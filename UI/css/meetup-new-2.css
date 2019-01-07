@@ -24,6 +24,11 @@
 
 #q-new-meetup .wrapper .new-feature-content {
   flex: 0 0 35%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/img/alejandro-escamilla-2-unsplash.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  color: white;
 }
 
 .new-feature-content .feature-content__primary {
@@ -42,6 +47,7 @@
 #q-new-meetup .wrapper .new-main-content h3 {
   text-align: center;
   font-size: 2rem;
+
 }
 
 .upload-image-preview {

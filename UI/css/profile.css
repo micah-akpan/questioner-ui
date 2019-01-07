@@ -173,9 +173,8 @@
 }
 
 /* Notification enable/disable section */
-#notif {
+#notif, #misc {
   width: 100%;
-  padding: 20px;
 }
 
 #notif .notif__wrapper {
@@ -184,11 +183,6 @@
 
 #notif .notif__wrapper h3 {
   text-align: left;
-}
-
-#misc {
-  width: 100%;
-  padding: 20px;
 }
 
 #misc .misc-btns__wrapper {
