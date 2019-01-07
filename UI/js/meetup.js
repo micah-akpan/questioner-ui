@@ -9,6 +9,7 @@
   const askQuestionWrapper = d.querySelector('#ask-question');
   const postQuestionDirArea = d.querySelector('#post-questions-directive');
   const askGroupBtn = d.querySelector('.ask-group-btn');
+  const commentBoxes = d.querySelectorAll('.comment-box .question-comment textarea');
 
   fileInput.onchange = (e) => {
     const image = new Image();
@@ -44,6 +45,15 @@
       }
     })
   }
+
+
+  commentBoxes.forEach((commentBox) => {
+    commentBox.oninput = function() {
+      
+      const text = this.value;
+      // TODO: Implement auto-resize as user types feature
+    }
+  })
 
   askGroupBtn.onclick = function() {
     showEl({
