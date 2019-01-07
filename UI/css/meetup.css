@@ -248,7 +248,29 @@ h3 {
   text-align: left;
 }
 
-.modal .user-profile-avatar {
+/* Ask question section */
+
+#ask-question {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+#ask-question.active {
+  display: block;
+}
+
+.inactive {
+  display: none;
+}
+
+.ask-group-btn.inactive {
+  display: none;
+}
+
+#ask-question .user-profile-avatar {
   float: left;
   width: 50px;
   height: 50px;
@@ -259,14 +281,19 @@ h3 {
   padding: 10px;
 }
 
-.modal .user-profile-text {
+#ask-question .user-profile-text {
   width: 90%;
   text-align: left;
 }
 
-.modal .clear {
+#ask-question .clear {
   clear: both;
   margin-bottom: 10px;
+}
+
+#ask-question .divider {
+  margin-top: 20px;
+  border: 1px solid #ccc;
 }
 
 #meetup-floating-icons {

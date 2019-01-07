@@ -167,9 +167,55 @@
 
         <div class="meetup-details">
           <section class="post-question" id="post-question">
-            <h3>Do you have a question?</h3>
-            <button class="q-btn ask-group-btn">Ask the group</button>
+            <div id="post-questions-directive">
+              <h3>Do you have a question?</h3>
+              <button class="q-btn ask-group-btn">Ask the group</button>
+            </div>
+
+
+            <section id="ask-question">
+              <div>
+                <div>
+                  <img src="../assets/icons/avatar1.svg" alt="Bob" class="user-profile-avatar" />
+                  <p class="modal-content-title question-text user-profile-text">Elitr invidunt ea diam stet
+                    erat erat sit
+                    amet et, lorem
+                    sit
+                    lorem elitr duo elitr, sit et sit sed.
+                  </p>
+                </div>
+
+                <div class="clear"></div>
+                <form>
+                  <div class="q-form__group">
+                    <label for="user-question-title" class="q-form__label question-label">Give your question a
+                      title</label>
+                    <input type="text" id="user-question-title" placeholder="What, why, where or when are great words to start with"
+                      class="q-form__input">
+
+                    <label for="user-question-body" class="q-form__label question-label">Your Question</label>
+                    <textarea placeholder="A concise and clear question gets more comments" id="user-question-body"
+                      class="q-form__textarea"></textarea>
+                    <span class="user-question-word-count"></span>
+                  </div>
+
+                  <div class="q-form__group">
+                    <label for="user-question-label" class="q-form__label question-label">
+                      Add tags for this question (max 5)
+                    </label>
+                    <input type="text" class="q-form__input" id="user-question-label">
+
+                    <div class="q-labels"></div>
+                  </div>
+
+                  <div class="post-btn-box post-question-btn-box q-form__group">
+                    <button class="q-btn post-comment-btn">Ask</button>
+                  </div>
+                </form>
+              </div>
+            </section>
           </section>
+
           <h3>Questions asked in this meetup</h3>
 
           <div class="q-question-cards">
@@ -337,51 +383,6 @@
                 <span class="user-comment-word-count"></span>
               </div>
               <div class="post-comment-btn-box">
-                <button class="q-btn post-comment-btn">Post</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Questions Modal -->
-  <section id="questions-modal" class="modal">
-    <div class="modal-overlay" id="q-modal-overlay">
-      <div class="modal-content">
-        <div class="modal-dialog" id="q-modal-dialog">
-          <div class="modal-content-card">
-            <button class="close-modal-btn" id="close-modal-btn-question">
-              <img src="../assets/icons/cross.svg" alt="close modal" />
-            </button>
-            <div>
-              <img src="../assets/icons/avatar1.svg" alt="Bob" class="user-profile-avatar" />
-              <p class="modal-content-title question-text user-profile-text">Elitr invidunt ea diam stet erat erat sit
-                amet et, lorem
-                sit
-                lorem elitr duo elitr, sit et sit sed.
-              </p>
-            </div>
-
-            <div class="clear"></div>
-            <form>
-              <div class="q-form__group">
-                <label for="user-question-desc" class="q-form__label question-label">Your Question</label>
-                <textarea placeholder="" id="user-question-desc"></textarea>
-                <span class="user-question-word-count"></span>
-              </div>
-
-              <div class="q-form__group">
-                <label for="user-question-label" class="q-form__label question-label">
-                  Add tags for this question (max 5)
-                </label>
-                <input type="text" class="q-form__input" id="user-question-label">
-
-                <div class="q-labels"></div>
-              </div>
-
-              <div class="post-btn-box post-question-btn-box q-form__group">
                 <button class="q-btn post-comment-btn">Post</button>
               </div>
             </form>
