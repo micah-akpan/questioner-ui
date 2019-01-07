@@ -270,8 +270,8 @@ h3 {
 }
 
 #meetup-floating-icons {
-  position: absolute;
-  top: 50%;
+  position: fixed;
+  top: 30%;
   left: 50px;
 }
 
