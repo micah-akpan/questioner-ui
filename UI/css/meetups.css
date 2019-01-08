@@ -34,7 +34,7 @@
   width: 40px;
   height: 20px;
   top: -80px;
-  right: -5px;
+  right: 10px;
 }
 
 /* Meetup Card DropDown Options */
@@ -109,13 +109,13 @@
   background-color: #d44;
 }
 
-.q-card__primary .q-card__primary-options img {
+.q-card__primary {
   width: 100%;
   height: 100%;
   z-index: 999999;
 }
 
-.q-card__primary .content img {
+.q-card__primary .content .meetup-main-image {
   width: 100%;
   height: 230px;
 }
@@ -224,7 +224,6 @@ nav.no-flex {
 }
 
 .q-search__nav li img:focus {
-  
 }
 
 .q-search__nav input[type="search"] {
@@ -244,6 +243,21 @@ nav.no-flex {
 .show {
   width: 300px !important;
   display: inline-block !important;
+}
+
+.q-card__primary-options button {
+  width: 100%;
+  height: 0px;
+  padding: 0;
+  /* background-color: white; */
+}
+
+.q-card__primary-options button img {
+  width: 100%;
+  padding: 5px 0;
+  margin-top: 100px;
+  height: 40px !important;
+  background: radial-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
 }
 
 @media (max-width: 768px) {
