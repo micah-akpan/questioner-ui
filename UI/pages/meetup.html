@@ -103,14 +103,7 @@
               et sed aliquyam sed, vero erat voluptua sadipscing sanctus..
             </p>
 
-            <div class="meetup-location-map__preview">
-
-            </div>
-            <p>
-              <a href="#!">
-                View larger map of location
-              </a>
-            </p>
+            <div class="meetup-location-map__preview" id="meetup-location-map__preview"></div>
 
 
             <section id="meetup-image-upload">
@@ -498,6 +491,18 @@
   <script src="../js/modal.js"></script>
   <script src="../js/mobile-nav.js"></script>
   <script src="../js/meetup.js"></script>
+  <script>
+    function showMeetupLocationOnMap() {
+      const lat = 6.5519399;
+      const long = 3.3663633;
+      const mapProp = {
+        center: new google.maps.LatLng(lat, long),
+        zoom: 5,
+      };
+      const map = new google.maps.Map(document.getElementById("meetup-location-map__preview"), mapProp);
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQrJ_4HjvAVi-wEboshgR-_-3MK_okn5E&callback=showMeetupLocationOnMap"></script>
 </body>
 
 </html>

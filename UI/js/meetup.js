@@ -48,14 +48,14 @@
 
 
   commentBoxes.forEach((commentBox) => {
-    commentBox.oninput = function() {
-      
+    commentBox.oninput = function () {
+
       const text = this.value;
       // TODO: Implement auto-resize as user types feature
     }
   })
 
-  askGroupBtn.onclick = function() {
+  askGroupBtn.onclick = function () {
     showEl({
       elem: askQuestionWrapper,
       activeClassName: 'active'
@@ -79,4 +79,6 @@
     elem.classList.add(activeClassName);
     return elem;
   }
+
+  // Meetup location on the map
 })();
