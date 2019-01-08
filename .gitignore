@@ -62,3 +62,6 @@ typings/
 
 # PR
 .github
+
+# Project ideas
+.idea

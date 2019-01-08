@@ -217,6 +217,22 @@ h3 {
   background: #116460;
 }
 
+.comment-box .view-comments__link {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+}
+
+.comment-box .view-comments__link:hover {
+  color: #333;
+}
+
+.comment-box .comments {
+  margin: 0;
+}
+
 /* Upload Meetup Image */
 #meetup-image-upload h3 {
   text-align: left;
