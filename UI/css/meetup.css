@@ -144,22 +144,16 @@ h3 {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ffffff;
+  overflow: hidden;
 }
 
-.comment-box .question-comment > *{
-  /* display: flex; */
-  /* align-items: flex-end; */
-  /* justify-content: flex-end; */
+.comment-box .question-comment > * {
   display: block;
+  float: left;
+  margin-left: 4px;
 }
 
-.comment-box .question-comment {
-  display: flex;
-  justify-content: space-between;
-}
-
-.comment-box .question-comment img
-{
+.comment-box .question-comment img {
   width: 10%;
   flex: 0;
   border-radius: 50%;
@@ -171,19 +165,11 @@ h3 {
   flex: 0;
 }
 
-.comment-box .question-comment button {
-
-}
-
 .comment-box .question-comment textarea {
   width: 70%;
   flex: 0 1 auto;
   padding: 5px 10px;
   resize: vertical;
-}
-
-.comment-box .question-card__img-block {
-  /* flex: 0 1 auto; */
 }
 
 .question-block .comment-box form {
@@ -373,7 +359,7 @@ h3 {
 }
 
 #meetup-tags .meetup-tags__box {
- margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 #meetup-tags .meetup-tags-added span {
@@ -392,10 +378,14 @@ h3 {
   outline: none;
 }
 
-
 .question-comment-count {
   text-align: center;
   display: block;
+}
+
+.meetup-date__primary {
+  font-weight: 600;
+  font-size: 1em;
 }
 
 @media (max-width: 768px) {
@@ -405,5 +395,37 @@ h3 {
 
   #meetup-floating-icons {
     display: none;
+  }
+
+  #q-meetups-preview .q-meetups-preview__block {
+    flex-direction: column;
+  }
+
+  .q-question-cards {
+    max-height: 100%;
+  }
+}
+
+@media screen and (max-width: 992px) and (min-width: 768px) {
+  #q-meetups-preview .q-meetups-preview__block {
+    flex-direction: column;
+  }
+
+  .q-question-cards {
+    max-height: 100%;
+  }
+
+  #meetup-floating-icons {
+    top: 40%;
+  }
+}
+
+@media screen and (max-width: 1200px) and (min-width: 992px) {
+  #q-meetups-preview .q-meetups-preview__block {
+    flex-direction: column;
+  }
+
+  .q-question-cards {
+    max-height: 100%;
   }
 }
