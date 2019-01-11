@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Questioner crowdsources questions to help meetup organizers prioritise questions related to a meetup">
   <meta name="author" content="Micah Akpan">
-  <link rel="stylesheet" href="../css/meetups.css">
+  <link rel="stylesheet" href="../../css/meetups.css">
 </head>
 
 <body>
@@ -16,20 +16,26 @@
       <div class="header-content">
         <div id="q-branding">
           <a href="../index.html">
-            <h1 class="q-logo">Questioner</h1>
+            <h1 class="q-logo q-logo-w-border">Questioner</h1>
           </a>
         </div>
+
+        <nav class="q-left-nav">
+          <ul>
+            <li><a href="../meetup-new.html">Start a Meetup</a></li>
+          </ul>
+        </nav>
 
         <nav class="q-right-nav notify-user__nav no-flex">
           <ul>
             <li>
               <button class="q-btn" title="Notifications">
-                <img src="../assets/icons/notifications-button.svg" alt="your notifications">
+                <img src="../../assets/icons/notifications-button.svg" alt="your notifications">
               </button>
             </li>
             <li class="q-user-profile__dropdown-trigger">
               <button class="q-btn dropdown-trigger-btn" title="Profile">
-                <img src="../assets/icons/avatar1.svg" alt="your profile">
+                <img src="../../assets/icons/avatar1.svg" alt="your profile">
               </button>
             </li>
           </ul>
@@ -40,11 +46,12 @@
 
   <!-- Nav User Profile DropDown Menu -->
   <section>
-    <div class="q-user-profile__dropdown-menu">
+    <div class="q-user-profile__dropdown-menu q-user-profile__admin">
       <ul>
-        <li><a href="./profile.html">Account settings</a></li>
-        <li><a href="./meetup.html">Ask a question</a></li>
-        <li><a href="#">Logout</a></li>
+        <li><a href="../profile.html">Account settings</a></li>
+        <li><a href="../meetup.html">Ask a question</a></li>
+        <li><a href="./meetup-new.html">Start a meetup</a></li>
+        <li><a href="#!">Logout</a></li>
       </ul>
     </div>
   </section>
@@ -55,7 +62,7 @@
         <ul>
           <li class="search-form__container">
             <a href="#!" id="search-icon">
-              <img src="../assets/icons/search.svg" alt="a magnifying glass icon">
+              <img src="../../assets/icons/search.svg" alt="a magnifying glass icon">
             </a>
           </li>
 
@@ -85,21 +92,24 @@
           <div class="q-card__primary">
             <div class="content">
               <div class="q-card__primary-options">
+                <button class="q-btn btn">
+                  <img src="../../assets/icons/horizontal.svg" alt="3 dot ellipsis image to toggle drop down menu">
+                </button>
 
                 <div class="dropdown-menu">
                   <ul>
                     <li class="edit-option">
-                      <img src="../assets/icons/pencil-edit-button.svg" alt="a dark green pencil">
+                      <img src="../../assets/icons/pencil-edit-button.svg" alt="a dark green pencil">
                       <span>edit</span>
                     </li>
                     <li class="delete-option">
-                      <img src="../assets/icons/delete-red.svg">
+                      <img src="../../assets/icons/delete-red.svg">
                       <span>delete</span>
                     </li>
                   </ul>
                 </div>
               </div>
-              <img src="../assets/img/startup-meetup2.jpg" alt="" class="meetup-main-image">
+              <img src="../../assets/img/startup-meetup2.jpg" alt="" class="meetup-main-image">
 
               <span class="q-asked-count" title="Total questions asked in this meetup">20</span>
             </div>
@@ -117,20 +127,23 @@
           <div class="q-card__primary">
             <div class="content">
               <div class="q-card__primary-options">
+                <button class="q-btn btn">
+                  <img src="../../assets/icons/horizontal.svg" alt="3 dot ellipsis image to toggle drop down menu">
+                </button>
                 <div class="dropdown-menu">
                   <ul>
                     <li class="edit-option">
-                      <img src="../assets/icons/pencil-edit-button.svg" alt="a dark green pencil">
+                      <img src="../../assets/icons/pencil-edit-button.svg" alt="a dark green pencil">
                       <span>edit</span>
                     </li>
                     <li class="delete-option">
-                      <img src="../assets/icons/delete-red.svg">
+                      <img src="../../assets/icons/delete-red.svg">
                       <span>delete</span>
                     </li>
                   </ul>
                 </div>
               </div>
-              <img src="../assets/img/tech-startup1.webp" alt="" class="meetup-main-image">
+              <img src="../../assets/img/tech-startup1.webp" alt="" class="meetup-main-image">
 
               <span class="q-asked-count" title="Total questions asked in this meetup">20</span>
             </div>
@@ -148,20 +161,23 @@
           <div class="q-card__primary">
             <div class="content">
               <div class="q-card__primary-options">
+                <button class="q-btn btn">
+                  <img src="../../assets/icons/horizontal.svg" alt="3 dot ellipsis image to toggle drop down menu">
+                </button>
                 <div class="dropdown-menu">
                   <ul>
                     <li class="edit-option">
-                      <img src="../assets/icons/pencil-edit-button.svg" alt="a dark green pencil">
+                      <img src="../../assets/icons/pencil-edit-button.svg" alt="a dark green pencil">
                       <span>edit</span>
                     </li>
                     <li class="delete-option">
-                      <img src="../assets/icons/delete-red.svg">
+                      <img src="../../assets/icons/delete-red.svg">
                       <span>delete</span>
                     </li>
                   </ul>
                 </div>
               </div>
-              <img src="../assets/img/startup-meetup2.jpg" alt="" class="meetup-main-image">
+              <img src="../../assets/img/startup-meetup2.jpg" alt="" class="meetup-main-image">
 
               <span class="q-asked-count" title="Total questions asked in this meetup">20</span>
             </div>
@@ -196,12 +212,12 @@
         <ul>
           <li><a href="#!"></a></li>
           <li class="q-sidenav__menu-item">
-            <a href="./profile.html#notif">
+            <a href="../profile.html#notif">
               Notifications
             </a>
           </li>
           <li class="q-sidenav__menu-item">
-            <a href="./profile.html">
+            <a href="../profile.html">
               Profile
             </a>
           </li>
@@ -222,7 +238,7 @@
         <div class="modal-dialog">
           <div class="modal-content-card">
             <button class="close-modal-btn" id="close-modal-btn">
-              <img src="../assets/icons/cross.svg" alt="close modal" />
+              <img src="../../assets/icons/cross.svg" alt="close modal" />
             </button>
             <div class="delete-modal-content">
               <h3>Delete Meetup 1</h3>
@@ -233,7 +249,7 @@
               <div class="button__wrapper">
                 <button class="cancel-btn q-btn btn__rounded">Cancel</button>
                 <button class="delete-btn q-btn btn__rounded">
-                  <img src="../assets/icons/delete-grey.svg" alt="delete icon">
+                  <img src="../../assets/icons/delete-grey.svg" alt="delete icon">
                   <span>Delete</span>
                 </button>
               </div>
@@ -269,24 +285,24 @@
           <ul>
             <li>
               <a href="#!" title="facebook">
-                <img src="../assets/icons/facebook.svg" alt="facebook logo">
+                <img src="../../assets/icons/facebook.svg" alt="facebook logo">
               </a></li>
             <li><a href="#!" title="twitter">
-                <img src="../assets/icons/twitter.svg" alt="twitter logo">
+                <img src="../../assets/icons/twitter.svg" alt="twitter logo">
               </a></li>
             <li><a href="#!" title="medium">
-                <img src="../assets/icons/medium.svg" alt="medium logo">
+                <img src="../../assets/icons/medium.svg" alt="medium logo">
               </a></li>
             <li><a href="#!" title="instagram">
-                <img src="../assets/icons/instagram.svg" alt="instagram logo">
+                <img src="../../assets/icons/instagram.svg" alt="instagram logo">
               </a></li>
           </ul>
         </section>
       </div>
     </div>
   </footer>
-  <script src="../js/meetups.js"></script>
-  <script src="../js/mobile-nav.js"></script>
+  <script src="../../js/meetups.js"></script>
+  <script src="../../js/mobile-nav.js"></script>
 </body>
 
 </html>
