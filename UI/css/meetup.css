@@ -147,56 +147,39 @@ h3 {
   overflow: hidden;
 }
 
-.comment-box .question-comment > * {
+/* .comment-box .question-comment > * {
   display: block;
   float: left;
   margin-left: 4px;
+} */
+
+.comment-box .question-comment {
+  display: flex;
 }
 
 .comment-box .question-comment img {
-  width: 10%;
-  flex: 0;
-  border-radius: 50%;
-  padding: 0.3em;
-}
-
-.comment-box .question-comment img,
-.comment-box .question-comment button {
-  flex: 0;
-}
-
-.comment-box .question-comment textarea {
-  width: 70%;
-  flex: 0 1 auto;
-  padding: 5px 10px;
-  resize: vertical;
+  display: block;
+  width: 50px;
+  height: 50px;
+  padding: 10px;
 }
 
 .question-block .comment-box form {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-content: flex-end;
 }
 
-.comment-box form textarea {
-  padding: 0.5rem;
-  flex: 1 1 auto;
-  max-height: 40px;
-  outline: 0;
-  resize: none;
+.question-block .comment-box form > * {
+  float: left;
 }
 
-.comment-box form button {
-  height: 45px;
-  margin-left: 10px;
-  flex: 0;
-  background-color: #116466;
-  color: #ffffff;
-  border: none;
-  outline: none;
-  cursor: pointer;
+.question-block .comment-box button {
+  margin-left: 5px;
+}
+
+.comment-box .question-comment textarea {
+  width: 75%;
+  padding: 5px;
+  resize: vertical;
 }
 
 .comment-box form button:hover {
