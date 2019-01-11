@@ -147,12 +147,6 @@ h3 {
   overflow: hidden;
 }
 
-/* .comment-box .question-comment > * {
-  display: block;
-  float: left;
-  margin-left: 4px;
-} */
-
 .comment-box .question-comment {
   display: flex;
 }
@@ -161,11 +155,12 @@ h3 {
   display: block;
   width: 50px;
   height: 50px;
-  padding: 10px;
+  padding: 10px 0;
 }
 
 .question-block .comment-box form {
   width: 100%;
+  flex: 1 1 auto;
 }
 
 .question-block .comment-box form > * {
@@ -386,6 +381,16 @@ h3 {
 
   .q-question-cards {
     max-height: 100%;
+  }
+
+  .question-block .question-comment textarea {
+    width: 100%;
+  }
+
+  .question-block .question-comment button {
+    text-align: center;
+    display: block;
+    margin: 20px auto;
   }
 }
 

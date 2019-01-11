@@ -146,7 +146,6 @@
   display: flex;
   width: 100%;
   padding: 10px;
-  /* justify-content: space-between; */
 }
 
 /* User feeds */
@@ -173,7 +172,8 @@
 }
 
 /* Notification enable/disable section */
-#notif, #misc {
+#notif,
+#misc {
   width: 100%;
 }
 
@@ -311,12 +311,7 @@ input:checked + .slider::before {
   cursor: pointer;
 }
 
-.user-feeds li.active {
-
-}
-
 @media (max-width: 768px) {
-
   #user-profile .user-profile__wrapper {
     flex-direction: column;
   }
@@ -332,8 +327,7 @@ input:checked + .slider::before {
     width: 100%;
   }
 
-  .user-profile__wrapper 
-  .user-profile__avatar-wrapper {
+  .user-profile__wrapper .user-profile__avatar-wrapper {
     display: none;
   }
 
@@ -354,3 +348,13 @@ input:checked + .slider::before {
     display: none !important;
   }
 }
+
+/* @media screen and (max-width: 1200px) and (min-width: 992px) {
+  #q-meetups-preview .q-meetups-preview__block {
+    flex-direction: column;
+  }
+
+  .q-question-cards {
+    max-height: 100%;
+  }
+} */
