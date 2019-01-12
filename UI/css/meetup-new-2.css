@@ -19,10 +19,6 @@
   padding: 0;
 }
 
-#q-new-meetup .wrapper > div {
-  height: 100vh;
-}
-
 #q-new-meetup .wrapper h3 {
   font-size: 2rem;
   text-align: center;
