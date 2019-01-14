@@ -53,7 +53,7 @@
           <h3>Meetup X</h3>
           <p>organized by X</p>
         </div>
-        <span>Dec <br>25</span>
+        <span class="meetup-date__primary">Dec<br>25</span>
       </div>
     </div>
   </section>
@@ -103,14 +103,7 @@
               et sed aliquyam sed, vero erat voluptua sadipscing sanctus..
             </p>
 
-            <div class="meetup-location-map__preview">
-
-            </div>
-            <p>
-              <a href="#!">
-                View larger map of location
-              </a>
-            </p>
+            <div class="meetup-location-map__preview" id="meetup-location-map__preview"></div>
 
 
             <section id="meetup-image-upload">
@@ -132,6 +125,7 @@
                 <img src="../assets/img/showcase2.jpg" alt="">
                 <img src="../assets/img/showcase2.jpg" alt="">
               </div>
+
               <!-- Only for Admins -->
               <form>
                 <div>
@@ -166,9 +160,55 @@
 
         <div class="meetup-details">
           <section class="post-question" id="post-question">
-            <h3>Do you have a question?</h3>
-            <button class="q-btn ask-group-btn">Ask the group</button>
+            <div id="post-questions-directive">
+              <h3>Do you have a question?</h3>
+              <button class="q-btn ask-group-btn">Ask the group</button>
+            </div>
+
+
+            <section id="ask-question">
+              <div>
+                <div>
+                  <img src="../assets/icons/avatar1.svg" alt="Bob" class="user-profile-avatar" />
+                  <p class="modal-content-title question-text user-profile-text">Elitr invidunt ea diam stet
+                    erat erat sit
+                    amet et, lorem
+                    sit
+                    lorem elitr duo elitr, sit et sit sed.
+                  </p>
+                </div>
+
+                <div class="clear"></div>
+                <form>
+                  <div class="q-form__group">
+                    <label for="user-question-title" class="q-form__label question-label">Give your question a
+                      title</label>
+                    <input type="text" id="user-question-title" placeholder="What, why, where or when are great words to start with"
+                      class="q-form__input">
+
+                    <label for="user-question-body" class="q-form__label question-label">Your Question</label>
+                    <textarea placeholder="A concise and clear question gets more comments" id="user-question-body"
+                      class="q-form__textarea"></textarea>
+                    <span class="user-question-word-count"></span>
+                  </div>
+
+                  <div class="q-form__group">
+                    <label for="user-question-label" class="q-form__label question-label">
+                      Add tags for this question (max 5)
+                    </label>
+                    <input type="text" class="q-form__input" id="user-question-label">
+
+                    <div class="q-labels"></div>
+                  </div>
+
+                  <div class="post-btn-box post-question-btn-box q-form__group">
+                    <button class="q-btn post-comment-btn">Ask</button>
+                  </div>
+                </form>
+              </div>
+            </section>
           </section>
+
           <h3>Questions asked in this meetup</h3>
 
           <div class="q-question-cards">
@@ -186,8 +226,9 @@
 
                   <div class="question-icons">
                     <div class="question-icons__left">
-                      <img src="../assets/icons/thumbs-up.svg" alt="upvote this question" title="Upvote Question">
-                      <img src="../assets/icons/thumb-down.svg" alt="downvote this question" title="Downvote Question">
+                      <img src="../assets/icons/thumbs-up.svg" alt="A thumb pointing upwards giving an approval" title="Upvote Question">
+                      <img src="../assets/icons/thumb-down.svg" alt="A thumb pointing downwards giving a disapproval"
+                        title="Downvote Question">
                     </div>
                     <div class="question-icons__right">
                       <img src="../assets/icons/share.svg" alt="A black curved arrow pointing east" title="Share">
@@ -197,9 +238,14 @@
                 </div>
 
                 <div class="comment-box">
-                  <a href="#" class="question-comment-count">View 20 Comments</a>
-                  <div class="question-card__img">
-                    <button class="q-form__button btn-large__30">Add a Comment</button>
+
+                  <a href="#" class="view-comments__link">View all 30 comments</a>
+                  <section class="comments"></section>
+
+                  <div class="question-comment">
+                    <img src="../assets/icons/avatar1.svg" alt="Bob" />
+                    <textarea placeholder="Add Comment"></textarea>
+                    <button class="q-btn btn">Comment</button>
                   </div>
                 </div>
               </div>
@@ -232,9 +278,12 @@
                 </div>
 
                 <div class="comment-box">
-                  <a href="#" class="question-comment-count">View 20 Comments</a>
-                  <div class="question-card__img">
-                    <button class="q-form__button btn-large__30">Add a Comment</button>
+                  <a href="#" class="view-comments__link">View all 30 comments</a>
+                  <section class="comments"></section>
+                  <div class="question-comment">
+                    <img src="../assets/icons/avatar1.svg" alt="Bob" />
+                    <textarea placeholder="Add Comment"></textarea>
+                    <button class="q-btn btn">Comment</button>
                   </div>
                 </div>
               </div>
@@ -266,9 +315,12 @@
                 </div>
 
                 <div class="comment-box">
-                  <a href="#" class="question-comment-count">View 20 Comments</a>
-                  <div class="question-card__img">
-                    <button class="q-form__button btn-large__30">Add a Comment</button>
+                  <a href="#" class="view-comments__link">View all 30 comments</a>
+                  <section class="comments"></section>
+                  <div class="question-comment">
+                    <img src="../assets/icons/avatar1.svg" alt="Bob" />
+                    <textarea placeholder="Add Comment"></textarea>
+                    <button class="q-btn btn">Comment</button>
                   </div>
                 </div>
               </div>
@@ -299,17 +351,20 @@
                 </div>
 
                 <div class="comment-box">
-                  <a href="#" class="question-comment-count">View 20 Comments</a>
-                  <div class="question-card__img">
-                    <button class="btn-large__30 q-form__button">Add a Comment</button>
+                  <a href="#" class="view-comments__link">View all 30 comments</a>
+                  <section class="comments"></section>
+                  <div class="question-comment">
+                    <img src="../assets/icons/avatar1.svg" alt="Bob" />
+                    <textarea placeholder="Add Comment"></textarea>
+                    <button class="q-btn btn">Comment</button>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="q-questions__pagination">
-            <button class="paginate-btn">see 2 more</button>
+            <div class="q-questions__pagination">
+              <button class="paginate-btn">see 2 more</button>
+            </div>
           </div>
         </div>
       </div>
@@ -345,66 +400,21 @@
     </div>
   </section>
 
-  <!-- Questions Modal -->
-  <section id="questions-modal" class="modal">
-    <div class="modal-overlay" id="q-modal-overlay">
-      <div class="modal-content">
-        <div class="modal-dialog" id="q-modal-dialog">
-          <div class="modal-content-card">
-            <button class="close-modal-btn" id="close-modal-btn-question">
-              <img src="../assets/icons/cross.svg" alt="close modal" />
-            </button>
-            <div>
-              <img src="../assets/icons/avatar1.svg" alt="Bob" class="user-profile-avatar" />
-              <p class="modal-content-title question-text user-profile-text">Elitr invidunt ea diam stet erat erat sit
-                amet et, lorem
-                sit
-                lorem elitr duo elitr, sit et sit sed.
-              </p>
-            </div>
-
-            <div class="clear"></div>
-            <form>
-              <div class="q-form__group">
-                <label for="user-question-desc" class="q-form__label question-label">Your Question</label>
-                <textarea placeholder="" id="user-question-desc"></textarea>
-                <span class="user-question-word-count"></span>
-              </div>
-
-              <div class="q-form__group">
-                <label for="user-question-label" class="q-form__label question-label">
-                  Add tags for this question (max 5)
-                </label>
-                <input type="text" class="q-form__input" id="user-question-label">
-
-                <div class="q-labels"></div>
-              </div>
-
-              <div class="post-btn-box post-question-btn-box q-form__group">
-                <button class="q-btn post-comment-btn">Post</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Meetup Floating Btns UI -->
   <div id="meetup-floating-icons">
 
     <!-- Only for admin users -->
     <button class="q-btn" title="Tag Meetup">
-      <img src="../assets/icons/tags.svg" alt="Double Tag Icon placed over each other">
+      <img src="../assets/icons/tags.svg" alt="Double Tag icons placed over each other">
     </button>
 
+    <!-- All Users -->
     <button class="q-btn" title="Favorite Meetup">
-      <!-- All Users -->
       <img src="../assets/icons/like.svg" alt="A red heart icon">
     </button>
 
     <button class="q-btn" title="Ask Question">
-      <img src="../assets/icons/question.svg" alt="The question mark in a circle">
+      <img src="../assets/icons/question.svg" alt="A question mark in a circle">
     </button>
   </div>
 
@@ -462,16 +472,16 @@
           <ul>
             <li>
               <a href="#!" title="facebook">
-                <img src="../assets/icons/facebook.svg" alt="facebook logo">
+                <img src="../assets/icons/facebook.svg" alt="Facebook logo">
               </a></li>
             <li><a href="#!" title="twitter">
-                <img src="../assets/icons/twitter.svg" alt="twitter logo">
+                <img src="../assets/icons/twitter.svg" alt="Twitter logo">
               </a></li>
             <li><a href="#!" title="medium">
-                <img src="../assets/icons/medium.svg" alt="medium logo">
+                <img src="../assets/icons/medium.svg" alt="Medium logo">
               </a></li>
             <li><a href="#!" title="instagram">
-                <img src="../assets/icons/instagram.svg" alt="instagram logo">
+                <img src="../assets/icons/instagram.svg" alt="Instagram logo">
               </a></li>
           </ul>
         </section>
@@ -481,6 +491,18 @@
   <script src="../js/modal.js"></script>
   <script src="../js/mobile-nav.js"></script>
   <script src="../js/meetup.js"></script>
+  <script>
+    function showMeetupLocationOnMap() {
+      const lat = 6.5519399;
+      const long = 3.3663633;
+      const mapProp = {
+        center: new google.maps.LatLng(lat, long),
+        zoom: 5,
+      };
+      const map = new google.maps.Map(document.getElementById("meetup-location-map__preview"), mapProp);
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQrJ_4HjvAVi-wEboshgR-_-3MK_okn5E&callback=showMeetupLocationOnMap"></script>
 </body>
 
 </html>
