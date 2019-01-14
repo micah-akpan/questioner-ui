@@ -1,8 +1,8 @@
 /* Stylings for meetups list page */
 
-@import "../css/main.css";
-@import "../css/home.css";
-@import "../css/modal.css";
+@import "./main.css";
+@import "./home.css";
+@import "./modal.css";
 
 /* Search Bar for meetups */
 #q-search {
@@ -127,6 +127,7 @@
   color: #ffffff;
   font-size: 2rem;
   cursor: pointer;
+  padding: 10px;
 }
 
 .q-card .q-card__sec {
@@ -249,7 +250,6 @@ nav.no-flex {
   width: 100%;
   height: 0px;
   padding: 0;
-  /* background-color: white; */
 }
 
 .q-card__primary-options button img {
@@ -257,7 +257,11 @@ nav.no-flex {
   padding: 5px 0;
   margin-top: 100px;
   height: 40px !important;
-  background: radial-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+}
+
+.q-card__primary .content .q-asked-count,
+.q-card__primary-options button img {
+  background: radial-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
 }
 
 @media (max-width: 768px) {

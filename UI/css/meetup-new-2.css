@@ -1,4 +1,10 @@
-/* Stylesheet for new meetup page(using flex) - (main) */
+
+
+@import url("./meetups.css");
+@import url("./meetup.css");
+@import url("./modal.css");
+@import url("./meetup-new.css");
+@import url("./form.css");
 
 #q-new-meetup {
   margin-bottom: 200px;
@@ -10,11 +16,7 @@
   background: #fff;
   display: flex;
   height: 100%;
-  padding: 0 0 60px 0;
-}
-
-#q-new-meetup .wrapper > div {
-  height: 100vh;
+  padding: 0;
 }
 
 #q-new-meetup .wrapper h3 {
@@ -24,7 +26,7 @@
 
 #q-new-meetup .wrapper .new-feature-content {
   flex: 0 0 35%;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/img/alejandro-escamilla-2-unsplash.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/img/andela.jpeg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -47,7 +49,6 @@
 #q-new-meetup .wrapper .new-main-content h3 {
   text-align: center;
   font-size: 2rem;
-
 }
 
 .upload-image-preview {
