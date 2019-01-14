@@ -348,14 +348,9 @@ input:checked + .slider::before {
   .user-feeds {
     display: none !important;
   }
+
+  #user-profile__main 
+  .personal-data-account__wrapper.account-settings {
+    margin-left: 20px;
+  }
 }
-
-/* @media screen and (max-width: 1200px) and (min-width: 992px) {
-  #q-meetups-preview .q-meetups-preview__block {
-    flex-direction: column;
-  }
-
-  .q-question-cards {
-    max-height: 100%;
-  }
-} */
