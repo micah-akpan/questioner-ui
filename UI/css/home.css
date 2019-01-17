@@ -12,6 +12,11 @@
   padding: 1em;
 }
 
+#questioner-what .cards .q-card,
+#questioner-how .cards .q-card {
+  box-shadow: none;
+}
+
 .q-right-nav a {
   padding: 0.5rem;
   border-radius: 5px;
