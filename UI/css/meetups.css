@@ -163,7 +163,7 @@ nav.no-flex {
   top: 70px;
   right: 200px;
   z-index: 100000;
-  box-shadow: 2px 2px 2px #555;
+  box-shadow: 2px 2px 2px #777;
 }
 
 .q-user-profile__dropdown-menu li {
