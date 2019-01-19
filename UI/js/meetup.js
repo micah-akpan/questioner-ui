@@ -19,9 +19,11 @@
 
   commentBoxes.forEach((commentBox) => {
     commentBox.oninput = function () {
-
       const text = this.value;
-      // TODO: Implement auto-resize as user types feature
+      const MAX_SIZE_TO_RESIZE = 40;
+      if (text.length === MAX_SIZE_TO_RESIZE) {
+        this.classList.add('long-comment-box');
+      }
     }
   })
 
@@ -50,5 +52,5 @@
     return elem;
   }
 
-  // Meetup location on the map
+
 })();
