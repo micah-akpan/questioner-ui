@@ -7,7 +7,10 @@ const
   userAcctAvatarWrapper = document.querySelector('.user-profile__avatar-wrapper'),
   userTopFeeds = document.querySelector('.user-feeds__wrapper'),
   mainContainer = document.querySelector('.user-profile__main-content__wrapper'),
-  userFeedsList = document.querySelector('.user-feeds');
+  userFeedsList = document.querySelector('.user-feeds'),
+  uploadNewPicBtn = document.querySelector('.change-image__btn'),
+  uploadNewPicWidget = document.querySelector('.change-image__file'),
+  userImage = document.querySelector('.user-image');
 
 // tabs
 const
@@ -36,7 +39,7 @@ tabListItems.forEach((listItem) => {
 
       userTopFeeds.classList.remove('active-block');
       userTopFeeds.classList.add('n-active-block');
-      
+
       userAcctAvatarWrapper.classList.remove('n-active-block');
       userAcctAvatarWrapper.classList.add('active-block');
       userFeedsList.classList.add('n-active-block');
@@ -49,3 +52,13 @@ tabListItems.forEach((listItem) => {
   }
 });
 
+uploadNewPicBtn.onclick = () => {
+  uploadNewPicWidget.click();
+}
+
+uploadNewPicWidget.onchange = function (e) {
+  const {files} = e.target;
+  const file = files[0];
+  const imgSrc = URL.createObjectURL(file);
+  userImage.src = imgSrc;
+}

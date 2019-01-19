@@ -11,21 +11,47 @@
   const askGroupBtn = d.querySelector('.ask-group-btn');
   const commentBoxes = d.querySelectorAll('.comment-box .question-comment textarea');
 
+  fileInput.onchange = (e) => {
+    const image = new Image();
+    const imageUrl = URL.createObjectURL(e.target.files[0]);
+    image.setAttribute('src', imageUrl);
+
+    mPhotosWrapper.appendChild(image);
+  }
+
   // Tags
   const addTagBtn = d.querySelector('.btn__tag');
   const tagField = d.querySelector('input[id="tag"]');
   const addTagsContainer = d.querySelector('.meetup-tags-added');
 
+  let tags = null;
+
+  addTagBtn.onclick = (e) => {
+    // allowed separators for tags are commas and hashes (#)
+    tags = tagField.value.split(",");
+    if (tags.length === 1 && tags[0].includes('#')) {
+      tags = tags[0].split('#');
+    }
+
+    addTagsContainer.innerHTML = "";
+    tags.forEach((tag, i) => {
+      if (tag !== '') {
+        const span = d.createElement('span');
+
+        // to support deleting the tags later
+        span.id = i;
+        span.textContent = `#${tag}`;
+        addTagsContainer.appendChild(span);
+      }
+    })
+  }
+
 
   commentBoxes.forEach((commentBox) => {
     commentBox.oninput = function () {
-      const numOfCharacters = this.value.length;
-      const MAX_SIZE_TO_RESIZE = 40;
-      if (numOfCharacters === MAX_SIZE_TO_RESIZE) {
-        this.classList.add('long-comment-box');
-      } else if (numOfCharacters < MAX_SIZE_TO_RESIZE) {
-        this.classList.remove('long-comment-box');
-      }
+
+      const text = this.value;
+      // TODO: Implement auto-resize as user types feature
     }
   })
 
@@ -54,5 +80,5 @@
     return elem;
   }
 
-
+  // Meetup location on the map
 })();

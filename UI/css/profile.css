@@ -314,6 +314,10 @@ input:checked + .slider::before {
   cursor: pointer;
 }
 
+.upload-image div {
+  display: none;
+}
+
 @media (max-width: 768px) {
   #user-profile .user-profile__wrapper {
     flex-direction: column;
