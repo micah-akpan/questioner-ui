@@ -17,21 +17,24 @@
   box-shadow: none;
 }
 
+/* Right Nav */
 .q-right-nav a {
   padding: 0.5rem;
   border-radius: 5px;
 }
 
+/* Right Nav Buttons */
 .q-right-nav .sign-in,
 .q-right-nav .sign-up {
   transition: border 0.2s ease;
 }
 
+
 .q-right-nav .sign-in {
   border: 1px solid #ffcb9a;
   text-align: center;
   margin-right: 10px;
-  color: #ffffff;
+  color: #ffcb9a;
 }
 
 .q-right-nav .sign-in:hover {
