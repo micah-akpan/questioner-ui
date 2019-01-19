@@ -19,10 +19,12 @@
 
   commentBoxes.forEach((commentBox) => {
     commentBox.oninput = function () {
-      const text = this.value;
+      const numOfCharacters = this.value.length;
       const MAX_SIZE_TO_RESIZE = 40;
-      if (text.length === MAX_SIZE_TO_RESIZE) {
+      if (numOfCharacters === MAX_SIZE_TO_RESIZE) {
         this.classList.add('long-comment-box');
+      } else if (numOfCharacters < MAX_SIZE_TO_RESIZE) {
+        this.classList.remove('long-comment-box');
       }
     }
   })

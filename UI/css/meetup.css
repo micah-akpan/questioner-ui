@@ -370,6 +370,10 @@ h3 {
   height: 100px;
 }
 
+.short-comment-box {
+  height: 50px;
+}
+
 @media (max-width: 768px) {
   #q-meetups-preview .q-meetups-preview__block {
     flex-direction: column;
