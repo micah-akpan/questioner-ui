@@ -1,0 +1,27 @@
+{
+  "name": "questioner-ui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:emrys8/questioner-ui.git",
+  "author": "Micah Akpan <mickey4sure2k7@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "5.3.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "2.14.0",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.0",
+    "prettier": "1.16.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,md,html}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
