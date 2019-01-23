@@ -3,6 +3,17 @@ const userFeedback = document.querySelector('.user-input-feedback');
 const emailField = document.getElementById('userEmail');
 const passwordField = document.getElementById('userPwd');
 
+
+window.onload = () => {
+  const userToken = localStorage.getItem('userToken');
+  if (userToken.trim()) {
+    // redirect to meetups page
+    window.location.href = './meetups.html';
+  } else {
+    window.location.href = './';
+  }
+};
+
 loginForm.onsubmit = function submitForm(e) {
   e.preventDefault();
   fetch('http://localhost:9999/api/v1/auth/login', {
@@ -18,7 +29,7 @@ loginForm.onsubmit = function submitForm(e) {
     })
   })
     .then(response => response.json())
-    .then(response => {
+    .then((response) => {
       if (response.status === 201) {
         // store user token in some storage
         const { token, user } = response.data[0];
@@ -33,11 +44,7 @@ loginForm.onsubmit = function submitForm(e) {
         userFeedback.textContent = response.error;
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
-};
-
-const navigateToURL = url => {
-  return (window.location.href = url);
 };

@@ -19,9 +19,17 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --single-quote --write",
+    "*.js": [
+      "npm run lint-fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
       "git add"
     ]
+  },
+  "scripts": {
+    "lint": "eslint --ext .js ./frontend --ignore-path .gitignore",
+    "lint-fix": "eslint --fix --ext .js ./frontend --ignore-path .gitignore"
   }
 }
