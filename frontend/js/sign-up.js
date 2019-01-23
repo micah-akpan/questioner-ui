@@ -14,13 +14,16 @@ window.onload = () => {
       userFeedback = document.querySelector('.user-feedback'),
       passwordValidationMsg = document.querySelector('.pwd-validation-msg');
 
-    
+
     confirmPasswordField.oninput = () => {
-      if (passwordField.value === confirmPasswordField.value) {
-        passwordValidationMsg.textContent = 'passwords match';
-      } else {
-        passwordValidationMsg.textContent = 'passwords dont match';
-      }
+      const originalPassword = passwordField.value.trim();
+      const repeatedPassword = confirmPasswordField.value.trim();
+
+      const validationMsg = originalPassword === repeatedPassword
+        ? 'passwords match'
+        : 'passwords do not match';
+      
+      passwordValidationMsg.textContent = validationMsg;
     }
 
     signUpForm.onsubmit = (e) => {
@@ -32,6 +35,12 @@ window.onload = () => {
       const rUserPassword = confirmPasswordField.value;
       const lastName = lastNameField.value;
       const firstName = firstNameField.value;
+
+      if (rUserPassword !== userPassword) {
+        // password have to be the same
+        // before proceeding to sign up
+        return;
+      }
 
 
       fetch('http://localhost:9999/api/v1/auth/signup', {
