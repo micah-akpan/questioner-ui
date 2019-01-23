@@ -19,10 +19,10 @@ window.onload = () => {
       const originalPassword = passwordField.value.trim();
       const repeatedPassword = confirmPasswordField.value.trim();
 
-      const validationMsg = originalPassword === repeatedPassword
+      const validationMsg = passwordMatch(originalPassword, repeatedPassword)
         ? 'passwords match'
         : 'passwords do not match';
-      
+
       passwordValidationMsg.textContent = validationMsg;
     }
 
@@ -36,40 +36,58 @@ window.onload = () => {
       const lastName = lastNameField.value;
       const firstName = firstNameField.value;
 
-      if (rUserPassword !== userPassword) {
+      if (passwordMatch(userPassword, rUserPassword)) {
         // password have to be the same
         // before proceeding to sign up
         return;
       }
 
+      const user = {
+        email: userEmail,
+        password: userPassword,
+        firstname: firstName,
+        lastname: lastName
+      };
 
-      fetch('http://localhost:9999/api/v1/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        mode: 'cors',
-        body: JSON.stringify({
-          email: userEmail,
-          password: userPassword,
-          firstname: firstName,
-          lastname: lastName
-        })
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.status === 201) {
-            const { token } = res.data[0];
-            localStorage.setItem('userToken', token);
-
-            window.location.href = './meetups.html';
-          } else {
-            userFeedback.textContent = res.error;
-          }
-        })
-        .catch((err) => {
-          // handle error
-        })
+      registerUser(user);
     }
   }
 };
+
+/**
+ * @func registerUser
+ * @param {*} user User payload
+ * @return {*}
+ * @description Signs up a user represented by `user`
+ */
+function registerUser(user) {
+  fetch('http://localhost:9999/api/v1/auth/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify(user)
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 201) {
+        const { token } = res.data[0];
+        localStorage.setItem('userToken', token);
+
+        window.location.href = './meetups.html';
+      } else {
+        userFeedback.textContent = res.error;
+      }
+    })
+    .catch((err) => {
+      // handle error
+    })
+}
+
+/**
+ * 
+ */
+function passwordMatch(password1,password2) {
+  return password1 === password2;
+}
