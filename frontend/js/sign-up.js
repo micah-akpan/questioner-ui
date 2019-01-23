@@ -8,9 +8,20 @@ window.onload = () => {
       signUpForm = document.getElementById('sign-up-form'),
       emailField = document.querySelector('input[name=email]'),
       passwordField = document.querySelector('input[name=password]'),
+      confirmPasswordField = document.getElementById('c-pwd'),
       lastNameField = document.querySelector('input[name=lastname]'),
       firstNameField = document.querySelector('input[name=firstname]'),
-      userFeedback = document.querySelector('.user-feedback');
+      userFeedback = document.querySelector('.user-feedback'),
+      passwordValidationMsg = document.querySelector('.pwd-validation-msg');
+
+    
+    confirmPasswordField.oninput = () => {
+      if (passwordField.value === confirmPasswordField.value) {
+        passwordValidationMsg.textContent = 'passwords match';
+      } else {
+        passwordValidationMsg.textContent = 'passwords dont match';
+      }
+    }
 
     signUpForm.onsubmit = (e) => {
 
@@ -18,8 +29,10 @@ window.onload = () => {
 
       const userEmail = emailField.value;
       const userPassword = passwordField.value;
+      const rUserPassword = confirmPasswordField.value;
       const lastName = lastNameField.value;
       const firstName = firstNameField.value;
+
 
       fetch('http://localhost:9999/api/v1/auth/signup', {
         method: 'POST',

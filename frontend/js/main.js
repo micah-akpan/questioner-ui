@@ -20,19 +20,4 @@ for (let i = 0; i < pToggleBtns.length; i++) {
   };
 }
 
-const passwordValidationMsg = document.querySelector(
-  '.pwd-validation-error-msg'
-);
-const mainPasswdField = document.querySelector('input[id=pwd]');
-const confirmPasswdField = document.querySelector('input[id=c-pwd]');
-
-const mainPasswdFieldValue = mainPasswdField.value;
-confirmPasswdField.oninput = function () {
-  if (this.value !== mainPasswdFieldValue) {
-    passwordValidationMsg.textContent = 'passwords does not match';
-  } else {
-    passwordValidationMsg.textContent = '';
-  }
-};
-
 const matchPasswords = (val1, value2) => {};
