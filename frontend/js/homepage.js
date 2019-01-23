@@ -1,8 +1,6 @@
 window.addEventListener('load', () => {
   const userToken = localStorage.getItem('userToken');
-  if (userToken.trim()) {
+  if (userToken) {
     window.location.href = './pages/meetups.html';
-  } else {
-    window.location.href = '/pages/sign-in.html';
   }
 });

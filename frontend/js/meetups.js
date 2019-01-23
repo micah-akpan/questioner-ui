@@ -56,3 +56,14 @@ delBtn.onclick = (e) => {
 closeModalBtn.onclick = (e) => {
   modal.classList.toggle('active');
 };
+
+window.addEventListener('load', () => {
+  const userToken = localStorage.getItem('userToken');
+  if (!userToken) {
+    window.location.href = './sign-in.html';
+  } else {
+    
+  }
+});
+
+
