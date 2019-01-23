@@ -37,6 +37,9 @@ window.onload = () => {
         .then((res) => res.json())
         .then((res) => {
           if (res.status === 201) {
+            const { token } = res.data[0];
+            localStorage.setItem('userToken', token);
+
             window.location.href = './meetups.html';
           } else {
             userFeedback.textContent = res.error;
@@ -46,6 +49,5 @@ window.onload = () => {
           // handle error
         })
     }
-
   }
 };
