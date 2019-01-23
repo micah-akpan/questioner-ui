@@ -20,7 +20,15 @@ loginForm.onsubmit = function submitForm(e) {
     .then(response => response.json())
     .then(response => {
       if (response.status === 201) {
-        window.location.href = './meetups.html';
+        // store user token in some storage
+        const { token, user } = response.data[0];
+        localStorage.setItem('userToken', token);
+
+        if (user.isadmin) {
+          window.location.href = './admin/meetups.html';
+        } else {
+          window.location.href = './meetups.html';
+        }
       } else {
         userFeedback.textContent = response.error;
       }
@@ -28,4 +36,8 @@ loginForm.onsubmit = function submitForm(e) {
     .catch(err => {
       console.log(err);
     });
+};
+
+const navigateToURL = url => {
+  return (window.location.href = url);
 };
