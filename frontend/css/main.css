@@ -138,6 +138,10 @@ section {
   margin: 0 auto;
 }
 
+.error {
+  color: #f44;
+}
+
 /* App Main Header */
 header {
   position: fixed;
