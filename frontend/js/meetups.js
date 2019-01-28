@@ -78,7 +78,7 @@ function showAllMeetups(userToken) {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       if (res.status === 200) {
         addMeetupsToDOM(res.data);
       }
@@ -115,10 +115,13 @@ function createMeetup(meetup) {
   
   const meetupTitle = document.createElement('p');
   meetupTitle.setAttribute('class', 'meetup-title');
-  meetupTitle.textContent = meetup.topic;
+  meetupTitle.textContent = meetup.title;
   const meetupDate = document.createElement('p');
   meetupDate.setAttribute('class', 'meetup-sched-date');
   meetupDate.textContent = meetup.happeningOn;
+
+  meetupDetail.appendChild(meetupTitle);
+  meetupDetail.appendChild(meetupDate);
 
   content.appendChild(meetupImage);
   content.appendChild(meetupQuestionCount);
@@ -126,6 +129,7 @@ function createMeetup(meetup) {
   meetupCardContentWrapper.appendChild(content);
 
   meetupCardLink.appendChild(meetupCardContentWrapper);
+  meetupCardLink.appendChild(meetupDetail)
 
   meetupCard.appendChild(meetupCardLink);
 

@@ -13,7 +13,12 @@
   margin-bottom: 200px;
 }
 
+.cards {
+  flex-wrap: wrap;
+}
+
 .cards .q-card {
+  width: calc(100% / 3 - 20px);
   border: 1px solid #116466;
 }
 
