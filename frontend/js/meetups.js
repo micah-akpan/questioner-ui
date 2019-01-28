@@ -74,6 +74,28 @@ function showAllMeetups(userToken) {
     })
 }
 
+
+
+async function getTotalQuestionsAsked(meetup) {
+  try {
+    let totalQuestions = 0;
+    const response = await fetch(
+      `http://localhost:9999/api/v1/meetups/${meetup.id}/questions`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+      }
+    });
+    const res = await response.json();
+    if (res.status === 200) {
+      totalQuestions = res.data.length; 
+    }
+
+    return totalQuestions;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 /**
  * @func createDOMElement
  * @param {String} elType The type of the element
@@ -99,7 +121,13 @@ function createMeetupPrimarySec(meetup) {
   const meetupQuestionCount = document.createElement('span');
   meetupQuestionCount.classList.add('q-asked-count');
   meetupQuestionCount.setAttribute('title', 'Total questions asked in this meetup');
-  meetupQuestionCount.textContent = 20;
+
+  getTotalQuestionsAsked(meetup)
+    .then((value) => {
+      meetupQuestionCount.textContent = value;
+    })
+
+  getTotalQuestionsAsked(meetup)
 
   content.appendChild(meetupImage);
   content.appendChild(meetupQuestionCount);

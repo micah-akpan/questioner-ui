@@ -277,4 +277,8 @@ nav.no-flex {
   #q-search {
     margin-left: 0;
   }
+
+  .cards .q-card {
+    width: 100%;
+  }
 }
