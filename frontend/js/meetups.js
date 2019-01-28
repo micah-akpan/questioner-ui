@@ -114,7 +114,7 @@ function createMeetupPrimarySec(meetup) {
   const content = document.createElement('div');
   content.classList.add('content');
   const meetupImage = document.createElement('img');
-  meetupImage.setAttribute('src', '../assets/img/startup-meetup2.jpg');
+  meetupImage.setAttribute('src', meetup.images[0]);
   meetupImage.setAttribute('alt', '')
   meetupImage.setAttribute('class', 'meetup-main-image');
 
