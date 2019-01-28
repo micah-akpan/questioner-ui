@@ -62,7 +62,18 @@ window.addEventListener('load', () => {
   if (!userToken) {
     window.location.href = './sign-in.html';
   } else {
-    
+    fetch('http://localhost:9999/api/v1/meetups', {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err);
+      }) 
   }
 });
 
