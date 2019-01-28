@@ -6,7 +6,7 @@ const passwordField = document.getElementById('userPwd');
 
 window.onload = () => {
   const userToken = localStorage.getItem('userToken');
-  if (userToken.trim()) {
+  if (!userToken) {
     // redirect to meetups page
     window.location.href = './meetups.html';
   } else {
