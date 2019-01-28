@@ -48,19 +48,6 @@ function showNode(node, keyPressed) {
   }
 }
 
-// meetupDropdownTrigger.onclick = (e) => {
-//   meetupDropdownMenu.classList.toggle('active');
-// };
-
-// delBtn.onclick = (e) => {
-//   // pop open delete modal
-//   modal.classList.toggle('active');
-// };
-
-// closeModalBtn.onclick = (e) => {
-//   modal.classList.toggle('active');
-// };
-
 window.addEventListener('load', () => {
   const userToken = localStorage.getItem('userToken');
   if (!userToken) {
@@ -130,7 +117,8 @@ function createMeetupSecondarySec(meetup) {
 
   const meetupDate = document.createElement('p');
   meetupDate.setAttribute('class', 'meetup-sched-date');
-  meetupDate.textContent = meetup.happeningOn;
+  const [month, day ] = parseDate(meetup.happeningOn); 
+  meetupDate.textContent = `${month} ${day}`;
 
   content.appendChild(meetupTitle);
   content.appendChild(meetupDate);
@@ -196,4 +184,27 @@ function createButton({ attribs, text }) {
   button.textContent = 'SEE MORE X Meetups';
 
   return button;
+}
+
+function parseDate(date) {
+  const currentDate = new Date(date);
+  const month = currentDate.getMonth();
+  const monthShortForm = getMonth(month + 1);
+  const day = currentDate.getDay();
+
+  return [monthShortForm, day];
+}
+
+const numMonthToStr = { 
+  1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr',
+  5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug',
+  9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec'
+};
+
+/**
+ * 
+ * @param {Number} date 
+ */
+function getMonth(date) {
+  return numMonthToStr[date];
 }

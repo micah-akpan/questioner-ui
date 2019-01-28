@@ -146,6 +146,7 @@
 
 .q-card .q-card__sec .meetup-title {
   font-size: 1.4rem;
+  text-transform: capitalize;
 }
 
 .q-card .q-card__sec .meetup-sched-date {
