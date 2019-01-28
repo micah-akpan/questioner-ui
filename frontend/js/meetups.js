@@ -66,7 +66,7 @@ window.addEventListener('load', () => {
   if (!userToken) {
     window.location.href = './sign-in.html';
   } else {
-    showAllMeetups(userToken); 
+    showAllMeetups(userToken);
   }
 });
 
@@ -78,7 +78,6 @@ function showAllMeetups(userToken) {
   })
     .then((res) => res.json())
     .then((res) => {
-      // console.log(res);
       if (res.status === 200) {
         addMeetupsToDOM(res.data);
       }
@@ -88,16 +87,21 @@ function showAllMeetups(userToken) {
     })
 }
 
-// creates the meetup card
-// and its content
-function createMeetup(meetup) {
-  const meetupCard = document.createElement('div');
-  meetupCard.classList.add('q-card');
-  const meetupCardLink = document.createElement('a');
-  meetupCardLink.setAttribute('href', './meetup.html')
-  const meetupCardContentWrapper = document.createElement('div');
-  meetupCardContentWrapper.classList.add('q-card__primary');
+/**
+ * @func createDOMElement
+ * @param {String} elType The type of the element
+ * @param {*} attrs An hash structure with attrs: `className`, and `id`
+ * @returns {HTMLElement}
+ */
+function createDOMElement(elType, attrs) {
+  const el = document.createElement(elType);
+  const { className, id } = attrs;
+  el.classList.add(className);
+  el.id = id;
+  return el;
+}
 
+function createMeetupPrimarySec(meetup) {
   const content = document.createElement('div');
   content.classList.add('content');
   const meetupImage = document.createElement('img');
@@ -110,26 +114,54 @@ function createMeetup(meetup) {
   meetupQuestionCount.setAttribute('title', 'Total questions asked in this meetup');
   meetupQuestionCount.textContent = 20;
 
-  const meetupDetail = document.createElement('div');
-  meetupDetail.setAttribute('class', 'q-card__sec');
-  
+  content.appendChild(meetupImage);
+  content.appendChild(meetupQuestionCount);
+
+  return content;
+}
+
+function createMeetupSecondarySec(meetup) {
+  const content = document.createElement('div');
+  content.setAttribute('class', 'q-card__sec');
+
   const meetupTitle = document.createElement('p');
   meetupTitle.setAttribute('class', 'meetup-title');
   meetupTitle.textContent = meetup.title;
+
   const meetupDate = document.createElement('p');
   meetupDate.setAttribute('class', 'meetup-sched-date');
   meetupDate.textContent = meetup.happeningOn;
 
-  meetupDetail.appendChild(meetupTitle);
-  meetupDetail.appendChild(meetupDate);
+  content.appendChild(meetupTitle);
+  content.appendChild(meetupDate);
 
-  content.appendChild(meetupImage);
-  content.appendChild(meetupQuestionCount);
+  return content;
+}
 
-  meetupCardContentWrapper.appendChild(content);
+function createMeetupLink(meetup) {
+  const meetupCardLink = document.createElement('a');
+  // TODO: Use dynamic link here
+  meetupCardLink.setAttribute('href', './meetup.html');
+  return meetupCardLink;
+}
+
+// creates the meetup card
+// and its content
+function createMeetup(meetup) {
+  const meetupCard = document.createElement('div');
+  meetupCard.classList.add('q-card');
+
+  const meetupCardLink = createMeetupLink();
+  const meetupCardContentWrapper = document.createElement('div');
+  meetupCardContentWrapper.classList.add('q-card__primary');
+
+  const primarySection = createMeetupPrimarySec(meetup);
+  const secondarySection = createMeetupSecondarySec(meetup);
+
+  meetupCardContentWrapper.appendChild(primarySection);
 
   meetupCardLink.appendChild(meetupCardContentWrapper);
-  meetupCardLink.appendChild(meetupDetail)
+  meetupCardLink.appendChild(secondarySection);
 
   meetupCard.appendChild(meetupCardLink);
 
@@ -146,7 +178,7 @@ function convertMeetupsToCards(meetups) {
 
 /**
  * 
- * @param {Array<Element>} meetups 
+ * @param {Array<HTMLElement>} meetups 
  */
 function addMeetupsToDOM(meetups) {
   cards.innerHTML = '';
