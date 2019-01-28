@@ -127,8 +127,6 @@ function createMeetupPrimarySec(meetup) {
       meetupQuestionCount.textContent = value;
     })
 
-  getTotalQuestionsAsked(meetup)
-
   content.appendChild(meetupImage);
   content.appendChild(meetupQuestionCount);
 
