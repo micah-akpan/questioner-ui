@@ -20,6 +20,8 @@ const closeModalBtn = d.querySelector('.close-modal-btn');
 
 // Meetups Cards
 const cards = d.querySelector('.cards');
+const cardsWrapper = d.querySelector('.meetup-cards__wrapper');
+const seeMoreBtn  = d.querySelector('.see-more-meetups_btn');
 
 // Toggle display of dropdown menu
 btnTrigger.onclick = () => {
@@ -66,7 +68,16 @@ function showAllMeetups(userToken) {
     .then((res) => res.json())
     .then((res) => {
       if (res.status === 200) {
-        addMeetupsToDOM(res.data);
+        const meetups = res.data;
+        const MAX_MEETUPS = 6;
+        if (meetups.length > MAX_MEETUPS) {
+          const data = meetups.slice(0, MAX_MEETUPS);
+          addMeetupsToDOM(data);
+          seeMoreBtn.textContent = `SEE MORE ${meetups.length - MAX_MEETUPS} MEETUPS`
+        } else {
+          addMeetupsToDOM(meetups);
+        }
+        
       }
     })
     .catch((err) => {
@@ -74,6 +85,11 @@ function showAllMeetups(userToken) {
     })
 }
 
+function getTokenHeader(token) {
+  return {
+    Authorization: `Bearer ${token}`
+  }
+}
 
 
 async function getTotalQuestionsAsked(meetup) {
@@ -144,7 +160,7 @@ function createMeetupSecondarySec(meetup) {
 
   const meetupDate = document.createElement('p');
   meetupDate.setAttribute('class', 'meetup-sched-date');
-  const [month, day ] = parseDate(meetup.happeningOn); 
+  const [month, day] = parseDate(meetup.happeningOn); 
   meetupDate.textContent = `${month} ${day}`;
 
   content.appendChild(meetupTitle);
@@ -229,8 +245,9 @@ const numMonthToStr = {
 };
 
 /**
- * 
+ * @func getMonth
  * @param {Number} date 
+ * @returns {String} A string version of date e.g 1 -> Jan
  */
 function getMonth(date) {
   return numMonthToStr[date];
