@@ -34,6 +34,7 @@ h3 {
 
 #q-meetup-details__main .meetup-title-host h3 {
   font-size: 2rem;
+  text-transform: capitalize;
 }
 
 #q-meetup-details__main .meetup-title-host p {

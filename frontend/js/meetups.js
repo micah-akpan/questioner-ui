@@ -22,11 +22,15 @@ const getUserToken = () => localStorage.getItem('userToken');
 
 /**
  * @function createMeetupLink
+ * @param {*} meetup Meetup object
  * @returns {HTMLElement} Returns an anchor link
  */
-const createMeetupLink = () => {
+const createMeetupLink = (meetup) => {
   const meetupCardLink = document.createElement('a');
   meetupCardLink.setAttribute('href', './meetup.html');
+  meetupCardLink.onclick = () => {
+    localStorage.setItem('activeMeetupId', meetup.id);
+  };
   return meetupCardLink;
 };
 
@@ -177,7 +181,7 @@ const createMeetupCard = (meetup) => {
   const meetupCard = document.createElement('div');
   meetupCard.classList.add('q-card');
 
-  const meetupCardLink = createMeetupLink();
+  const meetupCardLink = createMeetupLink(meetup);
   const meetupCardContentWrapper = document.createElement('div');
   meetupCardContentWrapper.classList.add('q-card__primary');
 
