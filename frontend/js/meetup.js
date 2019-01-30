@@ -4,6 +4,9 @@ const detailsWrapper = document.querySelector('.details-content');
 const meetupTitleHost = document.querySelector('.meetup-title-host'); 
 const meetupTitle = document.querySelector('.meetup-title-host h3');
 const meetupOrganizer = document.querySelector('.meetup-title-host p');
+const activeMeetupId = localStorage.getItem('activeMeetupId');
+const imagePreviewWrapper = document.querySelector('.image-preview');
+const imagePreview = document.querySelector('.image-preview img');
 
 const addMeetupDetailsToDOM = (meetup) => {
   meetupTitle.textContent = meetup.topic;
@@ -18,16 +21,36 @@ const addMeetupDateToDOM = (meetup) => {
   const [ month, day ] = parseDate(meetup.happeningOn);
   meetupDate.textContent = month;
   const lineBreak = document.createElement('p');
-  console.log(`day = ${day}`);
   lineBreak.textContent = day;
   meetupDate.appendChild(lineBreak);
   return meetupDate;
 }
 
+const addMeetupMainImage = async (meetup) => {
+  const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}/images`, {
+    headers: {
+      Authorization: `Bearer ${Token.getToken('userToken')}`
+    }
+  });
+  const result = await response.json();
+  const defaultImage = '../assets/img/showcase2.jpg';
+  const image = result.data[0];
+  imagePreview.src = image.imageurl || defaultImage;
+}
+
+const addMeetupDescription = (meetup) => {
+  const meetupDescription = document.querySelector('.meetup-desc');
+  meetupDescription.textContent = meetup.description;
+  return meetupDescription;
+}
+
+
 const addMeetupToDOM = (meetup) => {
   detailsWrapper.appendChild(addMeetupDetailsToDOM(meetup));
-  addMeetupDateToDOM(meetup); 
+  addMeetupDateToDOM(meetup);
+  addMeetupMainImage(meetup)
 }
+
 
 const apiBaseURL = 'http://localhost:9999/api/v1';
 
