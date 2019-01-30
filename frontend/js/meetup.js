@@ -1,4 +1,5 @@
 /* eslint-disable */
+const apiBaseURL = 'http://localhost:9999/api/v1';
 
 const detailsWrapper = document.querySelector('.details-content');
 const meetupTitleHost = document.querySelector('.meetup-title-host');
@@ -75,6 +76,48 @@ const addMeetupImagesToDOM = async () => {
   meetupImages.forEach(image => {
     photosWrapper.appendChild(image);
   });
+};
+
+const getMeetupRsvps = async (meetup) => {
+  const response = await fetch(`${apiBaseURL}/meetups/${meetup.id}/rsvps`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Token.getToken('userToken')}`
+    }
+  });
+  const result = await response.json();
+  const rsvps = result.data;
+  return rsvps;
+}
+
+const userHasRsvped = async (meetup) => {
+  const rsvps = await getMeetupRsvps(meetup);
+  const userId = localStorage.getItem('userId');
+  const userRsvp = rsvps.find(rsvp => {
+    return rsvp.user === Number(userId);
+  });
+
+  return userRsvp !== null;
+}
+
+const sendRsvpFeedback = async (meetup) => {
+  const rsvpForMeetupExist = await userHasRsvped(meetup);
+  if (rsvpForMeetupExist) {
+    const allRsvpsForMeetup = await getMeetupRsvps(meetup);
+    const rsvp = allRsvpsForMeetup[0];
+    const feedbackMsg = `You are ${rsvp.response === 'yes' || rsvp.response === 'maybe' ? 'going' : 'not going'} to this meetup`;
+
+    rsvpEnquiryWrapper.innerHTML = '';
+    const text = document.createTextNode(feedbackMsg);
+    const p = document.createElement('p');
+    p.appendChild(text);
+    const responseUpdateBtn = document.createElement('button');
+    responseUpdateBtn.classList.add('q-btn');
+    responseUpdateBtn.textContent = 'Change Response';
+
+    rsvpEnquiryWrapper.appendChild(p);
+    rsvpEnquiryWrapper.appendChild(responseUpdateBtn);
+  }
 }
 
 
@@ -83,10 +126,9 @@ const addMeetupToDOM = (meetup) => {
   addMeetupDateToDOM(meetup);
   addMeetupMainImage(meetup);
   addMeetupImagesToDOM();
+  sendRsvpFeedback(meetup);
 }
 
-
-const apiBaseURL = 'http://localhost:9999/api/v1';
 
 const displayMeetup = () => {
   fetch(`${apiBaseURL}/meetups/${localStorage.getItem('activeMeetupId')}`, {
@@ -108,41 +150,6 @@ const displayMeetup = () => {
     .catch((err) => {
       throw err;
     })
-}
-
-const userHasRsvped = async (meetup) => {
-  // get all rsvps for this meetup
-  // match the user with the rsvp
-  // if user exist, true, false otherwise
-  const response = await fetch(`${apiBaseURL}/meetups/${meetup.id}/rsvps`);
-  const result = await response.json();
-  const rsvps = result.data;
-  const userId = localStorage.getItem('userId');
-  const userRsvp = rsvps.filter(rsvp => {
-    return rsvp.user === Number(userId);
-  });
-
-  if (userRsvp.length > 0) {
-    const rsvp = userRsvp[0];
-    // user has already rsvped for this meetup
-    // disable buttons
-    // and send a msg
-    const msg = `You are ${rsvp.response === 'Yes' || rsvp.response === 'Maybe' ? 'going' : 'Not going'} to this meetup`;
-
-    rsvpEnquiryWrapper.innerHTML = '';
-    const text = document.createTextNode(msg);
-    const p = document.createElement('p');
-    p.appendChild(text);
-    
-    rsvpEnquiryWrapper.appendChild(p);
-
-    // change response
-    const responseUpdate = document.createElement('button');
-    responseUpdate.classList.add('q-btn');
-    responseUpdate.textContent = 'Change Response';
-
-    rsvpEnquiryWrapper.appendChild(responseUpdate);
-  }
 }
 
 window.onload = (e) => {
