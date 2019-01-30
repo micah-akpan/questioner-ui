@@ -1,0 +1,427 @@
+@import url("../css/form.css");
+
+h3 {
+  text-align: left;
+}
+
+#q-meetup-details__main {
+  margin-top: 200px;
+  width: 100%;
+  color: black;
+}
+
+#q-meetup-details__main .details-content {
+  position: relative;
+}
+
+#q-meetup-details__main .details-content span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 50px;
+  background-color: #116466;
+  text-align: center;
+  padding: 20px 0;
+  color: #ffffff;
+  border-radius: 3px;
+  border: none;
+}
+
+#q-meetup-details__main .meetup-title-host {
+  margin-left: 100px;
+}
+
+#q-meetup-details__main .meetup-title-host h3 {
+  font-size: 2rem;
+}
+
+#q-meetup-details__main .meetup-title-host p {
+  position: relative;
+  top: -30px;
+  left: 0;
+  text-transform: capitalize;
+}
+
+#q-meetups-preview .q-meetups-preview__block {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+#q-meetups-preview .q-meetups-preview__block > div {
+  padding: 10px;
+}
+
+#q-meetups-preview .q-meetups-preview__block .image-preview {
+  flex: 1 1 50%;
+}
+
+.q-meetups-preview__block .image-preview {
+  position: relative;
+  margin-right: 30px;
+}
+
+.q-meetups-preview__block .image-preview img {
+  width: 100%;
+  max-height: 400px;
+}
+
+#q-meetups-preview .q-meetups-preview__block .meetup-details {
+  flex: 1 1 25%;
+}
+
+/* Question cards */
+.q-question-cards {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-height: 900px;
+  overflow-y: scroll;
+}
+
+.q-question-cards .question-card {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 3px;
+  padding: 10px;
+  flex: 1 1 auto;
+  margin-bottom: 20px;
+}
+
+.q-question-cards .question-card p {
+  font-weight: 400;
+}
+
+.q-question-cards .question-card img {
+  width: 40px;
+  height: 40px;
+}
+
+.q-question-cards .question-card span {
+  float: right;
+  font-weight: 600;
+}
+
+.q-question-cards .question-text {
+  background-color: #ffffff;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+.question-text-block {
+  min-height: 160px;
+  border-bottom: 1px solid #cccccc;
+}
+
+.question-icons {
+  display: flex;
+  width: 95%;
+  justify-content: space-between;
+  padding: 10px 0 10px 10px;
+}
+
+.question-icons .question-icons__left img,
+.question-icons .question-icons__right img {
+  width: 30px;
+  height: 30px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.question-icons .question-icons__right > img:last-child {
+  margin-right: 0;
+}
+
+.question-block {
+  border: 1px solid #cccccc;
+  background: white;
+}
+
+.question-block .comment-box {
+  margin: 10px auto;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ffffff;
+  overflow: hidden;
+}
+
+.comment-box .question-comment {
+  display: flex;
+}
+
+.comment-box .question-comment img {
+  display: block;
+  width: 50px;
+  height: 50px;
+  padding: 10px 0;
+}
+
+.question-block .comment-box form {
+  width: 100%;
+  flex: 1 1 auto;
+}
+
+.question-block .comment-box form > * {
+  float: left;
+}
+
+.question-block .comment-box button {
+  margin-left: 5px;
+}
+
+.comment-box .question-comment textarea {
+  width: 75%;
+  padding: 5px;
+  resize: vertical;
+}
+
+.comment-box form button:hover {
+  background: #116460;
+}
+
+.comment-box .view-comments__link {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+}
+
+.comment-box .view-comments__link:hover {
+  color: #333;
+}
+
+.comment-box .comments {
+  margin: 0;
+}
+
+/* Upload Meetup Image */
+#meetup-image-upload h3 {
+  text-align: left;
+  margin: 0;
+}
+
+#meetup-image-upload .meetup-photos__wrapper {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+#meetup-image-upload .meetup-photos__wrapper img {
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+#meetup-image-upload form {
+  margin-top: 40px;
+}
+
+#meetup-image-upload form input {
+  display: none;
+}
+
+.q-questions__pagination .paginate-btn {
+  padding: 1rem;
+  display: block;
+  margin: 0 auto 40px;
+  border: solid 2px #116460;
+  text-transform: uppercase;
+  background: transparent;
+  color: #333333;
+}
+
+.q-questions__pagination .paginate-btn:hover {
+  background-color: #ffcb9a;
+  cursor: pointer;
+}
+
+.q-questions__pagination.paginate-btn:active {
+  background-color: #fdc086;
+}
+
+.meetup-details .post-question .ask-group-btn {
+  min-width: 200px;
+  width: 30%;
+}
+
+.meetup-details .post-question .ask-group-btn:hover {
+  background: #024f50;
+}
+
+.question-label {
+  text-align: left;
+}
+
+/* Ask question section */
+
+#ask-question {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+#ask-question.active {
+  display: block;
+}
+
+.inactive {
+  display: none;
+}
+
+.ask-group-btn.inactive {
+  display: none;
+}
+
+#ask-question .user-profile-avatar {
+  float: left;
+  width: 50px;
+  height: 50px;
+  display: block;
+  margin-right: 10px;
+  border-radius: 50%;
+  border: 1px solid #116466;
+  padding: 10px;
+}
+
+#ask-question .user-profile-text {
+  width: 90%;
+  text-align: left;
+}
+
+#ask-question .clear {
+  clear: both;
+  margin-bottom: 10px;
+}
+
+#ask-question .divider {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+}
+
+#meetup-floating-icons {
+  position: fixed;
+  top: 30%;
+  left: 50px;
+}
+
+#meetup-floating-icons button {
+  width: 50px;
+  height: 50px;
+  display: block;
+  background: transparent;
+}
+
+#meetup-floating-icons button img {
+  width: 100%;
+  height: 100%;
+}
+
+#meetup-tags {
+  margin-bottom: 120px;
+}
+
+#meetup-tags .meetup-tags-added {
+  margin-bottom: 10px;
+}
+
+#meetup-tags .added-tags__text {
+  font-size: 1em;
+}
+
+#meetup-tags .meetup-tags__box {
+  margin-bottom: 10px;
+}
+
+#meetup-tags .meetup-tags-added span {
+  margin-right: 5px;
+  border: none;
+  color: #116466;
+  background-color: #ccc;
+  border-radius: 2px;
+  padding: 5px;
+}
+
+.q-input__small {
+  width: 100%;
+  border: 1px solid #116460;
+  padding: 0.8em 1em;
+  outline: none;
+}
+
+.question-comment-count {
+  text-align: center;
+  display: block;
+}
+
+.meetup-date__primary {
+  font-weight: 600;
+  font-size: 1em;
+}
+
+.long-comment-box {
+  height: 100px;
+}
+
+.short-comment-box {
+  height: 50px;
+}
+
+@media (max-width: 768px) {
+  #q-meetups-preview .q-meetups-preview__block {
+    flex-direction: column;
+  }
+
+  #meetup-floating-icons {
+    display: none;
+  }
+
+  #q-meetups-preview .q-meetups-preview__block {
+    flex-direction: column;
+  }
+
+  .q-question-cards {
+    max-height: 100%;
+  }
+
+  .question-block .question-comment textarea {
+    width: 100%;
+  }
+
+  .question-block .question-comment button {
+    text-align: center;
+    display: block;
+    margin: 20px auto;
+  }
+}
+
+@media screen and (max-width: 992px) and (min-width: 768px) {
+  #q-meetups-preview .q-meetups-preview__block {
+    flex-direction: column;
+  }
+
+  .q-question-cards {
+    max-height: 100%;
+  }
+
+  #meetup-floating-icons {
+    top: 40%;
+  }
+}
+
+@media screen and (max-width: 1200px) and (min-width: 992px) {
+  #q-meetups-preview .q-meetups-preview__block {
+    flex-direction: column;
+  }
+
+  .q-question-cards {
+    max-height: 100%;
+  }
+}
