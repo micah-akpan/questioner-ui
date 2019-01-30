@@ -24,6 +24,7 @@ loginForm.onsubmit = (e) => {
         // store user token in some storage
         const { token, user } = response.data[0];
         localStorage.setItem('userToken', token);
+        localStorage.setItem('userId', user.id);
 
         if (user.isadmin) {
           window.location.assign('./admin/meetups.html');
@@ -31,6 +32,7 @@ loginForm.onsubmit = (e) => {
           window.location.assign('./meetups.html');
         }
       } else {
+        // TODO: Use an aesthetic alert/pop-up here!
         userFeedback.textContent = response.error;
       }
     })

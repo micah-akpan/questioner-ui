@@ -65,7 +65,9 @@ h3 {
 
 .q-meetups-preview__block .image-preview img {
   width: 100%;
+  height: 350px;
   max-height: 400px;
+  display: block;
 }
 
 #q-meetups-preview .q-meetups-preview__block .meetup-details {

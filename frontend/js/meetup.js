@@ -8,6 +8,7 @@ const activeMeetupId = localStorage.getItem('activeMeetupId');
 const imagePreviewWrapper = document.querySelector('.image-preview');
 const imagePreview = document.querySelector('.image-preview img');
 const photosWrapper = document.querySelector('.meetup-photos__wrapper');
+const rsvpEnquiryWrapper = document.querySelector('.meetup-rsvp__enquiry');
 
 const addMeetupDetailsToDOM = (meetup) => {
   meetupTitle.textContent = meetup.topic;
@@ -107,6 +108,41 @@ const displayMeetup = () => {
     .catch((err) => {
       throw err;
     })
+}
+
+const userHasRsvped = async (meetup) => {
+  // get all rsvps for this meetup
+  // match the user with the rsvp
+  // if user exist, true, false otherwise
+  const response = await fetch(`${apiBaseURL}/meetups/${meetup.id}/rsvps`);
+  const result = await response.json();
+  const rsvps = result.data;
+  const userId = localStorage.getItem('userId');
+  const userRsvp = rsvps.filter(rsvp => {
+    return rsvp.user === Number(userId);
+  });
+
+  if (userRsvp.length > 0) {
+    const rsvp = userRsvp[0];
+    // user has already rsvped for this meetup
+    // disable buttons
+    // and send a msg
+    const msg = `You are ${rsvp.response === 'Yes' || rsvp.response === 'Maybe' ? 'going' : 'Not going'} to this meetup`;
+
+    rsvpEnquiryWrapper.innerHTML = '';
+    const text = document.createTextNode(msg);
+    const p = document.createElement('p');
+    p.appendChild(text);
+    
+    rsvpEnquiryWrapper.appendChild(p);
+
+    // change response
+    const responseUpdate = document.createElement('button');
+    responseUpdate.classList.add('q-btn');
+    responseUpdate.textContent = 'Change Response';
+
+    rsvpEnquiryWrapper.appendChild(responseUpdate);
+  }
 }
 
 window.onload = (e) => {
