@@ -18,6 +18,8 @@ searchIcon.onclick = () => {
   searchBar.classList.add('show');
 };
 
+const getUserToken = () => localStorage.getItem('userToken');
+
 /**
  * @function createMeetupLink
  * @returns {HTMLElement} Returns an anchor link
@@ -97,6 +99,26 @@ const parseDate = (date) => {
   return [monthShortForm, day];
 };
 
+/* eslint-disable */
+const getMeetupImages = async (meetup) => {
+  const res = await fetch(`${apiBaseURL}/meetups/${meetup.id}/images`, {
+    headers: {
+      Authorization: `Bearer ${getUserToken()}`
+    }
+  });
+
+  const result = await res.json();
+  return result.data;
+};
+
+const tokenIsValid = (response) => {
+  if (response.status === 401) {
+    return false;
+  }
+
+  return true;
+};
+
 /**
  * @function createMeetupPrimarySec
  * @param {*} meetup Meetup object
@@ -107,7 +129,8 @@ const createMeetupPrimarySec = (meetup) => {
   content.classList.add('content');
   const meetupImage = document.createElement('img');
   const defaultImage = '../assets/img/startup-meetup2.jpg';
-  meetupImage.setAttribute('src', meetup.images[0] || defaultImage);
+
+  meetupImage.setAttribute('src', (meetup.images && meetup.images[0]) || defaultImage);
   meetupImage.setAttribute('alt', '');
   meetupImage.setAttribute('class', 'meetup-main-image');
 
@@ -196,17 +219,22 @@ const showAllMeetups = (userToken) => {
   })
     .then(res => res.json())
     .then((res) => {
-      if (res.status === 200) {
-        const meetups = res.data;
-        const MAX_MEETUPS = 6;
-        if (meetups.length > MAX_MEETUPS) {
-          const data = meetups.slice(0, MAX_MEETUPS);
-          addMeetupsToDOM(data);
-          const remainingMeetups = meetups.length - MAX_MEETUPS;
-          seeMoreBtn.textContent = `SEE MORE ${remainingMeetups} ${remainingMeetups > 1 ? 'MEETUPS' : 'MEETUP'}`;
-        } else {
-          addMeetupsToDOM(meetups);
+      if (tokenIsValid(res)) {
+        if (res.status === 200) {
+          const meetups = res.data;
+          const MAX_MEETUPS = 6;
+          if (meetups.length > MAX_MEETUPS) {
+            const data = meetups.slice(0, MAX_MEETUPS);
+            addMeetupsToDOM(data);
+            const remainingMeetups = meetups.length - MAX_MEETUPS;
+            seeMoreBtn.textContent = `SEE MORE ${remainingMeetups} ${remainingMeetups > 1 ? 'MEETUPS' : 'MEETUP'}`;
+          } else {
+            addMeetupsToDOM(meetups);
+          }
         }
+      } else {
+        localStorage.removeItem('userToken');
+        window.location.assign('./sign-in.html');
       }
     })
     .catch((err) => {
