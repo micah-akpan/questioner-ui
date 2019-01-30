@@ -17,3 +17,45 @@ class Token {
     return true;
   }
 }
+
+/**
+ * @const numMonthToStr
+ * @description A hash of month ordinal numbers to their short forms
+ */
+const numMonthToStr = {
+  1: 'Jan',
+  2: 'Feb',
+  3: 'Mar',
+  4: 'Apr',
+  5: 'May',
+  6: 'Jun',
+  7: 'Jul',
+  8: 'Aug',
+  9: 'Sept',
+  10: 'Oct',
+  11: 'Nov',
+  12: 'Dec'
+};
+
+/**
+ * @function getMonth
+ * @param {Number} date
+ * @returns {String} A string version of date e.g 1 -> Jan
+ */
+const getMonth = (date) => {
+  return numMonthToStr[date];
+}
+
+/**
+ * @function parseDate
+ * @param {String} date
+ * @returns {Array} Returns an array of 2 elements (short form of the month and day)
+ */
+const parseDate = (date) => {
+  const currentDate = new Date(date);
+  const month = currentDate.getMonth();
+  const monthShortForm = getMonth(month + 1);
+  const day = currentDate.getDay();
+
+  return [monthShortForm, day];
+};

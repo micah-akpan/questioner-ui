@@ -365,6 +365,11 @@ h3 {
 .meetup-date__primary {
   font-weight: 600;
   font-size: 1em;
+  text-transform: uppercase;
+}
+
+.meetup-date__primary p {
+  margin: 0;
 }
 
 .long-comment-box {

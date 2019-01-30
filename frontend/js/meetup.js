@@ -1,29 +1,32 @@
 /* eslint-disable */
-window.onload = (e) => {
-  const userToken = Token.getToken('userToken');
-  if (!userToken) {
-    window.location.assign('./sign-in.html');
-  } else {
-    displayMeetup()
-  }
-}
 
 const detailsWrapper = document.querySelector('.details-content');
 const meetupTitleHost = document.querySelector('.meetup-title-host'); 
 const meetupTitle = document.querySelector('.meetup-title-host h3');
 const meetupOrganizer = document.querySelector('.meetup-title-host p');
 
-const setMeetupMainDetails = (meetup) => {
+const addMeetupDetailsToDOM = (meetup) => {
   meetupTitle.textContent = meetup.topic;
   meetupOrganizer.textContent = 'Organized by X';
   meetupTitleHost.appendChild(meetupTitle);
   meetupTitleHost.appendChild(meetupOrganizer);
-  detailsWrapper.appendChild(meetupTitleHost);
+  return meetupTitleHost;
 };
 
-const addMeetupDetailsToDOM = (meetup) => {
-  console.log(meetup);
-  setMeetupMainDetails(meetup);
+const addMeetupDateToDOM = (meetup) => {
+  const meetupDate = document.querySelector('.meetup-date__primary');
+  const [ month, day ] = parseDate(meetup.happeningOn);
+  meetupDate.textContent = month;
+  const lineBreak = document.createElement('p');
+  console.log(`day = ${day}`);
+  lineBreak.textContent = day;
+  meetupDate.appendChild(lineBreak);
+  return meetupDate;
+}
+
+const addMeetupToDOM = (meetup) => {
+  detailsWrapper.appendChild(addMeetupDetailsToDOM(meetup));
+  addMeetupDateToDOM(meetup); 
 }
 
 const apiBaseURL = 'http://localhost:9999/api/v1';
@@ -39,7 +42,7 @@ const displayMeetup = () => {
       const tokenValid = Token.tokenIsValid(res.status);
       if (tokenValid) {
         if (res.status === 200) {
-          addMeetupDetailsToDOM(res.data[0]);
+          addMeetupToDOM(res.data[0]);
         }
       } else {
 
@@ -50,3 +53,11 @@ const displayMeetup = () => {
     })
 }
 
+window.onload = (e) => {
+  const userToken = Token.getToken('userToken');
+  if (!userToken) {
+    window.location.assign('./sign-in.html');
+  } else {
+    displayMeetup()
+  }
+}
