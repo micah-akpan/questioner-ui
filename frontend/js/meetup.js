@@ -1,12 +1,13 @@
 /* eslint-disable */
 
 const detailsWrapper = document.querySelector('.details-content');
-const meetupTitleHost = document.querySelector('.meetup-title-host'); 
+const meetupTitleHost = document.querySelector('.meetup-title-host');
 const meetupTitle = document.querySelector('.meetup-title-host h3');
 const meetupOrganizer = document.querySelector('.meetup-title-host p');
 const activeMeetupId = localStorage.getItem('activeMeetupId');
 const imagePreviewWrapper = document.querySelector('.image-preview');
 const imagePreview = document.querySelector('.image-preview img');
+const photosWrapper = document.querySelector('.meetup-photos__wrapper');
 
 const addMeetupDetailsToDOM = (meetup) => {
   meetupTitle.textContent = meetup.topic;
@@ -18,7 +19,7 @@ const addMeetupDetailsToDOM = (meetup) => {
 
 const addMeetupDateToDOM = (meetup) => {
   const meetupDate = document.querySelector('.meetup-date__primary');
-  const [ month, day ] = parseDate(meetup.happeningOn);
+  const [month, day] = parseDate(meetup.happeningOn);
   meetupDate.textContent = month;
   const lineBreak = document.createElement('p');
   lineBreak.textContent = day;
@@ -44,11 +45,43 @@ const addMeetupDescription = (meetup) => {
   return meetupDescription;
 }
 
+const createMeetupImages = (images) => {
+  const pics = images.map((image) => {
+    const a = document.createElement('a');
+    a.href = image.imageurl;
+    const img = document.createElement('img');
+    img.src = image.imageurl;
+    img.alt = '';
+    a.appendChild(img);
+    return a;
+  });
+
+  return pics;
+}
+
+const addMeetupImagesToDOM = async () => {
+  const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}/images`, {
+    headers: {
+      Authorization: `Bearer ${Token.getToken('userToken')}`
+    }
+  });
+  const result = await response.json();
+  const defaultImage = '../assets/img/showcase2.jpg';
+  const images = result.data;
+
+  const meetupImages = createMeetupImages(images);
+
+  meetupImages.forEach(image => {
+    photosWrapper.appendChild(image);
+  });
+}
+
 
 const addMeetupToDOM = (meetup) => {
   detailsWrapper.appendChild(addMeetupDetailsToDOM(meetup));
   addMeetupDateToDOM(meetup);
-  addMeetupMainImage(meetup)
+  addMeetupMainImage(meetup);
+  addMeetupImagesToDOM();
 }
 
 
