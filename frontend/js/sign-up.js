@@ -36,7 +36,7 @@ window.onload = () => {
       const lastName = lastNameField.value;
       const firstName = firstNameField.value;
 
-      if (passwordMatch(userPassword, rUserPassword)) {
+      if (!passwordMatch(userPassword, rUserPassword)) {
         // password have to be the same
         // before proceeding to sign up
         return;

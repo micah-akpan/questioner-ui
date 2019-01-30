@@ -13,13 +13,17 @@
   margin-bottom: 200px;
 }
 
+.cards {
+  flex-wrap: wrap;
+}
+
 .cards .q-card {
+  width: calc(100% / 3 - 20px);
   border: 1px solid #116466;
 }
 
 /* Cards main content */
 .q-card .q-card__primary {
-  width: 100%;
   height: 230px;
   border-bottom: 1px solid #116466;
 }
@@ -142,6 +146,7 @@
 
 .q-card .q-card__sec .meetup-title {
   font-size: 1.4rem;
+  text-transform: capitalize;
 }
 
 .q-card .q-card__sec .meetup-sched-date {
@@ -271,5 +276,9 @@ nav.no-flex {
 
   #q-search {
     margin-left: 0;
+  }
+
+  .cards .q-card {
+    width: 100%;
   }
 }

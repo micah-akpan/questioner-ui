@@ -6,6 +6,7 @@
   "author": "Micah Akpan <mickey4sure2k7@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "browser-sync": "^2.26.3",
     "eslint": "5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "2.14.0",
@@ -30,6 +31,7 @@
   },
   "scripts": {
     "lint": "eslint --ext .js ./frontend --ignore-path .gitignore",
-    "lint-fix": "eslint --fix --ext .js ./frontend --ignore-path .gitignore"
+    "lint-fix": "eslint --fix --ext .js ./frontend --ignore-path .gitignore",
+    "serve": "browser-sync frontend -w"
   }
 }

@@ -4,17 +4,7 @@ const emailField = document.getElementById('userEmail');
 const passwordField = document.getElementById('userPwd');
 
 
-window.onload = () => {
-  const userToken = localStorage.getItem('userToken');
-  if (userToken.trim()) {
-    // redirect to meetups page
-    window.location.href = './meetups.html';
-  } else {
-    window.location.href = './';
-  }
-};
-
-loginForm.onsubmit = function submitForm(e) {
+loginForm.onsubmit = (e) => {
   e.preventDefault();
   fetch('http://localhost:9999/api/v1/auth/login', {
     method: 'POST',
@@ -36,9 +26,9 @@ loginForm.onsubmit = function submitForm(e) {
         localStorage.setItem('userToken', token);
 
         if (user.isadmin) {
-          window.location.href = './admin/meetups.html';
+          window.location.assign('./admin/meetups.html');
         } else {
-          window.location.href = './meetups.html';
+          window.location.assign('./meetups.html');
         }
       } else {
         userFeedback.textContent = response.error;
@@ -47,4 +37,13 @@ loginForm.onsubmit = function submitForm(e) {
     .catch((err) => {
       console.log(err);
     });
+};
+
+
+window.onload = () => {
+  const userToken = localStorage.getItem('userToken');
+  if (userToken) {
+    // redirect to meetups page
+    window.location.assign('./meetups.html');
+  }
 };

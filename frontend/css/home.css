@@ -285,7 +285,6 @@
   }
 
   .cards .q-card {
-    flex: 1 1 calc(100% / 3 - 20px);
     margin-bottom: 20px;
   }
 }
