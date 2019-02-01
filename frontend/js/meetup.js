@@ -62,8 +62,13 @@ const createQuestionCard = (question) => {
   questionTextBlock.classList.add('question-text-block');
   const questionText = document.createElement('div');
   questionText.classList.add('question-text');
-  const p = document.createElement('p');
-  p.textContent = question.body;
+
+  const questionTitle = document.createElement('h3');
+  questionTitle.classList.add('question-title');
+  questionTitle.textContent = question.title;
+
+  const questionBody = document.createElement('p');
+  questionBody.textContent = question.body;
 
   // To be replaced with dynamic content
   const askedBy = document.createElement('span');
@@ -104,7 +109,8 @@ const createQuestionCard = (question) => {
   questionIcons.appendChild(leftIcons);
   questionIcons.appendChild(rightIcons);
 
-  questionText.appendChild(p);
+  questionText.appendChild(questionTitle);
+  questionText.appendChild(questionBody);
   questionText.appendChild(askedBy);
   questionText.appendChild(askedWhen);
 

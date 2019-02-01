@@ -103,6 +103,11 @@ button {
   margin-bottom: 20px;
 }
 
+.q-question-cards .question-card
+.question-title {
+  font-size: 1em;
+}
+
 .q-question-cards .question-card p {
   font-weight: 400;
 }
