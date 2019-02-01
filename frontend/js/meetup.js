@@ -11,6 +11,126 @@ const imagePreview = document.querySelector('.image-preview img');
 const photosWrapper = document.querySelector('.meetup-photos__wrapper');
 const rsvpEnquiryWrapper = document.querySelector('.meetup-rsvp__enquiry');
 
+// Question cards
+const questionCards = document.querySelector('.q-question-cards');
+
+const questionCardIcons = {
+  left: [
+    {
+      id: 1,
+      src: '../assets/icons/thumbs-up.svg',
+      alt: 'A thumb pointing upwards giving an approval',
+      title: 'Upvote Question'
+    },
+
+    {
+      id: 2,
+      src: '../assets/icons/thumbs-down.svg',
+      alt: 'A thumb pointing downwards giving a disapproval',
+      title: 'Downvote Question'
+    },
+  ],
+
+  right: [
+    {
+      id: 3,
+      src: '../assets/icons/share.svg',
+      alt: 'A black curved arrow pointing east',
+      title: 'Share'
+    },
+
+    {
+      id: 4,
+      src: '../assets/icons/like.svg',
+      alt: 'A red heart shape',
+      title: 'Favorite'
+    }
+  ]
+};
+
+
+// TODO: Refactor
+const createQuestionCard = (question) => {
+  const card = document.createElement('div');
+  card.classList.add('question-card');
+  const questionBlock = document.createElement('div');
+  questionBlock.classList.add('question-block');
+  const questionTextBlock = document.createElement('div');
+  questionTextBlock.classList.add('question-text-block');
+  const questionText = document.createElement('div');
+  questionText.classList.add('question-text');
+  const p = document.createElement('p');
+  p.textContent = question.body;
+
+  // To be replaced with dynamic content
+  const askedBy = document.createElement('span');
+  askedBy.classList.add('asked-by')
+  askedBy.textContent = 'asked by X';
+  const askedWhen = document.createElement('span');
+  askedWhen.classList.add('asked-when');
+  askedWhen.textContent = '';
+
+  // Question icons
+  const questionIcons = document.createElement('div');
+  questionIcons.classList.add('question-icons');
+
+  const leftIcons = document.createElement('div');
+  leftIcons.classList.add('question-icons__left');
+
+  questionCardIcons.left.forEach((icon) => {
+    const img = document.createElement('img');
+    img.src = icon.src;
+    img.alt = icon.alt;
+    img.title = icon.title;
+    img.setAttribute('data-target', icon.id);
+    leftIcons.appendChild(img);
+  });
+
+  const rightIcons = document.createElement('div');
+  rightIcons.classList.add('question-icons__right');
+
+  questionCardIcons.right.forEach((icon) => {
+    const img = document.createElement('img');
+    img.src = icon.src;
+    img.alt = icon.alt;
+    img.title = icon.title;
+    img.setAttribute('data-target', icon.id);
+    rightIcons.appendChild(img);
+  });
+
+  questionIcons.appendChild(leftIcons);
+  questionIcons.appendChild(rightIcons);
+
+  questionText.appendChild(p);
+  questionText.appendChild(askedBy);
+  questionText.appendChild(askedWhen);
+
+  questionTextBlock.appendChild(questionText);
+  questionTextBlock.appendChild(questionIcons);
+
+  questionBlock.appendChild(questionTextBlock);
+  card.appendChild(questionBlock);
+
+  return card;
+}
+
+const displayMeetupQuestions = async (meetup) => {
+  try {
+    const activeMeetupId = localStorage.getItem('activeMeetupId');
+    const apiUrl = `${apiBaseURL}/meetups/${activeMeetupId}/questions`;
+    const response = await fetch(apiUrl, genericRequestHeader);
+    const responseBody = await response.json();
+    if (responseBody.status === 200) {
+      const questions = responseBody.data;
+      questions.forEach((question) => {
+        questionCards.appendChild(createQuestionCard(question));
+      })
+    }
+  } catch(e) {
+    console.log(e);
+  }
+}
+
 const addMeetupDetailsToDOM = (meetup) => {
   meetupTitle.textContent = meetup.topic;
   meetupOrganizer.textContent = 'Organized by X';
@@ -196,7 +316,6 @@ const rsvpBtnSpecs = [
 ];
 
 const rsvpForMeetup = async (userResponse) => {
-  console.log(`userResponse = ${userResponse}`);
   const meetupId = localStorage.getItem('activeMeetupId');
   const apiUrl = `${apiBaseURL}/meetups/${meetupId}/rsvps`;
   const response = await fetch(apiUrl, {
@@ -208,7 +327,11 @@ const rsvpForMeetup = async (userResponse) => {
     body: JSON.stringify({ response: userResponse })
   });
   const responseBody = await response.json();
-  console.log(responseBody);
+  return responseBody.data;
+}
+
+const updateRsvpResponse = () => {
+
 }
 
 
@@ -287,6 +410,8 @@ const addMeetupToPage = (meetup) => {
   addMeetupImagesToPage(meetup);
   displayRsvpFeedbackMsg(meetup);
   addDescriptionToPage(meetup);
+
+  displayMeetupQuestions(meetup);
 }
 /**
  * @func displayMeetup
@@ -303,6 +428,7 @@ const displayMeetup = () => {
       if (tokenValid) {
         if (res.status === 200) {
           addMeetupToPage(res.data[0]);
+
         }
       } else {
         window.location.assign('./sign-in.html');
@@ -318,6 +444,6 @@ window.onload = (e) => {
   if (!userToken) {
     window.location.assign('./sign-in.html');
   } else {
-    displayMeetup()
+    displayMeetup();
   }
 }
