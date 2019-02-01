@@ -29,17 +29,49 @@ const addMeetupDateToDOM = (meetup) => {
   return meetupDate;
 }
 
-const addMeetupMainImage = async (meetup) => {
-  const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}/images`, {
-    headers: {
-      Authorization: `Bearer ${Token.getToken('userToken')}`
-    }
-  });
-  const result = await response.json();
-  const defaultImage = '../assets/img/showcase2.jpg';
-  const image = result.data[0];
-  imagePreview.src = image.imageurl || defaultImage;
+const genericRequestHeader = {
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${Token.getToken('userToken')}`
+  }
+};
+
+/**
+ * @func getMeetupImages
+ * @param {*} meetup
+ * @returns {Promise<Array>} Returns a list of meetup images 
+ */
+const getMeetupImages = async (meetup) => {
+  try {
+    const url = `${apiBaseURL}/meetups/${meetup.id}/images`;
+    const response = await fetch(url, genericRequestHeader);
+    const responseBody = await response.json();
+    console.log(responseBody)
+    return responseBody.data;
+  } catch (e) {
+
+  }
 }
+
+/**
+ * @func addMeetupImageToPage
+ * @param {*} meetup Meetup object
+ * @returns {*}
+ * @description Places a main meetup image on the page 
+ */
+const addMeetupImageToPage = async (meetup) => {
+  try {
+    const meetupImages = await getMeetupImages(meetup);
+    const image = meetupImages[0];
+    const defaultImage = '../assets/img/showcase2.jpg';
+    imagePreview.setAttribute('src', image.imageUrl || defaultImage);
+    return imagePreview;
+  } catch (e) {
+
+  }
+}
+
+
 
 const addMeetupDescription = (meetup) => {
   const meetupDescription = document.querySelector('.meetup-desc');
@@ -60,6 +92,7 @@ const createMeetupImages = (images) => {
 
   return pics;
 }
+
 
 const addMeetupImagesToDOM = async () => {
   const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}/images`, {
@@ -124,7 +157,7 @@ const sendRsvpFeedback = async (meetup) => {
 const addMeetupToDOM = (meetup) => {
   detailsWrapper.appendChild(addMeetupDetailsToDOM(meetup));
   addMeetupDateToDOM(meetup);
-  addMeetupMainImage(meetup);
+  addMeetupImageToPage(meetup);
   addMeetupImagesToDOM();
   sendRsvpFeedback(meetup);
 }
