@@ -46,7 +46,6 @@ const getMeetupImages = async (meetup) => {
     const url = `${apiBaseURL}/meetups/${meetup.id}/images`;
     const response = await fetch(url, genericRequestHeader);
     const responseBody = await response.json();
-    console.log(responseBody)
     return responseBody.data;
   } catch (e) {
 
@@ -72,19 +71,29 @@ const addMeetupImageToPage = async (meetup) => {
 }
 
 
-
-const addMeetupDescription = (meetup) => {
+/**
+ * @func addDescriptionToPage
+ * @param {*} meetup Meetup object
+ * @description Adds meetup description to page
+ * @return {HTMLElement} Returns the meetup description element
+ */
+const addDescriptionToPage = (meetup) => {
   const meetupDescription = document.querySelector('.meetup-desc');
   meetupDescription.textContent = meetup.description;
   return meetupDescription;
 }
 
+/**
+ * 
+ * @param {Array} images An array of meetup image objects
+ * @returns {Array<HTMLElement>} Returns an array of meetups 
+ */
 const createMeetupImages = (images) => {
   const pics = images.map((image) => {
     const a = document.createElement('a');
-    a.href = image.imageurl;
+    a.href = image.imageUrl;
     const img = document.createElement('img');
-    img.src = image.imageurl;
+    img.src = image.imageUrl;
     img.alt = '';
     a.appendChild(img);
     return a;
@@ -94,54 +103,96 @@ const createMeetupImages = (images) => {
 }
 
 
-const addMeetupImagesToDOM = async () => {
-  const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}/images`, {
-    headers: {
-      Authorization: `Bearer ${Token.getToken('userToken')}`
-    }
-  });
-  const result = await response.json();
-  const defaultImage = '../assets/img/showcase2.jpg';
-  const images = result.data;
+/**
+ * @func addMeetupImagesToPage
+ * @param {*} meetup Meetup object 
+ * @description Adds meetup images to page
+ */
+const addMeetupImagesToPage = async (meetup) => {
+  try {
+    const meetupImages = await getMeetupImages(meetup);
+    const allImages = createMeetupImages(meetupImages);
+    allImages.forEach((image) => {
+      photosWrapper.appendChild(image);
+    });
+  } catch (e) {
 
-  const meetupImages = createMeetupImages(images);
-
-  meetupImages.forEach(image => {
-    photosWrapper.appendChild(image);
-  });
+  }
 };
 
+/**
+ * @func getMeetupRsvps
+ * @param {*} meetup Meetup object
+ * @returns {Array} An Array of rsvps for `meetup` 
+ */
 const getMeetupRsvps = async (meetup) => {
-  const response = await fetch(`${apiBaseURL}/meetups/${meetup.id}/rsvps`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${Token.getToken('userToken')}`
-    }
-  });
-  const result = await response.json();
-  const rsvps = result.data;
-  return rsvps;
+  try {
+    const apiUrl = `${apiBaseURL}/meetups/${meetup.id}/rsvps`;
+    const response = await fetch(apiUrl, genericRequestHeader);
+    const responseBody = await response.json();
+    return responseBody.data;
+  } catch (e) {
+
+  }
 }
 
-const userHasRsvped = async (meetup) => {
+/**
+ * @func getUserRsvp
+ * @param {*} meetup
+ * @returns {Promise} Resolves to a Meetup Rsvp object
+ */
+const getUserRsvp = async (meetup) => {
   const rsvps = await getMeetupRsvps(meetup);
   const userId = localStorage.getItem('userId');
-  const userRsvp = rsvps.find(rsvp => {
+  const userRsvp = rsvps.find((rsvp) => {
     return rsvp.user === Number(userId);
   });
 
+  return userRsvp;
+}
+
+/**
+ * @func userHasRsvped
+ * @param {*} meetup Meetup object
+ * @returns {Promise<Boolean>} Resolve to true if user has rsvped for `meetup`, false otherwise
+ */
+const userHasRsvped = async (meetup) => {
+  const userRsvp = await getUserRsvp(meetup);
   return userRsvp !== null;
 }
 
-const sendRsvpFeedback = async (meetup) => {
+/**
+ * @param {String} response
+ * @returns {String} Rsvp feedback message
+ */
+const formRsvpFeedbackMsg = (response) => {
+  let feedbackMessage = '';
+  if (response === 'yes') {
+    feedbackMessage = 'You are going to this meetup'
+  } else if (response === 'no') {
+    feedbackMessage = 'You are not going to this meetup';
+  } else {
+    feedbackMessage = 'You are likely to attend this meetup'
+  }
+
+  return feedbackMessage;
+}
+
+/**
+ * 
+ * @param {*} meetup Meetup object
+ * @returns {Promise<Element>} Resolves to an HTMLElement
+ * @description Adds An RSVP feedback to page
+ */
+const displayRsvpFeedbackMsg = async (meetup) => {
   const rsvpForMeetupExist = await userHasRsvped(meetup);
   if (rsvpForMeetupExist) {
-    const allRsvpsForMeetup = await getMeetupRsvps(meetup);
-    const rsvp = allRsvpsForMeetup[0];
-    const feedbackMsg = `You are ${rsvp.response === 'yes' || rsvp.response === 'maybe' ? 'going' : 'not going'} to this meetup`;
+    const userRsvp = await getUserRsvp(meetup);
+    const userResponse = userRsvp.response;
+    const feedbackMessage = formRsvpFeedbackMsg(userResponse);
 
     rsvpEnquiryWrapper.innerHTML = '';
-    const text = document.createTextNode(feedbackMsg);
+    const text = document.createTextNode(feedbackMessage);
     const p = document.createElement('p');
     p.appendChild(text);
     const responseUpdateBtn = document.createElement('button');
@@ -151,33 +202,41 @@ const sendRsvpFeedback = async (meetup) => {
     rsvpEnquiryWrapper.appendChild(p);
     rsvpEnquiryWrapper.appendChild(responseUpdateBtn);
   }
+
+  return rsvpEnquiryWrapper;
 }
 
-
-const addMeetupToDOM = (meetup) => {
+/**
+ * @func addMeetupToPage
+ * @param {*} meetup Meetup object
+ * @description Adds Meetup Details sections to page 
+ */
+const addMeetupToPage = (meetup) => {
   detailsWrapper.appendChild(addMeetupDetailsToDOM(meetup));
   addMeetupDateToDOM(meetup);
   addMeetupImageToPage(meetup);
-  addMeetupImagesToDOM();
-  sendRsvpFeedback(meetup);
+  addMeetupImagesToPage(meetup);
+  displayRsvpFeedbackMsg(meetup);
 }
 
-
+/**
+ * @func displayMeetup
+ * @returns {*}
+ * @description Displays the meetup details on page
+ */
 const displayMeetup = () => {
-  fetch(`${apiBaseURL}/meetups/${localStorage.getItem('activeMeetupId')}`, {
-    headers: {
-      Authorization: `Bearer ${Token.getToken('userToken')}`
-    }
-  })
+  const activeMeetupId = localStorage.getItem('activeMeetupId');
+  const apiUrl = `${apiBaseURL}/meetups/${activeMeetupId}`
+  fetch(apiUrl, genericRequestHeader)
     .then(res => res.json())
-    .then(res => {
+    .then((res) => {
       const tokenValid = Token.tokenIsValid(res.status);
       if (tokenValid) {
         if (res.status === 200) {
-          addMeetupToDOM(res.data[0]);
+          addMeetupToPage(res.data[0]);
         }
       } else {
-
+        window.location.assign('./sign-in.html');
       }
     })
     .catch((err) => {
