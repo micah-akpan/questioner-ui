@@ -338,6 +338,7 @@ button {
   height: 100%;
 }
 
+/* Meetup Tags */
 #meetup-tags {
   margin-bottom: 120px;
 }
@@ -352,6 +353,22 @@ button {
 
 #meetup-tags .meetup-tags__box {
   margin-bottom: 10px;
+}
+
+#meetup-tags .meetup-tags-added ul {
+  
+}
+
+#meetup-tags .meetup-tags-added li {
+  display: inline-block;
+  padding: 7px;
+  background: #ccc;
+  color: #555;
+  border-radius: 3px;
+  border: none;
+  margin: 5px 5px 5px 0;
+  min-width: 60px;
+  text-align: center;
 }
 
 #meetup-tags .meetup-tags-added span {

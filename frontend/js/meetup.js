@@ -11,6 +11,9 @@ const imagePreview = document.querySelector('.image-preview img');
 const photosWrapper = document.querySelector('.meetup-photos__wrapper');
 const rsvpEnquiryWrapper = document.querySelector('.meetup-rsvp__enquiry');
 
+const meetupTagsWrapper = document.getElementById('meetup-tags');
+const addedMeetups = document.querySelector('.meetup-tags-added');
+
 // Question cards
 const questionCards = document.querySelector('.q-question-cards');
 
@@ -112,6 +115,35 @@ const createQuestionCard = (question) => {
   card.appendChild(questionBlock);
 
   return card;
+}
+
+const getMeetupTags = async () => {
+  const activeMeetupId = localStorage.getItem('activeMeetupId');
+  const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}`, genericRequestHeader);
+  const responseBody = await response.json();
+  console.log(responseBody)
+  return responseBody.data[0].tags;
+}
+
+const createMeetupTags = (tags) => {
+  return tags.map((tag) => {
+    const meetupTag = document.createElement('li');
+    meetupTag.classList.add('meetup-tag');
+    meetupTag.textContent = tag;
+    return meetupTag;
+  })
+}
+
+const displayMeetupTags = async () => {
+  const meetupTags = await getMeetupTags();
+  const meetupTagElems = createMeetupTags(meetupTags);
+  const meetupList = document.createElement('ul');
+  meetupTagElems.forEach((item) => {
+    meetupList.appendChild(item);
+  });
+
+  addedMeetups.appendChild(meetupList);
+  meetupTagsWrapper.appendChild(addedMeetups);
 }
 
 const displayMeetupQuestions = async (meetup) => {
@@ -412,6 +444,7 @@ const addMeetupToPage = (meetup) => {
   addDescriptionToPage(meetup);
 
   displayMeetupQuestions(meetup);
+  displayMeetupTags();
 }
 /**
  * @func displayMeetup
