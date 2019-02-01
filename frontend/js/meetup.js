@@ -178,6 +178,52 @@ const formRsvpFeedbackMsg = (response) => {
   return feedbackMessage;
 }
 
+const rsvpBtnSpecs = [
+  {
+    id: 1,
+    text: 'yes'
+  },
+
+  {
+    id: 2,
+    text: 'maybe'
+  },
+
+  {
+    id: 3,
+    text: 'no'
+  }
+]
+
+
+const createRsvpButtons = () => {
+  const rsvpButtons = rsvpBtnSpecs.map((spec) => {
+    const button = document.createElement('button');
+    button.classList.add('q-btn');
+    button.classList.add('rsvp-btn');
+    button.textContent = spec.text;
+    button.setAttribute('data-target', spec.id);
+    return button;
+  })
+
+  return rsvpButtons;
+}
+
+const displayRsvpBtns = () => {
+  const rsvpButtons = createRsvpButtons();
+  const p = document.createElement('p');
+  p.textContent = 'Will you attend this meetup?';
+  const btnsWrapper = document.createElement('div');
+  btnsWrapper.classList.add('meetup-sched__btns');
+  rsvpButtons.forEach((rsvpButton) => {
+    btnsWrapper.appendChild(rsvpButton);
+  });
+  rsvpEnquiryWrapper.innerHTML = '';
+  rsvpEnquiryWrapper.appendChild(p);
+  rsvpEnquiryWrapper.appendChild(btnsWrapper);
+  return rsvpEnquiryWrapper;
+}
+
 /**
  * 
  * @param {*} meetup Meetup object
@@ -194,8 +240,10 @@ const displayRsvpFeedbackMsg = async (meetup) => {
     rsvpEnquiryWrapper.innerHTML = '';
     const text = document.createTextNode(feedbackMessage);
     const p = document.createElement('p');
+    p.classList.add('user-rsvp-feedback-msg');
     p.appendChild(text);
     const responseUpdateBtn = document.createElement('button');
+    responseUpdateBtn.onclick = () => displayRsvpBtns();
     responseUpdateBtn.classList.add('q-btn');
     responseUpdateBtn.textContent = 'Change Response';
 
@@ -205,6 +253,8 @@ const displayRsvpFeedbackMsg = async (meetup) => {
 
   return rsvpEnquiryWrapper;
 }
+
+
 
 /**
  * @func addMeetupToPage
@@ -217,8 +267,8 @@ const addMeetupToPage = (meetup) => {
   addMeetupImageToPage(meetup);
   addMeetupImagesToPage(meetup);
   displayRsvpFeedbackMsg(meetup);
+  addDescriptionToPage(meetup);
 }
-
 /**
  * @func displayMeetup
  * @returns {*}
