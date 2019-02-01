@@ -158,7 +158,7 @@ const getUserRsvp = async (meetup) => {
  */
 const userHasRsvped = async (meetup) => {
   const userRsvp = await getUserRsvp(meetup);
-  return userRsvp !== null;
+  return userRsvp !== undefined;
 }
 
 /**
@@ -193,7 +193,23 @@ const rsvpBtnSpecs = [
     id: 3,
     text: 'no'
   }
-]
+];
+
+const rsvpForMeetup = async (userResponse) => {
+  console.log(`userResponse = ${userResponse}`);
+  const meetupId = localStorage.getItem('activeMeetupId');
+  const apiUrl = `${apiBaseURL}/meetups/${meetupId}/rsvps`;
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Token.getToken('userToken')}`
+    },
+    body: JSON.stringify({ response: userResponse })
+  });
+  const responseBody = await response.json();
+  console.log(responseBody);
+}
 
 
 const createRsvpButtons = () => {
@@ -203,6 +219,7 @@ const createRsvpButtons = () => {
     button.classList.add('rsvp-btn');
     button.textContent = spec.text;
     button.setAttribute('data-target', spec.id);
+    button.onclick = () => rsvpForMeetup(spec.text);
     return button;
   })
 
@@ -249,6 +266,8 @@ const displayRsvpFeedbackMsg = async (meetup) => {
 
     rsvpEnquiryWrapper.appendChild(p);
     rsvpEnquiryWrapper.appendChild(responseUpdateBtn);
+  } else {
+    displayRsvpBtns();
   }
 
   return rsvpEnquiryWrapper;
