@@ -73,7 +73,8 @@ const createCommentCard = (comments) => {
   const viewComments = document.createElement('p');
   viewComments.classList.add('view-comments__link');
 
-  viewComments.textContent = `View all ${comments.length} comments`;
+  let totalComments = comments.length;
+  viewComments.textContent = totalComments > 0 ? `View all ${totalComments} ${totalComments > 1 ? 'comments' : 'comment'}` : '';
 
   const questionComment = document.createElement('div');
   questionComment.classList.add('question-comment');
