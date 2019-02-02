@@ -1,21 +1,14 @@
 /* eslint-disable */
+
+/**
+ * @module meetup
+ * @description Meetup Detail script
+ */
+
+
+
 const apiBaseURL = 'http://localhost:9999/api/v1';
-
-const detailsWrapper = document.querySelector('.details-content');
-const meetupTitleHost = document.querySelector('.meetup-title-host');
-const meetupTitle = document.querySelector('.meetup-title-host h3');
-const meetupOrganizer = document.querySelector('.meetup-title-host p');
 const activeMeetupId = localStorage.getItem('activeMeetupId');
-const imagePreviewWrapper = document.querySelector('.image-preview');
-const imagePreview = document.querySelector('.image-preview img');
-const photosWrapper = document.querySelector('.meetup-photos__wrapper');
-const rsvpEnquiryWrapper = document.querySelector('.meetup-rsvp__enquiry');
-
-const meetupTagsWrapper = document.getElementById('meetup-tags');
-const addedMeetups = document.querySelector('.meetup-tags-added');
-
-// Question cards
-const questionCards = document.querySelector('.q-question-cards');
 
 const genericRequestHeader = {
   headers: {
@@ -24,6 +17,24 @@ const genericRequestHeader = {
   }
 };
 
+const detailsWrapper = document.querySelector('.details-content');
+const meetupTitleHost = document.querySelector('.meetup-title-host');
+const meetupTitle = document.querySelector('.meetup-title-host h3');
+const meetupOrganizer = document.querySelector('.meetup-title-host p');
+const imagePreviewWrapper = document.querySelector('.image-preview');
+const imagePreview = document.querySelector('.image-preview img');
+const photosWrapper = document.querySelector('.meetup-photos__wrapper');
+const rsvpEnquiryWrapper = document.querySelector('.meetup-rsvp__enquiry');
+
+const meetupTagsWrapper = document.getElementById('meetup-tags');
+const addedMeetups = document.querySelector('.meetup-tags-added');
+const questionCards = document.querySelector('.q-question-cards');
+
+/**
+ * @func getComments
+ * @param {*} question
+ * @returns {Array} A list of comments
+ */
 const getComments = async (question) => {
   const apiUrl = `${apiBaseURL}/questions/${question.id}/comments`;
   const response = await fetch(apiUrl, genericRequestHeader);
@@ -33,73 +44,86 @@ const getComments = async (question) => {
   return comments;
 }
 
-const questionCardIcons = {
-  left: [
-    {
-      id: 1,
-      src: '../assets/icons/thumbs-up.svg',
-      alt: 'A thumb pointing upwards giving an approval',
-      title: 'Upvote Question'
-    },
+/**
+ * @func formCommentLinkText
+ * @param {Number} totalComments
+ * @returns {String} Comment link text 
+ */
+const formCommentLinkText = (totalComments) => {
+  let linkText = '';
+  if (totalComments > 1) {
+    linkText = `View all ${totalComments} comments`
+  } else if (totalComments === 1) {
+    linkText = `View ${totalComments} comment`
+  }
 
-    {
-      id: 2,
-      src: '../assets/icons/thumbs-down.svg',
-      alt: 'A thumb pointing downwards giving a disapproval',
-      title: 'Downvote Question'
-    },
-  ],
+  return linkText;
+}
 
-  right: [
-    {
-      id: 3,
-      src: '../assets/icons/share.svg',
-      alt: 'A black curved arrow pointing east',
-      title: 'Share'
-    },
-
-    {
-      id: 4,
-      src: '../assets/icons/like.svg',
-      alt: 'A red heart shape',
-      title: 'Favorite'
-    }
-  ]
-};
-
-const createCommentCard = (comments) => {
-  const box = document.createElement('div');
-  box.className = 'comment-box';
-  const viewComments = document.createElement('p');
-  viewComments.classList.add('view-comments__link');
-
-  let totalComments = comments.length;
-  viewComments.textContent = totalComments > 0 ? `View all ${totalComments} ${totalComments > 1 ? 'comments' : 'comment'}` : '';
-
-  const questionComment = document.createElement('div');
-  questionComment.classList.add('question-comment');
-  const userImage = document.createElement('img');
-  userImage.setAttribute('src', '../assets/icons/avatar1.svg');
-  userImage.setAttribute('alt', '');
-
+/**
+ * @func createCommentForm
+ */
+const createCommentForm = () => {
   const commentForm = document.createElement('form');
   const textArea = document.createElement('textarea');
   textArea.placeholder = 'Add Your Comment';
-  const button = document.createElement('button');
-  button.classList.add('q-btn');
-  button.classList.add('btn');
-  button.textContent = 'Comment';
-
+  const commentButton = document.createElement('button');
+  commentButton.classList.add('q-btn');
+  commentButton.classList.add('btn');
+  commentButton.textContent = 'Comment';
   commentForm.appendChild(textArea);
-  commentForm.appendChild(button);
+  commentForm.appendChild(commentButton);
+  return commentForm;
+}
 
+/**
+ * @func getUserImage
+ * @returns {Promise<String>} Resolves to the user avatar image
+ */
+const getUserImage = async () => {
+  const userId = localStorage.getItem('userId');
+  const apiUrl = `${apiBaseURL}/users/${userId}`;
+  const response = await fetch(apiUrl, genericRequestHeader);
+  const responseBody = await response.json();
+  const { status, data } = responseBody;
+  const userImage = status === 200 ? data[0].avatar : '';
+  return userImage;
+};
+
+const createUserAvatar = async () => {
+  const userImageUrl = await getUserImage();
+  const userImage = document.createElement('img');
+  const defaultUserAvatar = '../assets/icons/avatar1.svg';
+  userImage.setAttribute('src', userImageUrl || defaultUserAvatar);
+  userImage.setAttribute('alt', '');
+  return userImage;
+}
+
+/**
+ * @func createCommentCard
+ * @param {Array} comments
+ * @returns {HTMLElement} HTMLElement representing a comment card
+ */
+const createCommentCard = async (comments) => {
+  const card = document.createElement('div');
+  card.classList.add('comment-box');
+  const viewComments = document.createElement('p');
+  viewComments.classList.add('view-comments__link');
+  viewComments.textContent = formCommentLinkText(comments.length);
+
+  const questionComment = document.createElement('div');
+  questionComment.classList.add('question-comment');
+
+  const userImage = await createUserAvatar();
+
+  const commentForm = createCommentForm();
   questionComment.appendChild(userImage);
   questionComment.appendChild(commentForm);
-  
-  box.appendChild(viewComments);
-  box.appendChild(questionComment);
 
-  return box;
+  card.appendChild(viewComments);
+  card.appendChild(questionComment);
+
+  return card;
 }
 
 
@@ -171,11 +195,11 @@ const createQuestionCard = async (question) => {
   // total comments
 
   const comments = await getComments(question);
-  const commentCard = createCommentCard(comments)
+  const commentCard = await createCommentCard(comments)
 
   questionBlock.appendChild(questionTextBlock);
   questionBlock.appendChild(commentCard);
-  
+
   card.appendChild(questionBlock);
 
   return card;
@@ -221,7 +245,7 @@ const displayMeetupQuestions = async (meetup) => {
         questionCards.appendChild(await createQuestionCard(question));
       })
     }
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
 }
