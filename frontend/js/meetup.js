@@ -17,6 +17,22 @@ const addedMeetups = document.querySelector('.meetup-tags-added');
 // Question cards
 const questionCards = document.querySelector('.q-question-cards');
 
+const genericRequestHeader = {
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${Token.getToken('userToken')}`
+  }
+};
+
+const getComments = async (question) => {
+  const apiUrl = `${apiBaseURL}/questions/${question.id}/comments`;
+  const response = await fetch(apiUrl, genericRequestHeader);
+  const responseBody = await response.json();
+  const { status, data } = responseBody;
+  const comments = status === 200 ? data : [];
+  return comments;
+}
+
 const questionCardIcons = {
   left: [
     {
@@ -51,9 +67,43 @@ const questionCardIcons = {
   ]
 };
 
+const createCommentCard = (comments) => {
+  const box = document.createElement('div');
+  box.className = 'comment-box';
+  const viewComments = document.createElement('p');
+  viewComments.classList.add('view-comments__link');
+
+  viewComments.textContent = `View all ${comments.length} comments`;
+
+  const questionComment = document.createElement('div');
+  questionComment.classList.add('question-comment');
+  const userImage = document.createElement('img');
+  userImage.setAttribute('src', '../assets/icons/avatar1.svg');
+  userImage.setAttribute('alt', '');
+
+  const commentForm = document.createElement('form');
+  const textArea = document.createElement('textarea');
+  textArea.placeholder = 'Add Your Comment';
+  const button = document.createElement('button');
+  button.classList.add('q-btn');
+  button.classList.add('btn');
+  button.textContent = 'Comment';
+
+  commentForm.appendChild(textArea);
+  commentForm.appendChild(button);
+
+  questionComment.appendChild(userImage);
+  questionComment.appendChild(commentForm);
+  
+  box.appendChild(viewComments);
+  box.appendChild(questionComment);
+
+  return box;
+}
+
 
 // TODO: Refactor
-const createQuestionCard = (question) => {
+const createQuestionCard = async (question) => {
   const card = document.createElement('div');
   card.classList.add('question-card');
   const questionBlock = document.createElement('div');
@@ -117,7 +167,14 @@ const createQuestionCard = (question) => {
   questionTextBlock.appendChild(questionText);
   questionTextBlock.appendChild(questionIcons);
 
+  // total comments
+
+  const comments = await getComments(question);
+  const commentCard = createCommentCard(comments)
+
   questionBlock.appendChild(questionTextBlock);
+  questionBlock.appendChild(commentCard);
+  
   card.appendChild(questionBlock);
 
   return card;
@@ -127,7 +184,6 @@ const getMeetupTags = async () => {
   const activeMeetupId = localStorage.getItem('activeMeetupId');
   const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}`, genericRequestHeader);
   const responseBody = await response.json();
-  console.log(responseBody)
   return responseBody.data[0].tags;
 }
 
@@ -160,8 +216,8 @@ const displayMeetupQuestions = async (meetup) => {
     const responseBody = await response.json();
     if (responseBody.status === 200) {
       const questions = responseBody.data;
-      questions.forEach((question) => {
-        questionCards.appendChild(createQuestionCard(question));
+      questions.forEach(async (question) => {
+        questionCards.appendChild(await createQuestionCard(question));
       })
     }
   } catch(e) {
@@ -186,13 +242,6 @@ const addMeetupDateToDOM = (meetup) => {
   meetupDate.appendChild(lineBreak);
   return meetupDate;
 }
-
-const genericRequestHeader = {
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${Token.getToken('userToken')}`
-  }
-};
 
 /**
  * @func getMeetupImages
