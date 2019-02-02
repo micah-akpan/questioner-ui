@@ -22,11 +22,15 @@ const getUserToken = () => localStorage.getItem('userToken');
 
 /**
  * @function createMeetupLink
+ * @param {*} meetup Meetup object
  * @returns {HTMLElement} Returns an anchor link
  */
-const createMeetupLink = () => {
+const createMeetupLink = (meetup) => {
   const meetupCardLink = document.createElement('a');
   meetupCardLink.setAttribute('href', './meetup.html');
+  meetupCardLink.onclick = () => {
+    localStorage.setItem('activeMeetupId', meetup.id);
+  };
   return meetupCardLink;
 };
 
@@ -56,48 +60,6 @@ async function getTotalQuestionsAsked(meetup) {
     console.log(e);
   }
 }
-
-/**
- * @const numMonthToStr
- * @description A hash of month ordinal numbers to their short forms
- */
-const numMonthToStr = {
-  1: 'Jan',
-  2: 'Feb',
-  3: 'Mar',
-  4: 'Apr',
-  5: 'May',
-  6: 'Jun',
-  7: 'Jul',
-  8: 'Aug',
-  9: 'Sept',
-  10: 'Oct',
-  11: 'Nov',
-  12: 'Dec'
-};
-
-/**
- * @function getMonth
- * @param {Number} date
- * @returns {String} A string version of date e.g 1 -> Jan
- */
-function getMonth(date) {
-  return numMonthToStr[date];
-}
-
-/**
- * @function parseDate
- * @param {String} date
- * @returns {Array} Returns an array of 2 elements (short form of the month and day)
- */
-const parseDate = (date) => {
-  const currentDate = new Date(date);
-  const month = currentDate.getMonth();
-  const monthShortForm = getMonth(month + 1);
-  const day = currentDate.getDay();
-
-  return [monthShortForm, day];
-};
 
 /* eslint-disable */
 const getMeetupImages = async (meetup) => {
@@ -177,7 +139,7 @@ const createMeetupCard = (meetup) => {
   const meetupCard = document.createElement('div');
   meetupCard.classList.add('q-card');
 
-  const meetupCardLink = createMeetupLink();
+  const meetupCardLink = createMeetupLink(meetup);
   const meetupCardContentWrapper = document.createElement('div');
   meetupCardContentWrapper.classList.add('q-card__primary');
 
