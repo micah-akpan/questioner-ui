@@ -55,7 +55,7 @@
 
         <div class="new-main-content">
           <h3>Create a meetup</h3>
-          <form class="q-form" method="POST">
+          <form class="q-form" method="POST" enctype="multipart/form-data">
             <div class="q-form__group">
               <label for="m-topic" class="q-form__label">Meetup Topic
                 <abbr title="required">*</abbr>
@@ -83,9 +83,9 @@
             <div class="q-form__group">
               <label class="q-form__label">Upload an image for your meetup</label>
               <div class="outer-upload__block">
-                <input type="file" name="image" accept="image/*" class="q-form__image-upload" id="m-image" />
+                <input type="file" name="image" accept="image/*" class="q-form__image-upload" id="m-images" />
                 <div class="inner-upload__block">
-                  <label for="m-image" class="q-form__label">Upload an image</label>
+                  <label for="m-images" class="q-form__label">Upload an image</label>
                 </div>
               </div>
               <div class="image-upload-btns">
