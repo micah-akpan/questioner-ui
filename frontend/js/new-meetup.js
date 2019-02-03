@@ -33,6 +33,7 @@ const createMeetup = () => {
       const { status, data } = res;
       if (status === 201) {
         // Navigate to all meetups page for admins
+        window.location.replace('./meetups.html');
       }
     })
     .catch((err) => {
