@@ -93,10 +93,15 @@ const createMeetupPrimarySec = (meetup) => {
   const content = document.createElement('div');
   content.classList.add('content');
   const meetupImage = document.createElement('img');
-  const defaultImage = '../../assets/img/startup-meetup2.jpg';
 
-  meetupImage.setAttribute('src', (meetup.images && meetup.images[0]) || defaultImage);
-  meetupImage.setAttribute('alt', '');
+  getMeetupImages(meetup)
+    .then((images) => {
+      const image = images[0];
+      const defaultImage = '../../assets/img/startup-meetup2.jpg';
+      meetupImage.setAttribute('src', image && image.imageUrl || defaultImage);
+      meetupImage.setAttribute('alt', '');
+    });
+
   meetupImage.setAttribute('class', 'meetup-main-image');
 
   const meetupQuestionCount = document.createElement('span');
