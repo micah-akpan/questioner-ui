@@ -1,13 +1,13 @@
 const d = document;
 
+const apiBaseURL = 'http://localhost:9999/api/v1';
+
 const searchIcon = d.getElementById('search-icon');
 const searchBar = d.getElementById('search-bar');
 const btnTrigger = d.querySelector('.dropdown-trigger-btn');
 const dropDownMenu = d.querySelector('.q-user-profile__dropdown-menu');
 const cards = d.querySelector('.cards');
 const seeMoreBtn = d.querySelector('.see-more-meetups_btn');
-
-const apiBaseURL = 'http://localhost:9999/api/v1';
 
 // Toggle display of dropdown menu
 btnTrigger.onclick = () => {

@@ -4,7 +4,6 @@
  */
 
 const apiBaseURL = 'http://localhost:9999/api/v1';
-
 const searchIcon = document.getElementById('search-icon');
 const searchBar = document.getElementById('search-bar');
 const btnTrigger = document.querySelector('.dropdown-trigger-btn');
@@ -49,7 +48,7 @@ async function getTotalQuestionsAsked(meetup) {
     const response = await fetch(
       `${apiBaseURL}/meetups/${meetup.id}/questions`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('userToken')}`
+          Authorization: `Bearer ${Token.getToken('userToken')}`
         }
       }
     );

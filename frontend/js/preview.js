@@ -4,6 +4,7 @@ window.onload = () => {
   const imgUploadBtns = document.querySelector('.image-upload-btns');
 
   imgUpload.onchange = (e) => {
+    console.log('.....got here...');
     const file = URL.createObjectURL(e.target.files[0]);
     const uploadedImg = document.createElement('img');
     uploadedImg.src = file;

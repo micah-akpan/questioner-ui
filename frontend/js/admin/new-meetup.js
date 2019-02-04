@@ -1,10 +1,17 @@
 /* eslint-disable */
+const apiBaseURL = 'http://localhost:9999/api/v1';
 
 const topicField = document.getElementById('m-topic');
 const locationField = document.getElementById('m-location');
 const dateField = document.getElementById('m-date');
 const tagsField = document.getElementById('m-tags');
 const imagesField = document.getElementById('m-images');
+
+const imgUpload = document.querySelector('.q-form__image-upload');
+const imgBlock = document.querySelector('.outer-upload__block');
+const imgUploadBtns = document.querySelector('.image-upload-btns');
+
+console.log(imgUpload)
 
 const createForm = document.querySelector('form');
 
@@ -17,6 +24,17 @@ const createFeedbackAlert = (msg) => {
 
 const displayFeedbackAlert = (msg) => {
   return document.body.appendChild(createFeedbackAlert(msg));
+}
+
+
+const loadImagePreview = (e) => {
+  const imageSrc = URL.createObjectURL(e.target.files[0]);
+  const uploadedImg = document.createElement('img');
+  uploadedImg.setAttribute('src', imageSrc);
+  uploadedImg.classList.add('upload-image-preview');
+  imgBlock.innerHTML = '';
+  imgBlock.appendChild(uploadedImg);
+  imgUploadBtns.classList.add('image-upload-btns-show');
 }
 
 const createMeetup = () => {
@@ -40,11 +58,11 @@ const createMeetup = () => {
     formData.append(prop, data[prop]);
   }
 
-  fetch('http://localhost:9999/api/v1/meetups', {
+  fetch(`${apiBaseURL}/meetups`, {
     method: 'POST',
     mode: 'cors',
     headers: {
-      Authorization: `Bearer ${Token.getToken('userToken')}`
+      Authorization: `Bearer ${Token.getUserToken('userToken')}`
     },
     body: formData
   })
@@ -56,6 +74,8 @@ const createMeetup = () => {
         setTimeout(() => {
           window.location.assign('./meetups.html');
         }, 5000);
+      } else {
+        console.log(res.error)
       }
     })
     .catch((err) => {
@@ -73,4 +93,5 @@ window.onload = () => {
   if (!userToken) {
     window.location.replace('./sign-in.html');
   }
+  imgUpload.onchange = loadImagePreview;
 }
