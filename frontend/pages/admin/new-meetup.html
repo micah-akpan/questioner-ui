@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Questioner crowdsources questions to help meetup organizers prioritise questions related to a meetup">
   <meta name="author" content="Micah Akpan">
-  <link rel="stylesheet" href="../../css/meetup-new-2.css">
+  <link rel="stylesheet" href="../../css/new-meetup.css">
 </head>
 
 <body>
@@ -22,7 +22,7 @@
 
         <nav class="q-left-nav">
           <ul>
-            <li><a href="#!">Ask Question</a></li>
+            <li><a href="./meetups.html">Meetups</a></li>
           </ul>
         </nav>
 
@@ -55,7 +55,7 @@
 
         <div class="new-main-content">
           <h3>Create a meetup</h3>
-          <form class="q-form">
+          <form class="q-form" method="POST" enctype="multipart/form-data">
             <div class="q-form__group">
               <label for="m-topic" class="q-form__label">Meetup Topic
                 <abbr title="required">*</abbr>
@@ -80,17 +80,9 @@
               <span class=""></span>
             </div>
 
-            <div class="q-form__group">
-              <label class="q-form__label">Upload an image for your meetup</label>
-              <div class="outer-upload__block">
-                <input type="file" name="image" accept="image/*" class="q-form__image-upload" id="m-image" />
-                <div class="inner-upload__block">
-                  <label for="m-image" class="q-form__label">Upload an image</label>
-                </div>
-              </div>
+            <div class="q-form__group image-upload__wrapper">
               <div class="image-upload-btns">
-                <button class="q-btn img-upload__btn">Upload</button>
-                <button class="q-btn img-upload-cancel__btn">Cancel</button>
+                <button type="button" class="q-btn img-upload-cancel__btn">Cancel</button>
               </div>
               <span class=""></span>
             </div>
@@ -98,7 +90,7 @@
             <div class="q-form__group">
               <label for="m-tag" class="q-form__label">Meetup Tags (Max 5)
               </label>
-              <input type="text" name="tags" placeholder="" id="m-tag" class="q-form__input" />
+              <input type="text" name="tags" placeholder="Tag1,Tag2,Tag3,Tag4" id="m-tags" class="q-form__input" />
             </div>
 
 
@@ -159,16 +151,16 @@
         <section class="footer-sec__social-media">
           <ul>
             <li>
-              <a href="#!" title="facebook">
+              <a href="#!" title="Follow on Facebook">
                 <img src="../../assets/icons/facebook.svg" alt="facebook logo">
               </a></li>
-            <li><a href="#!" title="twitter">
+            <li><a href="#!" title="Follow on Twitter">
                 <img src="../../assets/icons/twitter.svg" alt="twitter logo">
               </a></li>
-            <li><a href="#!" title="medium">
+            <li><a href="#!" title="Follow on Medium">
                 <img src="../../assets/icons/medium.svg" alt="medium logo">
               </a></li>
-            <li><a href="#!" title="instagram">
+            <li><a href="#!" title="Follow on Instagram">
                 <img src="../../assets/icons/instagram.svg" alt="instagram logo">
               </a></li>
           </ul>
@@ -176,9 +168,10 @@
       </div>
     </div>
   </footer>
-  <script src="../../js/modal.js"></script>
+  <script src="../../js/base.js"></script>
   <script src="../../js/preview.js"></script>
   <script src="../../js/mobile-nav.js"></script>
+  <script src="../../js/admin/new-meetup.js"></script>
 </body>
 
 </html>

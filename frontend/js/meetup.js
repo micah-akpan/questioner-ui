@@ -160,7 +160,7 @@ const createQuestionCard = async (question) => {
   const leftIcons = document.createElement('div');
   leftIcons.classList.add('question-icons__left');
 
-  questionCardIcons.left.forEach((icon) => {
+  icons.left.forEach((icon) => {
     const img = document.createElement('img');
     img.src = icon.src;
     img.alt = icon.alt;
@@ -172,7 +172,7 @@ const createQuestionCard = async (question) => {
   const rightIcons = document.createElement('div');
   rightIcons.classList.add('question-icons__right');
 
-  questionCardIcons.right.forEach((icon) => {
+  icons.right.forEach((icon) => {
     const img = document.createElement('img');
     img.src = icon.src;
     img.alt = icon.alt;

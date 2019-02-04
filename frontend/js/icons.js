@@ -1,5 +1,5 @@
 /* eslint-disable */
-const questionCardIcons = {
+const icons = {
   left: [
     {
       id: 1,
@@ -30,5 +30,23 @@ const questionCardIcons = {
       alt: 'A red heart shape',
       title: 'Favorite'
     }
+  ],
+
+  meetups: [
+    {
+      id: 5,
+      src: '../../assets/icons/pencil-edit-button.svg',
+      alt: 'a dark green pencil',
+      className: 'edit-option',
+      text: 'edit'
+    },
+
+    {
+      id: 6,
+      src: '../../assets/icons/delete-red.svg',
+      alt: 'a red trash bin',
+      className: 'delete-option',
+      text: 'delete'
+    },
   ]
 };

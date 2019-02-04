@@ -59,3 +59,9 @@ const parseDate = (date) => {
 
   return [monthShortForm, day];
 };
+
+
+const genericRequestHeader = {
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${Token.getToken('userToken')}`
+};

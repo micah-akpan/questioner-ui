@@ -1,0 +1,111 @@
+
+
+@import url("./meetups.css");
+@import url("./meetup.css");
+@import url("./modal.css");
+@import url("./new.css");
+@import url("./form.css");
+
+#q-new-meetup {
+  margin-bottom: 200px;
+}
+
+#q-new-meetup .wrapper {
+  margin-top: 150px;
+  width: 100%;
+  background: #fff;
+  display: flex;
+  height: 100%;
+  padding: 0;
+}
+
+#q-new-meetup .wrapper h3 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+#q-new-meetup .wrapper .new-feature-content {
+  flex: 0 0 35%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/img/andela.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+.new-feature-content .feature-content__primary {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#q-new-meetup .wrapper .new-main-content {
+  flex: 2 1 auto;
+  padding: 20px;
+}
+
+#q-new-meetup .wrapper .new-main-content h3 {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.upload-image-preview {
+  width: 100%;
+  height: 250px;
+}
+
+.image-upload-btns {
+  margin-top: 10px;
+  margin-bottom: 50px;
+  height: 0;
+  display: none;
+  transition: height 0.3s;
+}
+
+.image-upload-btns > button {
+  margin-right: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.img-upload-cancel__btn {
+  background-color: #ddd;
+  color: #f44;
+}
+
+.img-upload-cancel__btn:hover {
+  background-color: #ccc;
+}
+
+.image-upload-btns-show {
+  height: auto;
+  display: block;
+}
+
+.alert-box {
+  border: 2px;
+  background: #116466;
+  color: #ffcb9a;
+  padding: 10px;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  max-height: 50px;
+  
+}
+
+@media (max-width: 768px) {
+  #q-new-meetup .wrapper {
+    flex-direction: column;
+  }
+
+  #q-new-meetup .wrapper .new-feature-content {
+    display: none;
+  }
+
+  header .header-content {
+    justify-content: center;
+  }
+}
