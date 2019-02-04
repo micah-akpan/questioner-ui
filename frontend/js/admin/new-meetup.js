@@ -7,11 +7,49 @@ const dateField = document.getElementById('m-date');
 const tagsField = document.getElementById('m-tags');
 const imagesField = document.getElementById('m-images');
 
+// Image preview
 const imgUpload = document.querySelector('.q-form__image-upload');
 const imgBlock = document.querySelector('.outer-upload__block');
 const imgUploadBtns = document.querySelector('.image-upload-btns');
+const cancelUploadBtn = document.querySelector('.img-upload-cancel__btn');
 
-console.log(imgUpload)
+const createImageUploadFormWidget = () => {
+  const imageUploadWrapper = document.querySelector('.image-upload__wrapper');
+  const outerLabel = document.createElement('label');
+  outerLabel.classList.add('q-form__label');
+  outerLabel.textContent = 'Upload an image for your meetup';
+
+  const outerUploadBlock = document.createElement('div');
+  outerUploadBlock.classList.add('outer-upload__block');
+  const fileInput = document.createElement('input');
+  fileInput.setAttribute('type', 'file');
+  fileInput.setAttribute('name', 'image');
+  fileInput.setAttribute('accept', 'image/*');
+  fileInput.setAttribute('class', 'q-form__image-upload');
+  fileInput.setAttribute('id', 'm-images');
+  const innerUploadBlock = document.createElement('div');
+  innerUploadBlock.classList.add('inner-upload__block');
+  const innerLabel = document.createElement('label');
+  innerLabel.setAttribute('for', 'm-images');
+  innerLabel.classList.add('q-form__label');
+  innerLabel.textContent = 'Upload an Image';
+
+  innerUploadBlock.appendChild(innerLabel);
+
+  imageUploadWrapper.innerHTML = '';
+
+  outerUploadBlock.appendChild(fileInput);
+  outerUploadBlock.appendChild(innerUploadBlock);
+
+  imageUploadWrapper.appendChild(outerLabel);
+  imageUploadWrapper.appendChild(outerUploadBlock);
+
+  return imageUploadWrapper;
+}
+
+cancelUploadBtn.onclick = () => {
+  createImageUploadFormWidget();
+}
 
 const createForm = document.querySelector('form');
 
