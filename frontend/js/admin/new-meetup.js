@@ -31,6 +31,13 @@ const createImageUploadFormWidget = () => {
   fileInput.onchange = loadImagePreview;
   const innerUploadBlock = document.createElement('div');
   innerUploadBlock.classList.add('inner-upload__block');
+
+  innerUploadBlock.onclick = () => {
+    // This is meant to increase
+    // surface area for better user
+    // clicks on the image upload area
+    fileInput.click();
+  }
   const innerLabel = document.createElement('label');
   innerLabel.setAttribute('for', 'm-images');
   innerLabel.classList.add('q-form__label');
