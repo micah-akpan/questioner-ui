@@ -8,6 +8,17 @@ const imagesField = document.getElementById('m-images');
 
 const createForm = document.querySelector('form');
 
+const createFeedbackAlert = (msg) => {
+  const displayBox = document.createElement('div');
+  displayBox.textContent = msg;
+  displayBox.classList.add('alert-box');
+  return displayBox;
+}
+
+const displayFeedbackAlert = (msg) => {
+  return document.body.appendChild(createFeedbackAlert(msg));
+}
+
 const createMeetup = () => {
   const topic = topicField.value;
   const location = locationField.value;
@@ -41,7 +52,10 @@ const createMeetup = () => {
     .then((res) => {
       const { status, data } = res;
       if (status === 201) {
-        window.location.replace('./meetups.html');
+        displayFeedbackAlert(`${topic} has been successfully created. Redirecting in 5 seconds`);
+        setTimeout(() => {
+          window.location.assign('./meetups.html');
+        }, 5000);
       }
     })
     .catch((err) => {

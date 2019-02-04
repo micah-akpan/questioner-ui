@@ -80,6 +80,18 @@
   display: block;
 }
 
+.alert-box {
+  border: 2px;
+  background: #116466;
+  color: #ffcb9a;
+  padding: 10px;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  max-height: 50px;
+  
+}
+
 @media (max-width: 768px) {
   #q-new-meetup .wrapper {
     flex-direction: column;
