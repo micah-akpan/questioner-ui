@@ -39,7 +39,6 @@ const createImageUploadFormWidget = () => {
     fileInput.click();
   }
   const innerLabel = document.createElement('label');
-  innerLabel.setAttribute('for', 'm-images');
   innerLabel.classList.add('q-form__label');
   innerLabel.textContent = 'Upload an Image';
 
