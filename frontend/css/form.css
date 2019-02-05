@@ -1,9 +1,9 @@
 /* General form stylesheet */
 
 /* General form validation */
-form input[type="text"]:valid,
-form input[type="email"]:valid,
-form input[type="password"]:valid {
+form input[type="text"]:valid:not(:placeholder-shown),
+form input[type="email"]:valid:not(:placeholder-shown),
+form input[type="password"]:valid:not(:placeholder-shown) {
   background: url("../assets/icons/check-mark.svg");
   background-size: 20px;
   background-repeat: no-repeat;
@@ -79,7 +79,6 @@ form input:invalid:focus + .input-validation-feedback {
 
 #q-form input {
   width: 100%;
-  padding: 1rem;
   outline: none;
   border: 1px solid #116466;
 }

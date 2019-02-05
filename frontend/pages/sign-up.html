@@ -62,16 +62,17 @@
           <label for="pwd" class="q-form__label">Password
             <abbr title="required">*</abbr>
           </label>
-          <input type="password" placeholder="************" id="pwd" name="password" required class="q-form__input">
+          <input type="password" placeholder="************" id="pwd" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required class="q-form__input">
           <button class="toggle-password-visibility" type="button">show</button>
-          <span>Your password must be at least 8 characters</span>
+          <span>Your Password must be at least 8 characters</span>
+         
         </div>
 
         <div class="q-form__group password-input">
           <label for="c-pwd" class="q-form__label">Confirm Password
             <abbr title="required">*</abbr>
           </label>
-          <input type="password" placeholder="************" id="c-pwd" class="q-form__input">
+          <input type="password" placeholder="************" id="c-pwd" class="q-form__input" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
           <button class="toggle-password-visibility" type="button">show</button>
           <span class="pwd-validation-msg"></span>
         </div>
