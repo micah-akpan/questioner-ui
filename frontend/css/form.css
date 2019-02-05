@@ -10,7 +10,7 @@ form input[type="password"]:valid:not(:placeholder-shown) {
   background-position: 10px center;
 }
 
-form input:invalid:focus + .input-validation-feedback {
+form input:invalid:focus ~ .input-validation-feedback {
   display: block;
   max-height: 200px;
   padding: 10px 10px 10px 30px;
@@ -18,8 +18,7 @@ form input:invalid:focus + .input-validation-feedback {
 
 .input-validation-feedback {
   display: none;
-  background: rgb(170, 0, 0);
-  color: #fff;
+  background: #ffcb9a;
   font-style: italic;
 }
 

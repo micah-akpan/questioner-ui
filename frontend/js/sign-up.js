@@ -11,8 +11,13 @@ const displayFormFeedback = (msg) => {
   span.textContent = msg;
   userFeedback.classList.add('info-box');
   userFeedback.appendChild(span);
-  
 }
+
+const hideFormFeedback = (secs) => {
+  setTimeout(() => {
+    userFeedback.classList.add('hide')
+  }, secs * 1000);
+} 
 
 /**
  * @param {String} password1
@@ -44,8 +49,8 @@ const registerUser = (user) => {
         localStorage.setItem('userToken', token);
         window.location.assign('./meetups.html');
       } else {
-        console.log(res.error)
         displayFormFeedback(res.error);
+        hideFormFeedback(10)
       }
     })
     .catch((err) => {
@@ -90,7 +95,6 @@ window.onload = () => {
       if (!passwordMatch(userPassword, rUserPassword)) {
         // password have to be the same
         // before proceeding to sign up
-        
         return;
       }
 
