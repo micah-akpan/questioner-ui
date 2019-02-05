@@ -43,13 +43,14 @@
           <div class="q-form__group">
             <label for="userEmail" class="q-form__label">Email</label>
             <input
-              type="text"
+              type="email"
               placeholder=""
               id="userEmail"
               name="email"
               class="q-form__input"
               required
             />
+            <span class="input-validation-feedback">Must be a valid email address</span>
           </div>
 
           <div class="q-form__group password-input">
@@ -60,8 +61,11 @@
               id="userPwd"
               name="password"
               class="q-form__input"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              autocomplete="off"
               required
             />
+            <span class="input-validation-feedback">Your Password must be at least 8 characters, as well as contain one uppercase, one lowercase and one number</span>
             <button class="toggle-password-visibility" type="button">
               show
             </button>

@@ -1,5 +1,28 @@
 /* General form stylesheet */
 
+/* General form validation */
+form input[type="text"]:valid,
+form input[type="email"]:valid,
+form input[type="password"]:valid {
+  background: url("../assets/icons/check-mark.svg");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+}
+
+form input:invalid:focus + .input-validation-feedback {
+  display: block;
+  max-height: 200px;
+  padding: 10px 10px 10px 30px;
+}
+
+.input-validation-feedback {
+  display: none;
+  background: rgb(170, 0, 0);
+  color: #fff;
+  font-style: italic;
+}
+
 /* Form */
 #q-form {
   width: 600px;
@@ -152,6 +175,7 @@
   border: #d4d9e2 1px solid;
   border-radius: 3px;
   padding: 1rem;
+  padding-left: 35px;
   color: #596377;
   outline: none;
   width: 100%;
@@ -243,6 +267,10 @@
 
 form abbr[title="required"] {
   color: #f44;
+}
+
+#login-form input {
+  padding-left: 35px;
 }
 
 @media (max-width: 768px) {
