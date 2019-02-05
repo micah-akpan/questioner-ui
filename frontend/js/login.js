@@ -7,9 +7,11 @@ const displayFormFeedback = (msg) => {
   const infoImage = document.createElement('img');
   infoImage.src = '../../assets/icons/cross.svg';
   infoImage.alt = '';
+  userFeedback.innerHTML = '';
   userFeedback.appendChild(infoImage);
   const span = document.createElement('span');
   span.textContent = msg;
+  userFeedback.classList.remove('hide');
   userFeedback.classList.add('info-box');
   userFeedback.appendChild(span);
 };
