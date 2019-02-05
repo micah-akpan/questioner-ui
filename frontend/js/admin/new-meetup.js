@@ -5,7 +5,6 @@ const topicField = document.getElementById('m-topic');
 const locationField = document.getElementById('m-location');
 const dateField = document.getElementById('m-date');
 const tagsField = document.getElementById('m-tags');
-const imagesField = document.getElementById('m-images');
 
 // Image preview
 const imgUpload = document.querySelector('.q-form__image-upload');
@@ -13,6 +12,7 @@ const imgBlock = document.querySelector('.outer-upload__block');
 const imgUploadBtns = document.querySelector('.image-upload-btns');
 const cancelUploadBtn = document.querySelector('.img-upload-cancel__btn');
 const imageUploadWrapper = document.querySelector('.image-upload__wrapper');
+const userFeedback = document.querySelector('.user-feedback');
 
 const createImageUploadFormWidget = () => {
   const imageUploadWrapper = document.querySelector('.image-upload__wrapper');
@@ -72,12 +72,33 @@ const displayFeedbackAlert = (msg) => {
   return document.body.appendChild(createFeedbackAlert(msg));
 }
 
+
+const displayFormFeedback = (msg) => {
+  const infoImage = document.createElement('img');
+  infoImage.src = '../../../assets/icons/cross.svg';
+  infoImage.alt = '';
+  userFeedback.innerHTML = '';
+  userFeedback.appendChild(infoImage);
+  const span = document.createElement('span');
+  span.textContent = msg;
+  userFeedback.classList.remove('hide');
+  userFeedback.classList.add('info-box');
+  userFeedback.appendChild(span);
+};
+
+const hideFormFeedback = (secs) => {
+  setTimeout(() => {
+    userFeedback.classList.add('hide');
+  }, secs * 1000);
+};
+
 const loadImagePreview = (e) => {
   const uploadedImg = document.createElement('img');
   const imgBlock = document.querySelector('.outer-upload__block');
   uploadedImg.classList.add('upload-image-preview');
   const file = e.target.files[0];
   uploadedImg.file = file;
+  uploadedImg.id = 'm-images';
   imgBlock.innerHTML = '';
   imgBlock.appendChild(uploadedImg);
   imgUploadBtns.classList.add('image-upload-btns-show');
@@ -92,11 +113,12 @@ const loadImagePreview = (e) => {
 }
 
 const createMeetup = () => {
+  const imagesField = document.getElementById('m-images');
   const topic = topicField.value;
   const location = locationField.value;
   const happeningOn = dateField.value;
   const tags = tagsField.value.split(',');
-  const image = imagesField.files[0];
+  const image = imagesField.file;
 
   const data = {
     topic,
@@ -116,7 +138,7 @@ const createMeetup = () => {
     method: 'POST',
     mode: 'cors',
     headers: {
-      Authorization: `Bearer ${Token.getUserToken('userToken')}`
+      Authorization: `Bearer ${Token.getToken('userToken')}`
     },
     body: formData
   })
@@ -129,7 +151,8 @@ const createMeetup = () => {
           window.location.assign('./meetups.html');
         }, 5000);
       } else {
-        console.log(res.error)
+        displayFormFeedback(res.error);
+        hideFormFeedback(5);
       }
     })
     .catch((err) => {
