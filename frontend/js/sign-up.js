@@ -1,5 +1,18 @@
+/* eslint-disable */
 const userFeedback = document.querySelector('.user-feedback');
+const form = document.querySelector('form');
 
+const displayFormFeedback = (msg) => {
+  const infoImage = document.createElement('img');
+  infoImage.src = '../../assets/icons/cross.svg';
+  infoImage.alt = '';
+  userFeedback.appendChild(infoImage);
+  const span = document.createElement('span');
+  span.textContent = msg;
+  userFeedback.classList.add('info-box');
+  userFeedback.appendChild(span);
+  
+}
 
 /**
  * @param {String} password1
@@ -31,7 +44,8 @@ const registerUser = (user) => {
         localStorage.setItem('userToken', token);
         window.location.assign('./meetups.html');
       } else {
-        userFeedback.textContent = res.error;
+        console.log(res.error)
+        displayFormFeedback(res.error);
       }
     })
     .catch((err) => {
@@ -76,6 +90,7 @@ window.onload = () => {
       if (!passwordMatch(userPassword, rUserPassword)) {
         // password have to be the same
         // before proceeding to sign up
+        
         return;
       }
 

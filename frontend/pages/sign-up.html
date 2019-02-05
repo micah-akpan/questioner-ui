@@ -63,8 +63,8 @@
             <abbr title="required">*</abbr>
           </label>
           <input type="password" placeholder="************" id="pwd" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required class="q-form__input">
-          <button class="toggle-password-visibility" type="button">show</button>
-          <span>Your Password must be at least 8 characters</span>
+          <button class="toggle-password-visibility" type="button" tabindex="-1">show</button>
+          <span>Your Password must be at least 8 characters, and have at least one uppercase, one lowercase and one number</span>
          
         </div>
 
@@ -73,7 +73,7 @@
             <abbr title="required">*</abbr>
           </label>
           <input type="password" placeholder="************" id="c-pwd" class="q-form__input" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
-          <button class="toggle-password-visibility" type="button">show</button>
+          <button class="toggle-password-visibility" type="button" tabindex="-1">show</button>
           <span class="pwd-validation-msg"></span>
         </div>
 
