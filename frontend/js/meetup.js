@@ -253,8 +253,8 @@ const askQuestion = async () => {
     method: 'POST',
     headers: requestHeader.headers,
     body: JSON.stringify({
-      title,
-      body,
+      title: title.value,
+      body: body.value,
       meetupId: activeMeetupId
     })
   });
@@ -347,9 +347,6 @@ const createQuestionForm = () => {
   const postQuestionButton = document.createElement('button');
   postQuestionButton.classList.add('q-btn', 'post-comment-btn');
   postQuestionButton.textContent = 'Ask';
-  postQuestionButton.onclick = () => {
-    askQuestion()
-  }
 
   postBtnArea.appendChild(postQuestionButton);
 
@@ -358,6 +355,17 @@ const createQuestionForm = () => {
   })
 
   form.appendChild(postBtnArea);
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    askQuestion()
+      .then((question) => {
+         window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
   wrapper.appendChild(bioSection);
   wrapper.appendChild(clear);
@@ -368,7 +376,7 @@ const createQuestionForm = () => {
 };
 
 
-askGroupButton.onclick = () => {
+askGroupButton.onclick = (e) => {
   createQuestionForm();
   displayQuestionBlock();
 };
