@@ -29,7 +29,7 @@ const getUserToken = () => localStorage.getItem('userToken');
  */
 const createMeetupLink = (meetup) => {
   const meetupCardLink = document.createElement('a');
-  meetupCardLink.setAttribute('href', '#!');
+  meetupCardLink.setAttribute('href', './meetup.html');
   meetupCardLink.onclick = () => {
     localStorage.setItem('activeMeetupId', meetup.id);
   };
@@ -141,7 +141,10 @@ const createMeetupPrimarySec = (meetup) => {
     });
 
   const actionButton = createCardActionButton(meetup);
-  actionButton.onclick = () => {
+  actionButton.onclick = (e) => {
+    // Stops the redirection to the meetup
+    // detail page
+    e.preventDefault();
     showDropDownMenu(meetup);
   };
 
