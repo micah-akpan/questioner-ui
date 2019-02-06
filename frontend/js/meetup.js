@@ -5,12 +5,10 @@
  * @description Meetup Detail script
  */
 
-
-
 const apiBaseURL = 'http://localhost:9999/api/v1';
 const activeMeetupId = localStorage.getItem('activeMeetupId');
 
-const genericRequestHeader = {
+const requestHeader = {
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${Token.getToken('userToken')}`
@@ -25,10 +23,38 @@ const imagePreviewWrapper = document.querySelector('.image-preview');
 const imagePreview = document.querySelector('.image-preview img');
 const photosWrapper = document.querySelector('.meetup-photos__wrapper');
 const rsvpEnquiryWrapper = document.querySelector('.meetup-rsvp__enquiry');
+const askQuestionWrapper = document.querySelector('#ask-question');
 
 const meetupTagsWrapper = document.getElementById('meetup-tags');
 const addedMeetups = document.querySelector('.meetup-tags-added');
 const questionCards = document.querySelector('.q-question-cards');
+const postQuestionDirArea = document.querySelector('#post-questions-directive');
+const askGroupBtn = document.querySelector('.ask-group-btn');
+
+
+/**
+  * @param {*} elem an object with Element and activeClassName props
+  * @returns {Element} elem
+  * @description Shows an hidden element, applying the styles in activeClassName to it
+  */
+const showEl = ({ elem, activeClassName }) => {
+  elem.classList.add(activeClassName);
+  return elem;
+}
+
+askGroupBtn.onclick = function () {
+  showEl({
+    elem: askQuestionWrapper,
+    activeClassName: 'active'
+  });
+  // User should not see
+  // post question directive
+  // after enabling ask questions UI
+  postQuestionDirArea.classList.add('inactive');
+  const divider = document.createElement('hr');
+  divider.classList.add('divider');
+  askQuestionWrapper.appendChild(divider);
+}
 
 /**
  * @func getComments
@@ -37,7 +63,11 @@ const questionCards = document.querySelector('.q-question-cards');
  */
 const getComments = async (question) => {
   const apiUrl = `${apiBaseURL}/questions/${question.id}/comments`;
-  const response = await fetch(apiUrl, genericRequestHeader);
+  const response = await fetch(apiUrl, {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('userToken')}`
+    }
+  });
   const responseBody = await response.json();
   const { status, data } = responseBody;
   const comments = status === 200 ? data : [];
@@ -83,7 +113,11 @@ const createCommentForm = () => {
 const getUserImage = async () => {
   const userId = localStorage.getItem('userId');
   const apiUrl = `${apiBaseURL}/users/${userId}`;
-  const response = await fetch(apiUrl, genericRequestHeader);
+  const response = await fetch(apiUrl, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('userToken')}`
+    }
+  });
   const responseBody = await response.json();
   const { status, data } = responseBody;
   const userImage = status === 200 ? data[0].avatar : '';
@@ -207,9 +241,17 @@ const createQuestionCard = async (question) => {
 
 const getMeetupTags = async () => {
   const activeMeetupId = localStorage.getItem('activeMeetupId');
-  const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}`, genericRequestHeader);
+  const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('userToken')}`
+    }
+  });
   const responseBody = await response.json();
-  return responseBody.data[0].tags;
+  if (responseBody.status === 200) {
+    return responseBody.data[0].tags;
+  }
+  return [];
 }
 
 const createMeetupTags = (tags) => {
@@ -237,7 +279,12 @@ const displayMeetupQuestions = async (meetup) => {
   try {
     const activeMeetupId = localStorage.getItem('activeMeetupId');
     const apiUrl = `${apiBaseURL}/meetups/${activeMeetupId}/questions`;
-    const response = await fetch(apiUrl, genericRequestHeader);
+    const response = await fetch(apiUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+      }
+    });
     const responseBody = await response.json();
     if (responseBody.status === 200) {
       const questions = responseBody.data;
@@ -276,7 +323,12 @@ const addMeetupDateToDOM = (meetup) => {
 const getMeetupImages = async (meetup) => {
   try {
     const url = `${apiBaseURL}/meetups/${meetup.id}/images`;
-    const response = await fetch(url, genericRequestHeader);
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+      }
+    });
     const responseBody = await response.json();
     return responseBody.data;
   } catch (e) {
@@ -295,10 +347,10 @@ const addMeetupImageToPage = async (meetup) => {
     const meetupImages = await getMeetupImages(meetup);
     const image = meetupImages[0];
     const defaultImage = '../assets/img/showcase2.jpg';
-    imagePreview.setAttribute('src', image.imageUrl || defaultImage);
+    imagePreview.setAttribute('src', (image && image.imageUrl) || defaultImage);
     return imagePreview;
   } catch (e) {
-
+    throw e;
   }
 }
 
@@ -360,9 +412,17 @@ const addMeetupImagesToPage = async (meetup) => {
 const getMeetupRsvps = async (meetup) => {
   try {
     const apiUrl = `${apiBaseURL}/meetups/${meetup.id}/rsvps`;
-    const response = await fetch(apiUrl, genericRequestHeader);
+    const response = await fetch(apiUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+      }
+    });
     const responseBody = await response.json();
-    return responseBody.data;
+    if (responseBody.status === 200) {
+      return responseBody.data;
+    }
+    return [];
   } catch (e) {
 
   }
@@ -534,7 +594,12 @@ const addMeetupToPage = (meetup) => {
 const displayMeetup = () => {
   const activeMeetupId = localStorage.getItem('activeMeetupId');
   const apiUrl = `${apiBaseURL}/meetups/${activeMeetupId}`
-  fetch(apiUrl, genericRequestHeader)
+  fetch(apiUrl, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('userToken')}`
+    }
+  })
     .then(res => res.json())
     .then((res) => {
       const tokenValid = Token.tokenIsValid(res.status);
@@ -544,6 +609,7 @@ const displayMeetup = () => {
 
         }
       } else {
+        console.log(res.error)
         window.location.assign('./sign-in.html');
       }
     })
