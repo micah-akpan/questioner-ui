@@ -40,14 +40,14 @@
             <label for="f-name" class="q-form__label">First Name
               <abbr title="required">*</abbr>
             </label>
-            <input type="text" placeholder="Dennis" id="f-name" name="firstname" class="q-form__input" required>
+            <input type="text" placeholder="Dennis" id="f-name" name="firstname" class="q-form__input" pattern="[a-zA-Z]+"required>
           </div>
 
           <div class="q-form__input-name">
             <label for="f-name" class="q-form__label">Last Name
               <abbr title="required">*</abbr>
             </label>
-            <input type="text" placeholder="Ritchie" id="l-name" name="lastname" required class="q-form__input">
+            <input type="text" placeholder="Ritchie" id="l-name" name="lastname" class="q-form__input" pattern="[a-zA-Z]+" required>
           </div>
         </div>
 
@@ -62,17 +62,18 @@
           <label for="pwd" class="q-form__label">Password
             <abbr title="required">*</abbr>
           </label>
-          <input type="password" placeholder="************" id="pwd" name="password" required class="q-form__input">
-          <button class="toggle-password-visibility" type="button">show</button>
-          <span>Your password must be at least 8 characters</span>
+          <input type="password" placeholder="************" id="pwd" name="password" pattern="(?=.*\d)(?=.*[a-z]).{8,}" required class="q-form__input">
+          <button class="toggle-password-visibility" type="button" tabindex="-1">show</button>
+          <span class="input-validation-feedback">Your Password must be at least 8 characters, and have at least one uppercase, one lowercase and one number</span>
+         
         </div>
 
         <div class="q-form__group password-input">
           <label for="c-pwd" class="q-form__label">Confirm Password
             <abbr title="required">*</abbr>
           </label>
-          <input type="password" placeholder="************" id="c-pwd" class="q-form__input">
-          <button class="toggle-password-visibility" type="button">show</button>
+          <input type="password" placeholder="************" id="c-pwd" class="q-form__input" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+          <button class="toggle-password-visibility" type="button" tabindex="-1">show</button>
           <span class="pwd-validation-msg"></span>
         </div>
 
@@ -141,6 +142,7 @@
     </div>
   </footer>
   <script src="../js/main.js"></script>
+  <script src="../js/base.js"></script>
   <script src="../js/sign-up.js"></script>
 </body>
 

@@ -27,8 +27,27 @@
   background-color: #fff;
 }
 
-.error {
-  color: #f44;
+/* User Feedback for form inputs */
+.user-feedback {
+  width: 100%;
+  background: #ffcb9a;
+  overflow: hidden;
+  color: red;
+}
+
+.user-feedback > * {
+  float: left;
+}
+
+.user-feedback img {
+  width: 20px;
+  height: 20px;
+  margin-right: 20px;
+}
+
+.info-box {
+  max-height: 100px;
+  padding: 20px;
 }
 
 @media (max-width: 768px) {

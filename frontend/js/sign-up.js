@@ -1,8 +1,67 @@
+/* eslint-disable */
+const userFeedback = document.querySelector('.user-feedback');
+const form = document.querySelector('form');
+
+const displayFormFeedback = (msg) => {
+  const infoImage = document.createElement('img');
+  infoImage.src = '../../assets/icons/cross.svg';
+  infoImage.alt = '';
+  userFeedback.appendChild(infoImage);
+  const span = document.createElement('span');
+  span.textContent = msg;
+  userFeedback.classList.add('info-box');
+  userFeedback.appendChild(span);
+}
+
+const hideFormFeedback = (secs) => {
+  setTimeout(() => {
+    userFeedback.classList.add('hide')
+  }, secs * 1000);
+} 
+
+/**
+ * @param {String} password1
+ * @param {String} password2
+ * @returns {Boolean} Test the equality of `password1` and `password2`
+ * @description Returns true if `password` is equal to `password2`
+ */
+const passwordMatch = (password1, password2) => password1 === password2;
+
+/**
+ * @func registerUser
+ * @param {*} user User payload
+ * @return {undefined}
+ * @description Signs up a user represented by `user`
+ */
+const registerUser = (user) => {
+  fetch('http://localhost:9999/api/v1/auth/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify(user)
+  })
+    .then(res => res.json())
+    .then((res) => {
+      if (res.status === 201) {
+        const { token } = res.data[0];
+        localStorage.setItem('userToken', token);
+        window.location.assign('./meetups.html');
+      } else {
+        displayFormFeedback(res.error);
+        hideFormFeedback(10)
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
 window.onload = () => {
-  /* eslint-disable */
-  const userToken = localStorage.getItem('userToken');
+  const userToken = Token.getToken('userToken');
   if (userToken) {
-    window.location.href = './meetups.html';
+    window.location.assign('./meetups.html');
   } else {
     const
       signUpForm = document.getElementById('sign-up-form'),
@@ -11,9 +70,7 @@ window.onload = () => {
       confirmPasswordField = document.getElementById('c-pwd'),
       lastNameField = document.querySelector('input[name=lastname]'),
       firstNameField = document.querySelector('input[name=firstname]'),
-      userFeedback = document.querySelector('.user-feedback'),
       passwordValidationMsg = document.querySelector('.pwd-validation-msg');
-
 
     confirmPasswordField.oninput = () => {
       const originalPassword = passwordField.value.trim();
@@ -24,10 +81,9 @@ window.onload = () => {
         : 'passwords do not match';
 
       passwordValidationMsg.textContent = validationMsg;
-    }
+    };
 
     signUpForm.onsubmit = (e) => {
-
       e.preventDefault();
 
       const userEmail = emailField.value;
@@ -50,44 +106,6 @@ window.onload = () => {
       };
 
       registerUser(user);
-    }
+    };
   }
 };
-
-/**
- * @func registerUser
- * @param {*} user User payload
- * @return {*}
- * @description Signs up a user represented by `user`
- */
-function registerUser(user) {
-  fetch('http://localhost:9999/api/v1/auth/signup', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    mode: 'cors',
-    body: JSON.stringify(user)
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      if (res.status === 201) {
-        const { token } = res.data[0];
-        localStorage.setItem('userToken', token);
-
-        window.location.href = './meetups.html';
-      } else {
-        userFeedback.textContent = res.error;
-      }
-    })
-    .catch((err) => {
-      // handle error
-    })
-}
-
-/**
- * 
- */
-function passwordMatch(password1,password2) {
-  return password1 === password2;
-}

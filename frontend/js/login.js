@@ -1,11 +1,29 @@
 const loginForm = document.getElementById('login-form');
-const userFeedback = document.querySelector('.user-input-feedback');
+const userFeedback = document.querySelector('.user-feedback');
 const emailField = document.getElementById('userEmail');
 const passwordField = document.getElementById('userPwd');
 
+const displayFormFeedback = (msg) => {
+  const infoImage = document.createElement('img');
+  infoImage.src = '../../assets/icons/cross.svg';
+  infoImage.alt = '';
+  userFeedback.innerHTML = '';
+  userFeedback.appendChild(infoImage);
+  const span = document.createElement('span');
+  span.textContent = msg;
+  userFeedback.classList.remove('hide');
+  userFeedback.classList.add('info-box');
+  userFeedback.appendChild(span);
+};
 
-loginForm.onsubmit = (e) => {
-  e.preventDefault();
+const hideFormFeedback = (secs) => {
+  setTimeout(() => {
+    userFeedback.classList.add('hide');
+  }, secs * 1000);
+};
+
+
+const loginUser = () => {
   fetch('http://localhost:9999/api/v1/auth/login', {
     method: 'POST',
     mode: 'cors',
@@ -21,7 +39,6 @@ loginForm.onsubmit = (e) => {
     .then(response => response.json())
     .then((response) => {
       if (response.status === 201) {
-        // store user token in some storage
         const { token, user } = response.data[0];
         localStorage.setItem('userToken', token);
         localStorage.setItem('userId', user.id);
@@ -32,8 +49,8 @@ loginForm.onsubmit = (e) => {
           window.location.assign('./meetups.html');
         }
       } else {
-        // TODO: Use an aesthetic alert/pop-up here!
-        userFeedback.textContent = response.error;
+        displayFormFeedback(response.error);
+        hideFormFeedback(10);
       }
     })
     .catch((err) => {
@@ -42,10 +59,15 @@ loginForm.onsubmit = (e) => {
 };
 
 
+loginForm.onsubmit = (e) => {
+  e.preventDefault();
+  loginUser();
+};
+
+
 window.onload = () => {
   const userToken = localStorage.getItem('userToken');
   if (userToken) {
-    // redirect to meetups page
     window.location.assign('./meetups.html');
   }
 };
