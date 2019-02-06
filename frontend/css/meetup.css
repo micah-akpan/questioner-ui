@@ -39,16 +39,16 @@ button {
   border: none;
 }
 
-#q-meetup-details__main .meetup-title-host {
+#q-meetup-details__main .meetup-title__wrapper {
   margin-left: 100px;
 }
 
-#q-meetup-details__main .meetup-title-host h3 {
+#q-meetup-details__main .meetup-title {
   font-size: 2rem;
   text-transform: capitalize;
 }
 
-#q-meetup-details__main .meetup-title-host p {
+#q-meetup-details__main .meetup-host {
   position: relative;
   top: -30px;
   left: 0;

@@ -31,9 +31,11 @@
     e.stopPropagation();
   };
 
-  questionModalDialog.onclick = (e) => {
-    e.stopPropagation();
-  };
+  if (questionModalDialog) {
+    questionModalDialog.onclick = (e) => {
+      e.stopPropagation();
+    };
+  }
 
   d.onkeydown = (e) => {
     if (e.key === 'Escape') {
@@ -46,13 +48,17 @@
     hideModal(commentModal);
   };
 
-  questionModalCloseBtn.onclick = (e) => {
-    hideModal(questionModal);
-  };
+  if (questionModalCloseBtn) {
+    questionModalCloseBtn.onclick = (e) => {
+      hideModal(questionModal);
+    };
+  }
 
-  commentModalTriggerBtn.onclick = (e) => {
-    showModal(commentModal);
-  };
+  if (commentModalTriggerBtn) {
+    commentModalTriggerBtn.onclick = (e) => {
+      showModal(commentModal);
+    };
+  }
 
   questionModalTriggerBtn.onclick = (e) => {
     showModal(questionModal);
@@ -62,7 +68,9 @@
     hideModal(commentModal);
   };
 
-  questionModalOverlay.onclick = (e) => {
-    hideModal(questionModal);
-  };
+  if (questionModalOverlay) {
+    questionModalOverlay.onclick = (e) => {
+      hideModal(questionModal);
+    };
+  }
 })();
