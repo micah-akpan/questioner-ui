@@ -245,6 +245,24 @@ const getUser = async () => {
   return responseBody.status === 200 ? responseBody.data[0] : null;
 }
 
+const askQuestion = async () => {
+  const title = document.getElementById('user-question-title');
+  const body = document.getElementById('user-question-body');
+
+  const response = await fetch(`${apiBaseURL}/questions`, {
+    method: 'POST',
+    headers: requestHeader.headers,
+    body: JSON.stringify({
+      title,
+      body,
+      meetupId: activeMeetupId
+    })
+  });
+  const responseBody = await response.json();
+  const { status, data } = responseBody;
+  return status === 201 ? data[0] : null;
+}
+
 const createQuestionForm = () => {
   const wrapper = document.createElement('div');
   const bioSection = document.createElement('div');
@@ -316,6 +334,7 @@ const createQuestionForm = () => {
     field.id = spec.idText;
     field.placeholder = spec.placeholder;
     field.classList.add(`${spec.type === 'input' ? 'q-form__input' : 'q-form__textarea'}`);
+    field.setAttribute('required', '');
 
     formGroup.appendChild(label);
     formGroup.appendChild(field);
@@ -328,6 +347,9 @@ const createQuestionForm = () => {
   const postQuestionButton = document.createElement('button');
   postQuestionButton.classList.add('q-btn', 'post-comment-btn');
   postQuestionButton.textContent = 'Ask';
+  postQuestionButton.onclick = () => {
+    askQuestion()
+  }
 
   postBtnArea.appendChild(postQuestionButton);
 
