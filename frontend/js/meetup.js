@@ -15,22 +15,22 @@ const requestHeader = {
   }
 };
 
-const detailsWrapper = document.querySelector('.details-content');
-const meetupTitleHost = document.querySelector('.meetup-title-host');
-const meetupTitle = document.querySelector('.meetup-title-host h3');
-const meetupOrganizer = document.querySelector('.meetup-title-host p');
-const imagePreviewWrapper = document.querySelector('.image-preview');
-const imagePreview = document.querySelector('.image-preview img');
-const photosWrapper = document.querySelector('.meetup-photos__wrapper');
-const rsvpEnquiryWrapper = document.querySelector('.meetup-rsvp__enquiry');
-const askQuestionWrapper = document.querySelector('#ask-question');
+const detailsContent = document.getElementById('details-content');
+const meetupTitleWrapper = document.getElementById('meetup-title__wrapper');
+const meetupTitle = document.getElementById('meetup-title');
+const meetupOrganizer = document.getElementById('meetup-host');
+const imagePreviewWrapper = document.getElementById('image-preview');
+const imagePreview = document.getElementById('meetup-image');
+const thumbnailPhotosWrapper = document.getElementById('meetup-photos__wrapper');
+
+const rsvpEnquiryWrapper = document.getElementById('meetup-rsvp__enquiry');
+const askQuestionWrapper = document.getElementById('ask-question');
 
 const meetupTagsWrapper = document.getElementById('meetup-tags');
-const addedMeetups = document.querySelector('.meetup-tags-added');
-const questionCards = document.querySelector('.q-question-cards');
-const postQuestionDirArea = document.querySelector('#post-questions-directive');
-const askGroupBtn = document.querySelector('.ask-group-btn');
-
+const addedMeetups = document.getElementById('meetup-tags-added');
+const questionCards = document.getElementById('q-question-cards');
+const postQuestionDirArea = document.getElementById('post-questions-directive');
+const askGroupBtn = document.getElementById('ask-group-btn');
 
 /**
   * @param {*} elem an object with Element and activeClassName props
@@ -300,13 +300,13 @@ const displayMeetupQuestions = async (meetup) => {
 const addMeetupDetailsToDOM = (meetup) => {
   meetupTitle.textContent = meetup.topic;
   meetupOrganizer.textContent = 'Organized by X';
-  meetupTitleHost.appendChild(meetupTitle);
-  meetupTitleHost.appendChild(meetupOrganizer);
-  return meetupTitleHost;
+  meetupTitleWrapper.appendChild(meetupTitle);
+  meetupTitleWrapper.appendChild(meetupOrganizer);
+  return meetupTitleWrapper;
 };
 
 const addMeetupDateToDOM = (meetup) => {
-  const meetupDate = document.querySelector('.meetup-date__primary');
+  const meetupDate = document.getElementById('meetup-date__primary');
   const [month, day] = parseDate(meetup.happeningOn);
   meetupDate.textContent = month;
   const lineBreak = document.createElement('p');
@@ -397,7 +397,7 @@ const addMeetupImagesToPage = async (meetup) => {
     const meetupImages = await getMeetupImages(meetup);
     const allImages = createMeetupImages(meetupImages);
     allImages.forEach((image) => {
-      photosWrapper.appendChild(image);
+      thumbnailPhotosWrapper.appendChild(image);
     });
   } catch (e) {
 
@@ -576,7 +576,7 @@ const displayRsvpFeedbackMsg = async (meetup) => {
  * @description Adds Meetup Details sections to page 
  */
 const addMeetupToPage = (meetup) => {
-  detailsWrapper.appendChild(addMeetupDetailsToDOM(meetup));
+  detailsContent.appendChild(addMeetupDetailsToDOM(meetup));
   addMeetupDateToDOM(meetup);
   addMeetupImageToPage(meetup);
   addMeetupImagesToPage(meetup);

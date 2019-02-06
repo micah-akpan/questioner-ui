@@ -48,12 +48,12 @@
 
   <section id="q-meetup-details__main">
     <div class="container">
-      <div class="details-content">
-        <div class="meetup-title-host">
-          <h3></h3>
-          <p></p>
+      <div class="details-content" id="details-content">
+        <div class="meetup-title__wrapper" id="meetup-title__wrapper">
+          <h3 class="meetup-title" id="meetup-title"></h3>
+          <p class="meetup-host" id="meetup-host"></p>
         </div>
-        <span class="meetup-date__primary"></span>
+        <span class="meetup-date__primary" id="meetup-date__primary"></span>
       </div>
     </div>
   </section>
@@ -61,11 +61,11 @@
   <section id="q-meetups-preview">
     <div class="container">
       <div class="q-meetups-preview__block">
-        <div class="image-preview">
-          <img alt="a group of meetup attendees watching a presentation">
+        <div class="image-preview" id="image-preview">
+          <img alt="a group of meetup attendees watching a presentation" id="meetup-image" class="meetup-image">
 
           <section class="meetup-invite-share">
-            <div class="meetup-rsvp__enquiry">
+            <div class="meetup-rsvp__enquiry" id="meetup-rsvp__enquiry">
             </div>
 
             <p>Let your friends know about this meetup</p>
@@ -94,7 +94,7 @@
               <hr>
 
               <!-- Meetup Images Thumbnail -->
-              <div class="meetup-photos__wrapper">
+              <div class="meetup-photos__wrapper" id="meetup-photos__wrapper">
 
               </div>
 
@@ -104,7 +104,7 @@
               <div class="meetup-tags" id="meetup-tags">
                 <h3>Meetup Tags</h3>
                 <hr>
-                <div class="meetup-tags-added"></div>
+                <div class="meetup-tags-added" id="meetup-tags-added"></div>
               </div>
             </section>
           </section>
@@ -114,7 +114,7 @@
           <section class="post-question" id="post-question">
             <div id="post-questions-directive">
               <h3>Do you have a question?</h3>
-              <button class="q-btn ask-group-btn">Ask the group</button>
+              <button class="q-btn ask-group-btn" id="ask-group-btn">Ask the group</button>
             </div>
 
 
@@ -163,7 +163,7 @@
 
           <h3>Questions asked in this meetup</h3>
 
-          <div class="q-question-cards">
+          <div class="q-question-cards" id="q-question-cards">
           </div>
         </div>
       </div>
