@@ -251,32 +251,29 @@ const createQuestionForm = () => {
   const userAvatar = document.createElement('img');
   userAvatar.classList.add('user-profile-avatar')
   const defaultAvatar = '../assets/icons/avatar1.svg';
-  getUserImage()
-    .then((image) => {
-      userAvatar.setAttribute('src', image || defaultAvatar);
-      userAvatar.setAttribute('alt', '');
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+
   const bioText = document.createElement('p');
   bioText.classList.add('modal-content-title', 'question-text', 'user-profile-text');
   const userName = document.createElement('p');
   const clear = document.createElement('div');
   clear.classList.add('clear');
-  getUser()
-    .then((user) => {
+
+  Promise.all([getUserImage(), getUser()])
+    .then((results) => {
+      const [userImage, user] = results;
+      userAvatar.setAttribute('src', userImage || defaultAvatar);
+      userAvatar.setAttribute('alt', user.firstname);
+
       userName.textContent = `${user.firstname} ${user.lastname}`;
       bioText.textContent = user.bio;
     })
     .catch((err) => {
-      console.error(err);
-    });
+      console.log(err);
+    })
   bioSection.appendChild(userAvatar);
   bioSection.appendChild(userName);
   bioSection.appendChild(bioText);
 
-  // question form
   const form = document.createElement('form');
   const formInputSpec = [
     {
@@ -338,7 +335,6 @@ const createQuestionForm = () => {
     form.appendChild(el);
   })
 
-  // form.appendChild(formInputs);
   form.appendChild(postBtnArea);
 
   wrapper.appendChild(bioSection);
