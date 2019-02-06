@@ -1,13 +1,26 @@
-const d = document;
-
 const apiBaseURL = 'http://localhost:9999/api/v1';
+const userToken = localStorage.getItem('userToken');
 
-const searchIcon = d.getElementById('search-icon');
-const searchBar = d.getElementById('search-bar');
-const btnTrigger = d.querySelector('.dropdown-trigger-btn');
-const dropDownMenu = d.querySelector('.q-user-profile__dropdown-menu');
-const cards = d.querySelector('.cards');
-const seeMoreBtn = d.querySelector('.see-more-meetups_btn');
+const requestHeaders = {
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${userToken}`
+  }
+};
+
+const btnTrigger = document.querySelector('.dropdown-trigger-btn');
+const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
+const searchIcon = document.getElementById('search-icon');
+const searchBar = document.getElementById('search-bar');
+const cards = document.getElementById('meetup-cards');
+const meetupCardsWrapper = document.getElementById('meetup-cards__wrapper');
+
+const createPaginationButton = (text) => {
+  const pgButton = document.createElement('button');
+  pgButton.textContent = text;
+  pgButton.classList.add('q-btn', 'btn__centered', 'see-more-meetups_btn');
+  return pgButton;
+};
 
 // Toggle display of dropdown menu
 btnTrigger.onclick = () => {
@@ -17,8 +30,6 @@ btnTrigger.onclick = () => {
 searchIcon.onclick = () => {
   searchBar.classList.add('show');
 };
-
-const getUserToken = () => localStorage.getItem('userToken');
 
 /**
  * @function createMeetupLink
@@ -43,56 +54,54 @@ const createMeetupLink = (meetup) => {
 async function getTotalQuestionsAsked(meetup) {
   try {
     let totalQuestions = 0;
-    const response = await fetch(
-      `${apiBaseURL}/meetups/${meetup.id}/questions`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('userToken')}`
-        }
-      }
-    );
+    const response = await fetch(`${apiBaseURL}/meetups/${meetup.id}/questions`, requestHeaders);
     const res = await response.json();
     if (res.status === 200) {
       totalQuestions = res.data.length;
     }
-
     return totalQuestions;
   } catch (e) {
-    console.log(e);
+    throw e;
   }
 }
 
 /* eslint-disable */
+/**
+ * @func getMeetupImages
+ * @param {*} meetup Meetup
+ * @returns {Promise<Array>} Resolves to a list of meetup images
+ */
 const getMeetupImages = async (meetup) => {
-  const res = await fetch(`${apiBaseURL}/meetups/${meetup.id}/images`, {
-    headers: {
-      Authorization: `Bearer ${getUserToken()}`
-    }
-  });
-
-  const result = await res.json();
-  return result.data;
-};
-
-const tokenIsValid = (response) => {
-  if (response.status === 401) {
-    return false;
-  }
-
-  return true;
+  const apiUrl = `${apiBaseURL}/meetups/${meetup.id}/images`;
+  const response = await fetch(apiUrl, requestHeaders);
+  const responseBody = await response.json();
+  const { status, data } = responseBody;
+  return status === 200 ? data : [];
 };
 
 /**
- * @function createMeetupPrimarySec
+ * @func tokenIsValid
+ * @param {*} response Response hash
+ * @returns {Boolean} true if token is valid, false otherwise
+ */
+const tokenIsValid = (response) => response.status !== 401;
+
+/**
+ * @function createMeetupCardPrimarySec
  * @param {*} meetup Meetup object
  * @returns {HTMLElement} A wrapper HTMLElement for primary details about a meetup
  */
-const createMeetupPrimarySec = (meetup) => {
+const createMeetupCardPrimarySec = (meetup) => {
   const content = document.createElement('div');
   content.classList.add('content');
   const meetupImage = document.createElement('img');
   const defaultImage = '../assets/img/startup-meetup2.jpg';
 
-  meetupImage.setAttribute('src', (meetup.images && meetup.images[0]) || defaultImage);
+  getMeetupImages(meetup)
+    .then(images => images.length > 0 ? images[0].imageUrl : defaultImage)
+    .then((image) => {
+      meetupImage.setAttribute('src', image);
+    })
   meetupImage.setAttribute('alt', '');
   meetupImage.setAttribute('class', 'meetup-main-image');
 
@@ -111,7 +120,12 @@ const createMeetupPrimarySec = (meetup) => {
   return content;
 };
 
-const createMeetupSecondarySec = (meetup) => {
+/**
+ * @func createMeetupCardSecondarySec
+ * @param {*} Meetup
+ * @returns {HTMLDivElement} HTML element representing the meetup card
+ */
+const createMeetupCardSecondarySec = (meetup) => {
   const content = document.createElement('div');
   content.setAttribute('class', 'q-card__sec');
 
@@ -131,7 +145,7 @@ const createMeetupSecondarySec = (meetup) => {
 };
 
 /**
- * @function createMeetupCard
+ * @func createMeetupCard
  * @param {*} meetup Meetup object
  * @returns {HTMLElement} Meetup Card
  */
@@ -143,8 +157,8 @@ const createMeetupCard = (meetup) => {
   const meetupCardContentWrapper = document.createElement('div');
   meetupCardContentWrapper.classList.add('q-card__primary');
 
-  const primarySection = createMeetupPrimarySec(meetup);
-  const secondarySection = createMeetupSecondarySec(meetup);
+  const primarySection = createMeetupCardPrimarySec(meetup);
+  const secondarySection = createMeetupCardSecondarySec(meetup);
 
   meetupCardContentWrapper.appendChild(primarySection);
 
@@ -156,6 +170,11 @@ const createMeetupCard = (meetup) => {
   return meetupCard;
 };
 
+/**
+ * @func convertMeetupsToCards
+ * @param {Array} meetups list of meetups
+ * @returns {Array<HTMLElement>} List of meetups HTML DOM elements
+ */
 const convertMeetupsToCards = meetups => meetups.map(meetup => createMeetupCard(meetup));
 
 /**
@@ -189,7 +208,8 @@ const showAllMeetups = (userToken) => {
             const data = meetups.slice(0, MAX_MEETUPS);
             addMeetupsToDOM(data);
             const remainingMeetups = meetups.length - MAX_MEETUPS;
-            seeMoreBtn.textContent = `SEE MORE ${remainingMeetups} ${remainingMeetups > 1 ? 'MEETUPS' : 'MEETUP'}`;
+            const paginateText = `SEE MORE ${remainingMeetups} ${remainingMeetups > 1 ? 'MEETUPS' : 'MEETUP'}`;
+            meetupCardsWrapper.appendChild(createPaginationButton(paginateText));
           } else {
             addMeetupsToDOM(meetups);
           }
