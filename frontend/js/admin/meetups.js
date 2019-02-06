@@ -29,7 +29,7 @@ const getUserToken = () => localStorage.getItem('userToken');
  */
 const createMeetupLink = (meetup) => {
   const meetupCardLink = document.createElement('a');
-  meetupCardLink.setAttribute('href', './meetup.html');
+  meetupCardLink.setAttribute('href', '#!');
   meetupCardLink.onclick = () => {
     localStorage.setItem('activeMeetupId', meetup.id);
   };
@@ -75,13 +75,41 @@ const getMeetupImages = async (meetup) => {
   return result.data;
 };
 
-const tokenIsValid = (response) => {
-  if (response.status === 401) {
-    return false;
-  }
+const tokenIsValid = (response) => response.status !== 401;
 
-  return true;
-};
+const createDropDownMenuItems = () => {
+  return icons.meetups.map((icon) => {
+    const li = document.createElement('li');
+    li.classList.add(icon.className);
+    const img = document.createElement('img');
+    img.src = icon.src;
+    img.alt = icon.alt;
+    const span = document.createElement('span');
+    span.textContent = icon.text;
+    li.appendChild(img);
+    li.appendChild(span);
+
+    return li;
+  })
+}
+
+const createDropDownMenu = (meetup) => {
+  const menuBlock = document.createElement('div');
+  menuBlock.classList.add('dropdown-menu');
+  menuBlock.id = `dropdown-menu-${meetup.id}`;
+  const menu = document.createElement('ul');
+  const menuItems = createDropDownMenuItems();
+  menuItems.forEach((menuItem) => {
+    menu.appendChild(menuItem);
+  });
+  menuBlock.appendChild(menu);
+  return menuBlock;
+}
+
+const showDropDownMenu = (meetup) => {
+  const dropDownMenu = document.getElementById(`dropdown-menu-${meetup.id}`);
+  dropDownMenu.classList.toggle('show');
+}
 
 /**
  * @function createMeetupPrimarySec
@@ -101,7 +129,7 @@ const createMeetupPrimarySec = (meetup) => {
       meetupImage.setAttribute('alt', '');
     });
 
-  meetupImage.setAttribute('class', 'meetup-main-image');
+  meetupImage.classList.add('meetup-main-image');
 
   const meetupQuestionCount = document.createElement('span');
   meetupQuestionCount.classList.add('q-asked-count');
@@ -112,7 +140,11 @@ const createMeetupPrimarySec = (meetup) => {
       meetupQuestionCount.textContent = value;
     });
 
-  const actionButton = createCardActionButton();
+  const actionButton = createCardActionButton(meetup);
+  actionButton.onclick = () => {
+    showDropDownMenu(meetup);
+  };
+
   content.appendChild(actionButton);
   content.appendChild(meetupImage);
   content.appendChild(meetupQuestionCount);
@@ -139,35 +171,7 @@ const createMeetupSecondarySec = (meetup) => {
   return content;
 };
 
-const createDropDownMenuItems = () => {
-  return icons.meetups.map((icon) => {
-    const li = document.createElement('li');
-    li.classList.add(icon.className);
-    const img = document.createElement('img');
-    img.src = icon.src;
-    img.alt = icon.alt;
-    const span = document.createElement('span');
-    span.textContent = icon.text;
-    li.appendChild(img);
-    li.appendChild(span);
-
-    return li;
-  })
-}
-
-const createDropDownMenu = () => {
-  const menuBlock = document.createElement('div');
-  menuBlock.classList.add('dropdown-menu');
-  const menu = document.createElement('ul');
-  const menuItems = createDropDownMenuItems();
-  menuItems.forEach((menuItem) => {
-    menu.appendChild(menuItem);
-  });
-  menuBlock.appendChild(menu);
-  return menuBlock;
-}
-
-const createCardActionButton = () => {
+const createCardActionButton = (meetup) => {
   const buttonBlock = document.createElement('div');
   buttonBlock.classList.add('q-card__primary-options');
   const button = document.createElement('button');
@@ -177,7 +181,7 @@ const createCardActionButton = () => {
   actionButtonImg.src = imgSrc;
   actionButtonImg.alt = '3 dot ellipsis image to toggle drop down menu';
   button.appendChild(actionButtonImg);
-  const dropDownMenu = createDropDownMenu();
+  const dropDownMenu = createDropDownMenu(meetup);
   buttonBlock.appendChild(button);
   buttonBlock.appendChild(dropDownMenu);
   return buttonBlock;
