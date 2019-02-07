@@ -45,8 +45,10 @@ const registerUser = (user) => {
     .then(res => res.json())
     .then((res) => {
       if (res.status === 201) {
-        const { token } = res.data[0];
+        const { token, user } = res.data[0];
         localStorage.setItem('userToken', token);
+        localStorage.setItem('userId', user.id);
+
         window.location.assign('./meetups.html');
       } else {
         displayFormFeedback(res.error);
