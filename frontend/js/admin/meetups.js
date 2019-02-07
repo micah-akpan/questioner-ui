@@ -77,10 +77,32 @@ const getMeetupImages = async (meetup) => {
 
 const tokenIsValid = (response) => response.status !== 401;
 
-const createDropDownMenuItems = () => {
+const deleteMeetup = (meetupId) => {
+  const apiUrl = `${apiBaseURL}/meetups/${meetupId}`;
+  fetch(apiUrl, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getUserToken()}`
+    }
+  })
+  .then((res) => res.json())
+  .then((res) => {
+    window.location.reload();
+  })
+  .catch((err) => {
+    console.error(err);
+  })
+}
+
+const createDropDownMenuItems = (meetup) => {
   return icons.meetups.map((icon) => {
     const li = document.createElement('li');
     li.classList.add(icon.className);
+    li.onclick = () => {
+      const meetupId = meetup.id;
+      deleteMeetup(meetupId);
+    }
     const img = document.createElement('img');
     img.src = icon.src;
     img.alt = icon.alt;
@@ -98,7 +120,7 @@ const createDropDownMenu = (meetup) => {
   menuBlock.classList.add('dropdown-menu');
   menuBlock.id = `dropdown-menu-${meetup.id}`;
   const menu = document.createElement('ul');
-  const menuItems = createDropDownMenuItems();
+  const menuItems = createDropDownMenuItems(meetup);
   menuItems.forEach((menuItem) => {
     menu.appendChild(menuItem);
   });
