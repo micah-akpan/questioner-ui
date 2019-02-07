@@ -282,4 +282,8 @@ nav.no-flex {
   .cards .q-card {
     width: 100%;
   }
+
+  .q-user-profile__dropdown-menu {
+    display: none !important;
+  }
 }
