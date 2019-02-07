@@ -1,0 +1,13 @@
+form input[type="text"]:valid:not(:placeholder-shown),
+form input[type="email"]:valid:not(:placeholder-shown),
+form input[type="password"]:valid:not(:placeholder-shown) {
+  background: url("../assets/icons/check-mark.svg");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+}
+
+
+.q-form__input {
+  padding-left: 35px;
+}

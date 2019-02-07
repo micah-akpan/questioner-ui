@@ -1,19 +1,9 @@
 /* General form stylesheet */
-
-/* General form validation */
-form input[type="text"]:valid:not(:placeholder-shown),
-form input[type="email"]:valid:not(:placeholder-shown),
-form input[type="password"]:valid:not(:placeholder-shown) {
-  background: url("../assets/icons/check-mark.svg");
-  background-size: 20px;
-  background-repeat: no-repeat;
-  background-position: 10px center;
-}
-
 form input:invalid:focus ~ .input-validation-feedback {
   display: block;
   max-height: 200px;
-  padding: 10px 10px 10px 30px;
+  padding: 10px;
+  padding-left: 30px;
 }
 
 .input-validation-feedback {
@@ -173,7 +163,6 @@ form input:invalid:focus ~ .input-validation-feedback {
   border: #d4d9e2 1px solid;
   border-radius: 3px;
   padding: 1rem;
-  padding-left: 35px;
   color: #596377;
   outline: none;
   width: 100%;

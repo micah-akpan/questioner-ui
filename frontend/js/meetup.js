@@ -352,11 +352,18 @@ const createQuestionForm = () => {
     label.htmlFor = spec.idText;
     label.classList.add('q-form__label', spec.labelClass);
     label.textContent = spec.labelText;
+    const requireValidation = document.createElement('abbr');
+    requireValidation.textContent = ' * ';
+    requireValidation.title = 'required';
+    const emptyText = document.createTextNode('');
     const field = document.createElement(spec.type);
     field.id = spec.idText;
     field.placeholder = spec.placeholder;
     field.classList.add(`${spec.type === 'input' ? 'q-form__input' : 'q-form__textarea'}`);
-    // field.setAttribute('required', '');
+    if (spec.idText !== 'user-question-label') {
+      label.appendChild(requireValidation);
+      field.setAttribute('required', '');
+    }
 
     formGroup.appendChild(label);
     formGroup.appendChild(field);

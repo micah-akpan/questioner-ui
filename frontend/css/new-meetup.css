@@ -5,6 +5,7 @@
 @import url("./modal.css");
 @import url("./new.css");
 @import url("./form.css");
+@import url("./form-validate.css");
 
 #q-new-meetup {
   margin-bottom: 200px;
