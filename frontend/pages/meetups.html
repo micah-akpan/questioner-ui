@@ -21,18 +21,7 @@
         </div>
 
         <nav class="q-right-nav notify-user__nav no-flex">
-          <ul>
-            <li>
-              <button class="q-btn" title="Notifications">
-                <img src="../assets/icons/notifications-button.svg" alt="your notifications" />
-              </button>
-            </li>
-            <li class="q-user-profile__dropdown-trigger">
-              <button class="q-btn dropdown-trigger-btn" title="Profile">
-                <img src="../assets/icons/avatar1.svg" alt="your profile" />
-              </button>
-            </li>
-          </ul>
+          
         </nav>
       </div>
     </div>
@@ -44,7 +33,7 @@
       <ul>
         <li><a href="./profile.html">Account settings</a></li>
         <li><a href="./meetup.html">Ask a question</a></li>
-        <li><a href="#">Logout</a></li>
+        <li class="logout__btn"><a href="#!" role="button">Logout</a></li>
       </ul>
     </div>
   </section>
@@ -112,8 +101,8 @@
             </a>
           </li>
 
-          <li class="q-sidenav__menu-item">
-            <a href="#!">
+          <li class="q-sidenav__menu-item logout__btn" id="logout__btn">
+            <a href="#!" role="button">
               Logout
             </a>
           </li>
@@ -197,7 +186,7 @@
   </footer>
   <script src="../js/base.js"></script>
   <script src="../js/meetups.js"></script>
-  <script src="../js/mobile-nav.js"></script>
+  <script src="../js/nav.js"></script>
 </body>
 
 </html>

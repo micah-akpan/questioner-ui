@@ -65,3 +65,8 @@ const genericRequestHeader = {
   'Content-Type': 'application/json',
   Authorization: `Bearer ${Token.getToken('userToken')}`
 };
+
+const logOutUser = () => {
+  localStorage.removeItem('userToken');
+  window.location.replace('../index.html');
+};

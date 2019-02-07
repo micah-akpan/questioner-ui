@@ -46,8 +46,6 @@ const displayQuestionBlock = () => {
   return askQuestionWrapper;
 }
 
-// askGroupButton.onclick = displayQuestionBlock;
-
 /**
  * @func getComments
  * @param {*} question
@@ -800,8 +798,9 @@ const displayMeetup = () => {
       const tokenValid = Token.tokenIsValid(res.status);
       if (tokenValid) {
         if (res.status === 200) {
-          addMeetupToPage(res.data[0]);
-
+          const meetup = res.data[0];
+          document.title = `${meetup.topic} | Questioner`;
+          addMeetupToPage(meetup);
         }
       } else {
         window.location.assign('./sign-in.html');
