@@ -51,10 +51,10 @@ const createRightNavList = (navSpec) => {
           const { avatar, firstname } = user;
           if (avatar) {
             img.src = avatar;
-            img.alt = firstname;
+            img.alt = spec.type === 'profile' ? firstname : 'A light yellow colored bell';
           } else {
             img.src = spec.src;
-            img.alt = firstname;
+            img.alt = spec.type === 'profile' ? firstname : 'A light yellow colored bell';
           }
         }
       })
@@ -62,7 +62,9 @@ const createRightNavList = (navSpec) => {
         console.error(err);
       });
 
-    button.onclick = toggleDropDownMenu;
+    if (spec.type === 'profile') {
+      button.onclick = toggleDropDownMenu;
+    }
 
     button.appendChild(img);
     li.appendChild(button);
