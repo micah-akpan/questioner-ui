@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const apiBaseURL = 'http://localhost:9999/api/v1';
 const userToken = localStorage.getItem('userToken');
 
@@ -14,6 +16,8 @@ const searchIcon = document.getElementById('search-icon');
 const searchBar = document.getElementById('search-bar');
 const cards = document.getElementById('meetup-cards');
 const meetupCardsWrapper = document.getElementById('meetup-cards__wrapper');
+const logOutButtons = document.querySelectorAll('.logout__btn');
+
 
 const createPaginationButton = (text) => {
   const pgButton = document.createElement('button');
@@ -192,12 +196,10 @@ const addMeetupsToDOM = (meetups) => {
   return cards;
 };
 
+
+
 const showAllMeetups = (userToken) => {
-  fetch(`${apiBaseURL}/meetups`, {
-    headers: {
-      Authorization: `Bearer ${userToken}`
-    }
-  })
+  fetch(`${apiBaseURL}/meetups`, requestHeaders)
     .then(res => res.json())
     .then((res) => {
       if (tokenIsValid(res)) {
@@ -223,6 +225,13 @@ const showAllMeetups = (userToken) => {
       console.log(err);
     });
 };
+
+logOutButtons.forEach((logOutBtn) => {
+  logOutBtn.onclick = (e) => {
+    e.preventDefault();
+    logOutUser();
+  }
+})
 
 window.addEventListener('load', () => {
   const userToken = localStorage.getItem('userToken');

@@ -1,10 +1,9 @@
 /* eslint-disable */
 
 window.onload = (e) => {
-  const qNavMenuWrapper = document.querySelector('.sidebar-menu__wrapper'),
-    qNavMenuIconWrapper = document.querySelector(
-      '#mobile-nav-sidebar__wrapper'
-    );
+  const 
+    qNavMenuWrapper = document.querySelector('.sidebar-menu__wrapper'),
+    qNavMenuIconWrapper = document.getElementById('mobile-nav-sidebar__wrapper');
 
   document.onkeydown = (e) => {
     if (e.key === 'Escape') {
@@ -18,3 +17,4 @@ window.onload = (e) => {
     qNavMenuWrapper.classList.toggle('nav-menu-show');
   };
 };
+
