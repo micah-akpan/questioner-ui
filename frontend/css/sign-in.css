@@ -1,5 +1,6 @@
 @import url("../css/main.css");
 @import url("../css/form.css");
+@import url("../css/form-validate.css");
 
 .welcome-back-msg {
   text-align: center;

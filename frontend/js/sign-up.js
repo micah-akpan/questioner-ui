@@ -5,7 +5,7 @@ const form = document.querySelector('form');
 const displayFormFeedback = (msg) => {
   const infoImage = document.createElement('img');
   infoImage.src = '../../assets/icons/cross.svg';
-  infoImage.alt = '';
+  infoImage.alt = '2 slanted lines representing a cancel symbol';
   userFeedback.appendChild(infoImage);
   const span = document.createElement('span');
   span.textContent = msg;

@@ -7,6 +7,7 @@
 
 const apiBaseURL = 'http://localhost:9999/api/v1';
 const activeMeetupId = localStorage.getItem('activeMeetupId');
+const userId = localStorage.getItem('userId');
 const userToken = localStorage.getItem('userToken');
 
 const requestHeader = {
@@ -34,6 +35,7 @@ const questionCards = document.getElementById('q-question-cards');
 const postQuestionDirArea = document.getElementById('post-questions-directive');
 const askGroupButton = document.getElementById('ask-group-btn');
 
+const questionFormSection = document.getElementById('ask-question');
 
 const displayQuestionBlock = () => {
   askQuestionWrapper.classList.add('active');
@@ -44,7 +46,7 @@ const displayQuestionBlock = () => {
   return askQuestionWrapper;
 }
 
-askGroupButton.onclick = displayQuestionBlock;
+// askGroupButton.onclick = displayQuestionBlock;
 
 /**
  * @func getComments
@@ -235,6 +237,180 @@ const createQuestionCard = async (question) => {
 
   return card;
 }
+
+const getUser = async () => {
+  const apiUrl = `${apiBaseURL}/users/${userId}`;
+  const response = await fetch(apiUrl, requestHeader);
+  const responseBody = await response.json();
+  return responseBody.status === 200 ? responseBody.data[0] : null;
+}
+
+const askQuestion = async () => {
+  try {
+    const title = document.getElementById('user-question-title');
+    const body = document.getElementById('user-question-body');
+
+    const response = await fetch(`${apiBaseURL}/questions`, {
+      method: 'POST',
+      headers: requestHeader.headers,
+      body: JSON.stringify({
+        title: title.value,
+        body: body.value,
+        meetupId: activeMeetupId
+      })
+    });
+    const responseBody = await response.json();
+    const { status, data } = responseBody;
+    if (status === 201) {
+      return data[0];
+    }
+
+    throw new Error(responseBody.error);
+  } catch (e) {
+    throw e;
+  }
+}
+
+const displayFormFeedback = (msg) => {
+  const userFeedback = document.getElementById('user-feedback');
+  const span = document.createElement('span');
+  span.textContent = msg;
+  userFeedback.classList.add('info-box');
+  userFeedback.appendChild(span);
+}
+
+const createQuestionForm = () => {
+  const wrapper = document.createElement('div');
+  const bioSection = document.createElement('div');
+  const userAvatar = document.createElement('img');
+  userAvatar.classList.add('user-profile-avatar')
+  const defaultAvatar = '../assets/icons/avatar1.svg';
+
+  const bioText = document.createElement('p');
+  bioText.classList.add('modal-content-title', 'question-text', 'user-profile-text');
+  const userName = document.createElement('p');
+  const clear = document.createElement('div');
+  clear.classList.add('clear');
+
+  Promise.all([getUserImage(), getUser()])
+    .then((results) => {
+      const [userImage, user] = results;
+      userAvatar.setAttribute('src', userImage || defaultAvatar);
+      userAvatar.setAttribute('alt', user.firstname);
+
+      userName.textContent = `${user.firstname} ${user.lastname}`;
+      bioText.textContent = user.bio;
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  bioSection.appendChild(userAvatar);
+  bioSection.appendChild(userName);
+  bioSection.appendChild(bioText);
+
+  const form = document.createElement('form');
+  form.method = 'POST';
+  const userFeedback = document.createElement('div');
+  userFeedback.classList.add('user-feedback');
+  userFeedback.id = 'user-feedback';
+
+
+  const formInputSpec = [
+    {
+      id: 1,
+      idText: 'user-question-title',
+      labelClass: 'question-label',
+      labelText: 'Give your question a title',
+      placeholder: 'What, why, where or when are great words to start with',
+      type: 'input'
+    },
+
+    {
+      id: 2,
+      idText: 'user-question-body',
+      labelClass: 'question-label',
+      labelText: 'Your question',
+      placeholder: 'What, why, where or when are great words to start with',
+      type: 'textarea'
+    },
+
+    {
+      id: 3,
+      idText: 'user-question-label',
+      labelClass: 'question-label',
+      labelText: 'Add tags to this question (Max 5)',
+      placeholder: 'What, why, where or when are great words to start with',
+      type: 'input'
+    },
+
+  ];
+
+  const formInputs = formInputSpec.map((spec) => {
+    const formGroup = document.createElement('div');
+    formGroup.classList.add('q-form__group');
+    const label = document.createElement('label');
+    label.htmlFor = spec.idText;
+    label.classList.add('q-form__label', spec.labelClass);
+    label.textContent = spec.labelText;
+    const requireValidation = document.createElement('abbr');
+    requireValidation.textContent = ' * ';
+    requireValidation.title = 'required';
+    const emptyText = document.createTextNode('');
+    const field = document.createElement(spec.type);
+    field.id = spec.idText;
+    field.placeholder = spec.placeholder;
+    field.classList.add(`${spec.type === 'input' ? 'q-form__input' : 'q-form__textarea'}`);
+    if (spec.idText !== 'user-question-label') {
+      label.appendChild(requireValidation);
+      field.setAttribute('required', '');
+    }
+
+    formGroup.appendChild(label);
+    formGroup.appendChild(field);
+
+    return formGroup;
+  });
+
+  const postBtnArea = document.createElement('div');
+  postBtnArea.classList.add('post-btn-box', 'post-question-btn-box', 'q-form__group');
+  const postQuestionButton = document.createElement('button');
+  postQuestionButton.classList.add('q-btn', 'post-comment-btn');
+  postQuestionButton.textContent = 'Ask';
+
+  postBtnArea.appendChild(postQuestionButton);
+
+  form.appendChild(userFeedback);
+
+  formInputs.forEach((el) => {
+    form.appendChild(el);
+  })
+
+  form.appendChild(postBtnArea);
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    askQuestion()
+      .then((question) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        displayFormFeedback(err.message);
+      })
+  }
+
+  wrapper.appendChild(bioSection);
+  wrapper.appendChild(clear);
+  wrapper.appendChild(form);
+  askQuestionWrapper.appendChild(wrapper);
+
+  return wrapper;
+};
+
+
+askGroupButton.onclick = (e) => {
+  createQuestionForm();
+  displayQuestionBlock();
+};
 
 /**
  * @func getMeetupTags
