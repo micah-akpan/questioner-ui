@@ -219,6 +219,12 @@ const showAllMeetups = (userToken) => {
     });
 };
 
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    searchBar.classList.remove('show');
+  }
+})
+
 window.addEventListener('load', () => {
   const userToken = localStorage.getItem('userToken');
   if (!userToken) {
