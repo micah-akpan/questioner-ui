@@ -11,12 +11,10 @@ const requestHeaders = {
 };
 
 const btnTrigger = document.querySelector('.dropdown-trigger-btn');
-const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
 const searchIcon = document.getElementById('search-icon');
 const searchBar = document.getElementById('search-bar');
 const cards = document.getElementById('meetup-cards');
 const meetupCardsWrapper = document.getElementById('meetup-cards__wrapper');
-const logOutButtons = document.querySelectorAll('.logout__btn');
 
 
 const createPaginationButton = (text) => {
@@ -24,11 +22,6 @@ const createPaginationButton = (text) => {
   pgButton.textContent = text;
   pgButton.classList.add('q-btn', 'btn__centered', 'see-more-meetups_btn');
   return pgButton;
-};
-
-// Toggle display of dropdown menu
-btnTrigger.onclick = () => {
-  dropDownMenu.classList.toggle('show');
 };
 
 searchIcon.onclick = () => {
@@ -225,13 +218,6 @@ const showAllMeetups = (userToken) => {
       console.log(err);
     });
 };
-
-logOutButtons.forEach((logOutBtn) => {
-  logOutBtn.onclick = (e) => {
-    e.preventDefault();
-    logOutUser();
-  }
-})
 
 window.addEventListener('load', () => {
   const userToken = localStorage.getItem('userToken');
