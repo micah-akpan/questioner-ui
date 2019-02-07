@@ -6,8 +6,6 @@
 const apiBaseURL = 'http://localhost:9999/api/v1';
 const searchIcon = document.getElementById('search-icon');
 const searchBar = document.getElementById('search-bar');
-// const btnTrigger = document.querySelector('.dropdown-trigger-btn');
-// const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
 const cards = document.querySelector('.cards');
 const seeMoreBtn = document.querySelector('.see-more-meetups_btn');
 
