@@ -246,21 +246,37 @@ const getUser = async () => {
 }
 
 const askQuestion = async () => {
-  const title = document.getElementById('user-question-title');
-  const body = document.getElementById('user-question-body');
+  try {
+    const title = document.getElementById('user-question-title');
+    const body = document.getElementById('user-question-body');
 
-  const response = await fetch(`${apiBaseURL}/questions`, {
-    method: 'POST',
-    headers: requestHeader.headers,
-    body: JSON.stringify({
-      title: title.value,
-      body: body.value,
-      meetupId: activeMeetupId
-    })
-  });
-  const responseBody = await response.json();
-  const { status, data } = responseBody;
-  return status === 201 ? data[0] : null;
+    const response = await fetch(`${apiBaseURL}/questions`, {
+      method: 'POST',
+      headers: requestHeader.headers,
+      body: JSON.stringify({
+        title: title.value,
+        body: body.value,
+        meetupId: activeMeetupId
+      })
+    });
+    const responseBody = await response.json();
+    const { status, data } = responseBody;
+    if (status === 201) {
+      return data[0];
+    }
+
+    throw new Error(responseBody.error);
+  } catch (e) {
+    throw e;
+  }
+}
+
+const displayFormFeedback = (msg) => {
+  const userFeedback = document.getElementById('user-feedback');
+  const span = document.createElement('span');
+  span.textContent = msg;
+  userFeedback.classList.add('info-box');
+  userFeedback.appendChild(span);
 }
 
 const createQuestionForm = () => {
@@ -293,6 +309,12 @@ const createQuestionForm = () => {
   bioSection.appendChild(bioText);
 
   const form = document.createElement('form');
+  form.method = 'POST';
+  const userFeedback = document.createElement('div');
+  userFeedback.classList.add('user-feedback');
+  userFeedback.id = 'user-feedback';
+
+
   const formInputSpec = [
     {
       id: 1,
@@ -334,7 +356,7 @@ const createQuestionForm = () => {
     field.id = spec.idText;
     field.placeholder = spec.placeholder;
     field.classList.add(`${spec.type === 'input' ? 'q-form__input' : 'q-form__textarea'}`);
-    field.setAttribute('required', '');
+    // field.setAttribute('required', '');
 
     formGroup.appendChild(label);
     formGroup.appendChild(field);
@@ -350,6 +372,8 @@ const createQuestionForm = () => {
 
   postBtnArea.appendChild(postQuestionButton);
 
+  form.appendChild(userFeedback);
+
   formInputs.forEach((el) => {
     form.appendChild(el);
   })
@@ -360,10 +384,10 @@ const createQuestionForm = () => {
     e.preventDefault();
     askQuestion()
       .then((question) => {
-         window.location.reload();
+        window.location.reload();
       })
       .catch((err) => {
-        console.log(err);
+        displayFormFeedback(err.message);
       })
   }
 
