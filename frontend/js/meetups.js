@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const apiBaseURL = 'http://localhost:9999/api/v1';
 const userToken = localStorage.getItem('userToken');
 
@@ -9,22 +11,17 @@ const requestHeaders = {
 };
 
 const btnTrigger = document.querySelector('.dropdown-trigger-btn');
-const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
 const searchIcon = document.getElementById('search-icon');
 const searchBar = document.getElementById('search-bar');
 const cards = document.getElementById('meetup-cards');
 const meetupCardsWrapper = document.getElementById('meetup-cards__wrapper');
+
 
 const createPaginationButton = (text) => {
   const pgButton = document.createElement('button');
   pgButton.textContent = text;
   pgButton.classList.add('q-btn', 'btn__centered', 'see-more-meetups_btn');
   return pgButton;
-};
-
-// Toggle display of dropdown menu
-btnTrigger.onclick = () => {
-  dropDownMenu.classList.toggle('show');
 };
 
 searchIcon.onclick = () => {
@@ -192,12 +189,10 @@ const addMeetupsToDOM = (meetups) => {
   return cards;
 };
 
+
+
 const showAllMeetups = (userToken) => {
-  fetch(`${apiBaseURL}/meetups`, {
-    headers: {
-      Authorization: `Bearer ${userToken}`
-    }
-  })
+  fetch(`${apiBaseURL}/meetups`, requestHeaders)
     .then(res => res.json())
     .then((res) => {
       if (tokenIsValid(res)) {
@@ -223,6 +218,12 @@ const showAllMeetups = (userToken) => {
       console.log(err);
     });
 };
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    searchBar.classList.remove('show');
+  }
+})
 
 window.addEventListener('load', () => {
   const userToken = localStorage.getItem('userToken');

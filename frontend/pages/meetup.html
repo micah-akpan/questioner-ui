@@ -29,18 +29,6 @@
         </nav>
 
         <nav class="q-right-nav notify-user__nav">
-          <ul>
-            <li>
-              <button class="q-btn" title="Notifications">
-                <img src="../assets/icons/notifications-button.svg" alt="your notifications">
-              </button>
-            </li>
-            <li>
-              <button class="q-btn" title="Profile">
-                <img src="../assets/icons/avatar1.svg" alt="your profile">
-              </button>
-            </li>
-          </ul>
         </nav>
       </div>
     </div>
@@ -207,6 +195,17 @@
     </div>
   </section>
 
+  <!-- Nav User Profile DropDown Menu -->
+  <section>
+    <div class="q-user-profile__dropdown-menu">
+      <ul>
+        <li><a href="./profile.html">Account settings</a></li>
+        <li><a href="./meetup.html">Ask a question</a></li>
+        <li class="logout__btn"><a href="#">Logout</a></li>
+      </ul>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
       <div class="footer-content">
@@ -243,7 +242,7 @@
   </footer>
   <script src="../js/base.js"></script>
   <script src="../js/icons.js"></script>
-  <script src="../js/mobile-nav.js"></script>
+  <script src="../js/nav.js"></script>
   <script src="../js/meetup.js"></script>
   <script>
     function showMeetupLocationOnMap() {
