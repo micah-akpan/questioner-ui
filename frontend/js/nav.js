@@ -140,7 +140,6 @@ if (urlPath.includes('admin')) {
   ];
 
   const rightNav = createRightNavList(navSpec);
-  console.log(rightNav);
   nav.appendChild(rightNav);
 } else {
   const rightNav = createRightNavList(rightNavSpec);
