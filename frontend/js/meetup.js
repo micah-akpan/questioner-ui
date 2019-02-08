@@ -183,12 +183,17 @@ const createQuestionCardPrimary = (question) => {
  * @param {Array} icons List of icons
  */
 const addIcons = (iconWrapper, icons) => {
+  const urlPaths = window.location.pathname.split('/');
   icons.forEach((icon) => {
     const img = document.createElement('img');
-    img.src = icon.src;
     img.alt = icon.alt;
     img.title = icon.title;
     img.setAttribute('data-target', icon.id);
+    if (urlPaths.includes('admin')) {
+      img.src = icon.adminSrcPath;
+    } else {
+      img.src = icon.src;
+    }
     iconWrapper.appendChild(img);
   });
 }
