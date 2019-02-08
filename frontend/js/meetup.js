@@ -35,23 +35,6 @@ const askGroupButton = document.getElementById('ask-group-btn');
 
 const questionFormSection = document.getElementById('ask-question');
 
-const getMeetup = async () => {
-  try {
-    const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`
-      }
-    });
-
-    const responseBody = await response.json();
-    const { status, data } = responseBody;
-    return status === 200 ? data[0] : null;
-  } catch(e) {
-    console.error(e);
-  }
-}
-
 const displayQuestionBlock = () => {
   askQuestionWrapper.classList.add('active');
   postQuestionDirArea.classList.add('inactive');
@@ -619,7 +602,7 @@ const addMeetupToPage = (meetup) => {
   addMeetupDateToDOM(meetup);
   addMeetupImageToPage(meetup);
   addMeetupImagesToPage(meetup);
-  rsvp.addRsvpButtonsToPage(meetup);
+  addRsvpButtonsToPage(meetup);
   addDescriptionToPage(meetup);
 
   displayMeetupQuestions(meetup);

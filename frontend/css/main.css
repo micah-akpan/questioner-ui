@@ -150,6 +150,16 @@ section {
   display: none;
 }
 
+.disabled__btn {
+  background-color: grey;
+  color: #333;
+}
+
+.disabled__btn:hover {
+  cursor: not-allowed;
+  background-color: grey;
+}
+
 /* App Main Header */
 header {
   position: fixed;

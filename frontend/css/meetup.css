@@ -4,6 +4,14 @@ h3 {
   text-align: left;
 }
 
+.meetup-rsvp__enquiry {
+  margin-bottom: 50px;
+}
+
+.rsvp-user-feedback {
+  font-weight: bold;
+}
+
 .meetup-rsvp__enquiry .meetup-sched__btns 
 button {
   text-transform: uppercase;
