@@ -619,7 +619,7 @@ const addMeetupToPage = (meetup) => {
   addMeetupDateToDOM(meetup);
   addMeetupImageToPage(meetup);
   addMeetupImagesToPage(meetup);
-  addRsvpButtonsToPage(meetup);
+  rsvp.addRsvpButtonsToPage(meetup);
   addDescriptionToPage(meetup);
 
   displayMeetupQuestions(meetup);
