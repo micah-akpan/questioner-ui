@@ -214,6 +214,7 @@ button {
   width: 100%;
   text-align: center;
   padding: 10px;
+  cursor: pointer;
 }
 
 .comment-box .view-comments__link:hover {
