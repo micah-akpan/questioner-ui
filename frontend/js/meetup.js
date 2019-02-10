@@ -116,6 +116,7 @@ const getQuestion = async (questionId) => {
  */
 const createCommentForm = (question) => {
   const commentForm = document.createElement('form');
+  commentForm.classList.add('comment-form');
   commentForm.setAttribute('data-target', question.id);
   commentForm.onsubmit = (e) => {
     e.preventDefault();
@@ -169,6 +170,32 @@ const createUserAvatar = async () => {
   return userImage;
 };
 
+const displayComments = ({ card, commentsWrapper,
+  questionComment, commentForm, viewComments, question }) => {
+  Promise.all([getUser(), getComments(question)])
+    .then((values) => {
+      const [user, comments] = values;
+      commentsWrapper.innerHTML = '';
+      comments.forEach((comment) => {
+        const commentCard = createCommentCard(user, comment);
+        commentsWrapper.appendChild(commentCard);
+      })
+      card.innerHTML = '';
+      card.appendChild(commentsWrapper);
+      questionComment.appendChild(commentForm);
+
+      viewComments.textContent = `View less comments`;
+
+      card.appendChild(viewComments);
+      card.appendChild(questionComment);
+
+      return card;
+    })
+    .catch((e) => {
+      throw e;
+    })
+}
+
 /**
  * @func createCommentSection
  * @param {Array} comments
@@ -176,45 +203,29 @@ const createUserAvatar = async () => {
  */
 const createCommentSection = async (comments, question) => {
   const card = document.createElement('div');
+
   card.classList.add('comment-box');
   const viewComments = document.createElement('p');
   viewComments.classList.add('view-comments__link');
   viewComments.textContent = formCommentLinkText(comments.length);
   const commentsWrapper = document.createElement('div');
+  commentsWrapper.classList.add('comments-wrapper');
 
   const questionComment = document.createElement('div');
   questionComment.classList.add('question-comment');
 
   const userImage = await createUserAvatar();
-
   const commentForm = createCommentForm(question);
 
   viewComments.onclick = () => {
-    Promise.all([getUser(), getComments(question)])
-      .then((values) => {
-        const [user, comments] = values;
-        commentsWrapper.innerHTML = '';
-        comments.forEach((comment) => {
-          const commentCard = createCommentCard(user, comment);
-          commentsWrapper.appendChild(commentCard);
-        })
-        card.innerHTML = '';
-        card.appendChild(commentsWrapper);
-        questionComment.appendChild(commentForm);
-
-        viewComments.textContent = `View less comments`;
-        viewComments.onclick = function () {
-          // TODO: Toggle display of all comments
-        }
-
-        card.appendChild(viewComments);
-        card.appendChild(questionComment);
-
-        return card;
-      })
-      .catch((e) => {
-        throw e;
-      })
+    displayComments({
+      card,
+      commentsWrapper,
+      questionComment,
+      commentForm,
+      viewComments,
+      question
+    });
   }
 
   questionComment.appendChild(userImage);
@@ -305,7 +316,7 @@ const upvoteQuestion = (questionId) => {
     .then((response) => {
       const { status, data } = response;
       if (status === 200) {
-        const votes = document.getElementById(`user-vote-${questionIxd}`);
+        const votes = document.getElementById(`user-vote-${questionId}`);
         votes.textContent = data[0].votes;
       }
     })
@@ -328,7 +339,6 @@ const downvoteQuestion = (questionId) => {
       if (status === 200) {
         const votes = document.getElementById(`user-vote-${questionId}`);
         votes.textContent = data[0].votes;
-        console.log(votes)
       }
     })
     .catch((err) => {
@@ -424,6 +434,22 @@ const createQuestionCard = async (question) => {
   const questionText = createQuestionCardPrimary(question);
   const comments = await getComments(question);
   const commentSection = await createCommentSection(comments, question);
+
+  questionTextBlock.onclick = () => {
+    const card = document.querySelector('.question-card');
+    const commentsWrapper = document.querySelector('.comments-wrapper');
+    const questionComment = document.querySelector('.question-comment');
+    const commentForm = document.querySelector('.comment-form');
+    const viewComments = document.querySelector('.view-comments');
+    displayComments({
+      card,
+      commentsWrapper,
+      questionComment,
+      commentForm,
+      viewComments,
+      question
+    })
+  }
 
   questionIcons.appendChild(leftIcons);
   questionIcons.appendChild(rightIcons);

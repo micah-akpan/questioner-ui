@@ -70,3 +70,14 @@ const logOutUser = () => {
   localStorage.removeItem('userToken');
   window.location.replace('../index.html');
 };
+
+
+const setAttributes = (el, attrs) => {
+  const attrKeys = Object.keys(attrs);
+  attrKeys.forEach((key) => {
+    el.setAttribute(key, attrs[key]);
+  });
+  return el;
+}
+
+const getUserFullName = (firstname, lastname) => `${firstname} ${lastname}`;

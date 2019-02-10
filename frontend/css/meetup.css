@@ -145,6 +145,7 @@ button {
 .question-text-block {
   min-height: 160px;
   border-bottom: 1px solid #cccccc;
+  cursor: pointer;
 }
 
 .question-icons {
