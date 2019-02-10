@@ -168,7 +168,7 @@ button {
 .question-block .comment-box {
   margin: 10px auto;
   width: 100%;
-  padding: 10px;
+  padding: 20px;
   border-radius: 5px;
   border: 1px solid #ffffff;
   overflow: hidden;
@@ -180,9 +180,10 @@ button {
 
 .comment-box .question-comment img {
   display: block;
-  width: 50px;
-  height: 50px;
-  padding: 10px 0;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  margin-right: 5px;
 }
 
 .question-block .comment-box form {
@@ -204,6 +205,10 @@ button {
   resize: vertical;
 }
 
+.comment-box .question-comment textarea:focus {
+  outline: none;
+}
+
 .comment-box form button:hover {
   background: #116460;
 }
@@ -214,6 +219,7 @@ button {
   width: 100%;
   text-align: center;
   padding: 10px;
+  cursor: pointer;
 }
 
 .comment-box .view-comments__link:hover {
@@ -222,6 +228,34 @@ button {
 
 .comment-box .comments {
   margin: 0;
+}
+
+/* Comment Card */
+.comment-card {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  left: 10px;
+  background: #ffcb9a;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.comment-card .comment-card__primary {
+  flex: 1 1 auto;
+}
+
+.comment-card .comment-card__primary h3,
+.comment-card .comment-card__primary p {
+  padding: 0;
+  margin: 0;
+}
+
+.comment-card img {
+  background: white;
+  margin-right: 10px;
+  width: 10%;
+  padding: 10px;
 }
 
 /* Upload Meetup Image */

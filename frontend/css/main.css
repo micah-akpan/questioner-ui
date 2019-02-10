@@ -160,6 +160,14 @@ section {
   background-color: grey;
 }
 
+.rounded-border-avatar {
+  border-radius: 50%;
+}
+
+.light-border {
+  border: 1px solid #116466;
+}
+
 /* App Main Header */
 header {
   position: fixed;

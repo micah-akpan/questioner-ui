@@ -35,6 +35,29 @@ const askGroupButton = document.getElementById('ask-group-btn');
 
 const questionFormSection = document.getElementById('ask-question');
 
+const postComment = async (questionId, comment) => {
+  try {
+    const response = await fetch(`${apiBaseURL}/comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      },
+
+      body: JSON.stringify({
+        comment,
+        questionId
+      })
+    });
+
+    const responseBody = await response.json();
+    const { status, data } = responseBody;
+    return status === 201 ? data[0] : null;
+  } catch (e) {
+    throw e;
+  }
+}
+
 const displayQuestionBlock = () => {
   askQuestionWrapper.classList.add('active');
   postQuestionDirArea.classList.add('inactive');
@@ -74,13 +97,41 @@ const formCommentLinkText = (totalComments) => {
   return linkText;
 }
 
+const getQuestion = async (questionId) => {
+  const apiURL = `${apiBaseURL}/meetups/${activeMeetupId}/questions/${questionId}`
+  try {
+    const response = await fetch(apiURL, requestHeader);
+    const responseBody = await response.json();
+    const { status, data } = responseBody;
+    return status === 200 ? data[0] : null;
+  } catch (e) {
+    throw e;
+  }
+
+}
+
 /**
  * @func createCommentForm
  * @returns {HTMLElement} Returns a comment form
  */
-const createCommentForm = () => {
+const createCommentForm = (question) => {
   const commentForm = document.createElement('form');
+  commentForm.setAttribute('data-target', question.id);
+  commentForm.onsubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(commentForm);
+    const questionId = commentForm.getAttribute('data-target');
+    Promise.all([getQuestion(questionId), postComment(questionId, formData.get('comment'))])
+      .then((values) => { 
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+  }
   const textArea = document.createElement('textarea');
+  textArea.required = true;
+  textArea.name = 'comment';
   textArea.placeholder = 'Add Your Comment';
   const commentButton = document.createElement('button');
   commentButton.classList.add('q-btn', 'btn');
@@ -111,35 +162,94 @@ const getUserImage = async () => {
 const createUserAvatar = async () => {
   const userImageUrl = await getUserImage();
   const userImage = document.createElement('img');
+  userImage.classList.add('rounded-border-avatar', 'light-border');
   const defaultUserAvatar = '../assets/icons/avatar1.svg';
   userImage.setAttribute('src', userImageUrl || defaultUserAvatar);
   userImage.setAttribute('alt', '');
   return userImage;
-}
+};
 
 /**
- * @func createCommentCard
+ * @func createCommentSection
  * @param {Array} comments
  * @returns {Promise<HTMLDivElement>} Resolves to a comment card HTML element
  */
-const createCommentCard = async (comments) => {
+const createCommentSection = async (comments, question) => {
   const card = document.createElement('div');
   card.classList.add('comment-box');
   const viewComments = document.createElement('p');
   viewComments.classList.add('view-comments__link');
   viewComments.textContent = formCommentLinkText(comments.length);
+  const commentsWrapper = document.createElement('div');
 
   const questionComment = document.createElement('div');
   questionComment.classList.add('question-comment');
 
   const userImage = await createUserAvatar();
 
-  const commentForm = createCommentForm();
+  const commentForm = createCommentForm(question);
+
+  viewComments.onclick = () => {
+    Promise.all([getUser(), getComments(question)])
+      .then((values) => {
+        const [ user, comments ] = values;
+        commentsWrapper.innerHTML = '';
+        comments.forEach((comment) => {
+          const commentCard = createCommentCard(user, comment);
+          commentsWrapper.appendChild(commentCard);
+        })
+        card.innerHTML = '';
+        card.appendChild(commentsWrapper);
+        questionComment.appendChild(commentForm);
+
+        viewComments.textContent = `View less comments`;
+        viewComments.onclick =  function() {
+          // TODO: Toggle display of all comments
+        }
+
+        card.appendChild(viewComments);
+        card.appendChild(questionComment);
+
+        return card;
+      })
+      .catch((e) => {
+        throw e;
+      })
+  }
+
   questionComment.appendChild(userImage);
   questionComment.appendChild(commentForm);
 
   card.appendChild(viewComments);
   card.appendChild(questionComment);
+
+  return card;
+};
+
+const createCommentCard = (user, comment) => {
+  const card = document.createElement('div');
+  card.classList.add('comment-card');
+  const userAvatar = document.createElement('img');
+  userAvatar.setAttribute('src', user.avatar || '../assets/icons/avatar1.svg');
+  userAvatar.classList.add('rounded-border-avatar', 'light-border');
+  const userName = document.createElement('h3');
+  userName.textContent = `${user.firstname} ${user.lastname}`;
+  const commentBody = document.createElement('p');
+  commentBody.textContent = comment.body;
+  const commentDate = document.createElement('span');
+  const [ month, day ] = parseDate(comment.createdOn);
+  commentDate.textContent = `${month} ${day}`;
+  const primaryDetails = document.createElement('div');
+  primaryDetails.classList.add('comment-card__primary');
+  primaryDetails.appendChild(userName);
+  primaryDetails.appendChild(commentBody);
+  primaryDetails.appendChild(commentDate)
+
+  const avatarWrapper = document.createElement('div');
+  avatarWrapper.appendChild(userAvatar);
+
+  card.appendChild(avatarWrapper);
+  card.appendChild(primaryDetails);
 
   return card;
 }
@@ -173,7 +283,7 @@ const createQuestionCardPrimary = (question) => {
   section.appendChild(askedWhen);
 
   return section;
-}
+};
 
 /**
  * @func addIcons
@@ -223,7 +333,7 @@ const createQuestionCard = async (question) => {
 
   const questionText = createQuestionCardPrimary(question);
   const comments = await getComments(question);
-  const commentCard = await createCommentCard(comments)
+  const commentSection = await createCommentSection(comments, question);
 
   questionIcons.appendChild(leftIcons);
   questionIcons.appendChild(rightIcons);
@@ -232,7 +342,7 @@ const createQuestionCard = async (question) => {
   questionTextBlock.appendChild(questionIcons);
 
   questionBlock.appendChild(questionTextBlock);
-  questionBlock.appendChild(commentCard);
+  questionBlock.appendChild(commentSection);
 
   card.appendChild(questionBlock);
 
