@@ -3,10 +3,10 @@
 /**
  * @class Comment
  */
-const CommentCard = {
+const Comment = {
   card: null,
 
-  async getComments() {
+  async getComments(question) {
     try {
       const apiUrl = `${apiBaseURL}/questions/${question.id}/comments`;
       const response = await fetch(apiUrl, requestHeader);
@@ -170,9 +170,4 @@ const CommentCard = {
 
     return card;
   }
-}
-
-
-const Comment = {
-
 }

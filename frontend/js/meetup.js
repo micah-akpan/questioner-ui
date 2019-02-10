@@ -17,7 +17,6 @@ const requestHeader = {
   }
 };
 
-
 const detailsContent = document.getElementById('details-content');
 const meetupTitleWrapper = document.getElementById('meetup-title__wrapper');
 const meetupTitle = document.getElementById('meetup-title');
@@ -35,29 +34,6 @@ const askGroupButton = document.getElementById('ask-group-btn');
 
 const questionFormSection = document.getElementById('ask-question');
 
-const postComment = async (questionId, comment) => {
-  try {
-    const response = await fetch(`${apiBaseURL}/comments`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`
-      },
-
-      body: JSON.stringify({
-        comment,
-        questionId
-      })
-    });
-
-    const responseBody = await response.json();
-    const { status, data } = responseBody;
-    return status === 201 ? data[0] : null;
-  } catch (e) {
-    throw e;
-  }
-}
-
 const displayQuestionBlock = () => {
   askQuestionWrapper.classList.add('active');
   postQuestionDirArea.classList.add('inactive');
@@ -65,20 +41,6 @@ const displayQuestionBlock = () => {
   divider.classList.add('divider');
   askQuestionWrapper.appendChild(divider);
   return askQuestionWrapper;
-}
-
-/**
- * @func getComments
- * @param {*} question
- * @returns {Array} A list of comments
- */
-const getComments = async (question) => {
-  const apiUrl = `${apiBaseURL}/questions/${question.id}/comments`;
-  const response = await fetch(apiUrl, requestHeader);
-  const responseBody = await response.json();
-  const { status, data } = responseBody;
-  const comments = status === 200 ? data : [];
-  return comments;
 }
 
 /**
@@ -122,13 +84,8 @@ const createCommentForm = (question) => {
     e.preventDefault();
     const formData = new FormData(commentForm);
     const questionId = commentForm.getAttribute('data-target');
-    Promise.all([getQuestion(questionId), postComment(questionId, formData.get('comment'))])
-      .then((values) => {
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.error(err);
-      })
+    const comment = formData.get('comment');
+    Comment.handleCommentFormSubmit(questionId, comment);
   }
   const textArea = document.createElement('textarea');
   textArea.required = true;
@@ -172,7 +129,7 @@ const createUserAvatar = async () => {
 
 const displayComments = ({ card, commentsWrapper,
   questionComment, commentForm, viewComments, question }) => {
-  Promise.all([getUser(), getComments(question)])
+  Promise.all([getUser(), Comment.getComments(question)])
     .then((values) => {
       const [user, comments] = values;
       commentsWrapper.innerHTML = '';
@@ -432,7 +389,7 @@ const createQuestionCard = async (question) => {
   votes.textContent = question.votes;
 
   const questionText = createQuestionCardPrimary(question);
-  const comments = await getComments(question);
+  const comments = await Comment.getComments(question);
   const commentSection = await createCommentSection(comments, question);
 
   questionTextBlock.onclick = () => {
