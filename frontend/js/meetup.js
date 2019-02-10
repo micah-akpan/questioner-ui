@@ -227,12 +227,14 @@ const createCommentCard = (user, comment) => {
   card.classList.add('comment-card');
   const userAvatar = document.createElement('img');
   userAvatar.setAttribute('src', user.avatar || '../assets/icons/avatar1.svg');
+  userAvatar.classList.add('rounded-border-avatar', 'light-border');
   const userName = document.createElement('h3');
   userName.textContent = `${user.firstname} ${user.lastname}`;
   const commentBody = document.createElement('p');
   commentBody.textContent = comment.body;
   const commentDate = document.createElement('span');
   const primaryDetails = document.createElement('div');
+  primaryDetails.classList.add('comment-card__primary');
   primaryDetails.appendChild(userName);
   primaryDetails.appendChild(commentBody);
 
