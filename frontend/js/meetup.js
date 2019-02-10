@@ -123,7 +123,6 @@ const createCommentForm = (question) => {
     const questionId = commentForm.getAttribute('data-target');
     Promise.all([getQuestion(questionId), postComment(questionId, formData.get('comment'))])
       .then((values) => {
-        console.log(values)
         // TODO: form a list of comment cards
       })
       .catch((err) => {
@@ -131,6 +130,7 @@ const createCommentForm = (question) => {
       })
   }
   const textArea = document.createElement('textarea');
+  textArea.required = true;
   textArea.name = 'comment';
   textArea.placeholder = 'Add Your Comment';
   const commentButton = document.createElement('button');
@@ -179,11 +179,11 @@ const createCommentSection = async (comments, question) => {
   const viewComments = document.createElement('p');
   viewComments.classList.add('view-comments__link');
   viewComments.textContent = formCommentLinkText(comments.length);
-  viewComments.onclick = async () => {
-    const user = await getUser();
-    const comments = await getComments(question);
-    const commentsArea = null;
-    con
+  viewComments.onclick = () => {
+    Promise.all([getUser(), getComments(question)])
+      .then((values) => {
+        console.log(values);
+      })
   }
 
   const questionComment = document.createElement('div');
