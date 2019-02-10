@@ -55,7 +55,7 @@ const parseDate = (date) => {
   const currentDate = new Date(date);
   const month = currentDate.getMonth();
   const monthShortForm = getMonth(month + 1);
-  const day = currentDate.getDay();
+  const day = currentDate.getDate();
 
   return [monthShortForm, day];
 };
