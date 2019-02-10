@@ -124,6 +124,8 @@ const createCommentForm = (question) => {
     Promise.all([getQuestion(questionId), postComment(questionId, formData.get('comment'))])
       .then((values) => {
         // TODO: form a list of comment cards
+        const [question, comment] = values;
+
       })
       .catch((err) => {
         console.error(err);
@@ -179,12 +181,7 @@ const createCommentSection = async (comments, question) => {
   const viewComments = document.createElement('p');
   viewComments.classList.add('view-comments__link');
   viewComments.textContent = formCommentLinkText(comments.length);
-  viewComments.onclick = () => {
-    Promise.all([getUser(), getComments(question)])
-      .then((values) => {
-        console.log(values);
-      })
-  }
+  const commentsWrapper = document.createElement('div');
 
   const questionComment = document.createElement('div');
   questionComment.classList.add('question-comment');
@@ -192,6 +189,30 @@ const createCommentSection = async (comments, question) => {
   const userImage = await createUserAvatar();
 
   const commentForm = createCommentForm(question);
+
+  viewComments.onclick = () => {
+    Promise.all([getUser(), getComments(question)])
+      .then((values) => {
+        const [ user, comments ] = values;
+        commentsWrapper.innerHTML = '';
+        comments.forEach((comment) => {
+          const commentCard = createCommentCard(user, comment);
+          commentsWrapper.appendChild(commentCard);
+        })
+        card.innerHTML = '';
+        card.appendChild(commentsWrapper);
+        questionComment.appendChild(commentForm);
+
+        card.appendChild(viewComments);
+        card.appendChild(questionComment);
+
+        return card;
+      })
+      .catch((e) => {
+        throw e;
+      })
+  }
+
   questionComment.appendChild(userImage);
   questionComment.appendChild(commentForm);
 
@@ -205,11 +226,11 @@ const createCommentCard = (user, comment) => {
   const card = document.createElement('div');
   card.classList.add('comment-card');
   const userAvatar = document.createElement('img');
-  userAvatar.setAttribute('src', user.avatar);
+  userAvatar.setAttribute('src', user.avatar || '../assets/icons/avatar1.svg');
   const userName = document.createElement('h3');
   userName.textContent = `${user.firstname} ${user.lastname}`;
   const commentBody = document.createElement('p');
-  commentBody.textContent = comment.comment;
+  commentBody.textContent = comment.body;
   const commentDate = document.createElement('span');
   const primaryDetails = document.createElement('div');
   primaryDetails.appendChild(userName);
