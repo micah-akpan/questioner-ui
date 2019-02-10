@@ -239,10 +239,13 @@ const createCommentCard = (user, comment) => {
   const commentBody = document.createElement('p');
   commentBody.textContent = comment.body;
   const commentDate = document.createElement('span');
+  const [ month, day ] = parseDate(comment.createdOn);
+  commentDate.textContent = `${month} ${day}`;
   const primaryDetails = document.createElement('div');
   primaryDetails.classList.add('comment-card__primary');
   primaryDetails.appendChild(userName);
   primaryDetails.appendChild(commentBody);
+  primaryDetails.appendChild(commentDate)
 
   const avatarWrapper = document.createElement('div');
   avatarWrapper.appendChild(userAvatar);
