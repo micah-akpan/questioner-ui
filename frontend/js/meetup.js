@@ -122,7 +122,7 @@ const createCommentForm = (question) => {
     const formData = new FormData(commentForm);
     const questionId = commentForm.getAttribute('data-target');
     Promise.all([getQuestion(questionId), postComment(questionId, formData.get('comment'))])
-      .then((values) => { 
+      .then((values) => {
         window.location.reload();
       })
       .catch((err) => {
@@ -192,7 +192,7 @@ const createCommentSection = async (comments, question) => {
   viewComments.onclick = () => {
     Promise.all([getUser(), getComments(question)])
       .then((values) => {
-        const [ user, comments ] = values;
+        const [user, comments] = values;
         commentsWrapper.innerHTML = '';
         comments.forEach((comment) => {
           const commentCard = createCommentCard(user, comment);
@@ -203,7 +203,7 @@ const createCommentSection = async (comments, question) => {
         questionComment.appendChild(commentForm);
 
         viewComments.textContent = `View less comments`;
-        viewComments.onclick =  function() {
+        viewComments.onclick = function () {
           // TODO: Toggle display of all comments
         }
 
@@ -237,7 +237,7 @@ const createCommentCard = (user, comment) => {
   const commentBody = document.createElement('p');
   commentBody.textContent = comment.body;
   const commentDate = document.createElement('span');
-  const [ month, day ] = parseDate(comment.createdOn);
+  const [month, day] = parseDate(comment.createdOn);
   commentDate.textContent = `${month} ${day}`;
   const primaryDetails = document.createElement('div');
   primaryDetails.classList.add('comment-card__primary');
@@ -285,22 +285,106 @@ const createQuestionCardPrimary = (question) => {
   return section;
 };
 
+const displayTotalUsersVotes = (votes) => {
+  const p = document.createElement('p');
+  p.classList.add('user-vote');
+  p.title = 'Total number of votes on this question';
+  p.textContent = votes;
+  return p;
+}
+
+const upvoteQuestion = (questionId) => {
+  const apiUrl = `${apiBaseURL}/questions/${questionId}/upvote`;
+  fetch(apiUrl, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${userToken}`
+    }
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      const { status, data } = response;
+      if (status === 200) {
+        const votes = document.getElementById(`user-vote-${questionIxd}`);
+        votes.textContent = data[0].votes;
+      }
+    })
+    .catch((err) => {
+      throw err;
+    })
+}
+
+const downvoteQuestion = (questionId) => {
+  const apiUrl = `${apiBaseURL}/questions/${questionId}/downvote`;
+  fetch(apiUrl, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${userToken}`
+    }
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      const { status, data } = response;
+      if (status === 200) {
+        const votes = document.getElementById(`user-vote-${questionId}`);
+        votes.textContent = data[0].votes;
+        console.log(votes)
+      }
+    })
+    .catch((err) => {
+      throw err;
+    })
+}
+
 /**
  * @func addIcons
  * @param {HTMLElement} iconWrapper The parent container for the icons
  * @param {Array} icons List of icons
  */
-const addIcons = (iconWrapper, icons) => {
+const addIcons = (question, iconWrapper, icons) => {
   const urlPaths = window.location.pathname.split('/');
   icons.forEach((icon) => {
     const img = document.createElement('img');
     img.alt = icon.alt;
     img.title = icon.title;
-    img.setAttribute('data-target', icon.id);
+    img.setAttribute('data-action', icon.action);
+    img.setAttribute('data-target', question.id);
     if (urlPaths.includes('admin')) {
       img.src = icon.adminSrcPath;
     } else {
       img.src = icon.src;
+    }
+
+    img.onclick = function () {
+      const action = this.getAttribute('data-action');
+      switch (action) {
+        case 'upvote': {
+          const questionId = this.getAttribute('data-target');
+          upvoteQuestion(questionId);
+          getQuestion(questionId)
+            .then((question) => {
+
+            })
+            .catch((err) => {
+              throw err;
+            })
+        }
+
+        case 'downvote': {
+          const questionId = this.getAttribute('data-target');
+          downvoteQuestion(questionId);
+          getQuestion(questionId)
+            .then((question) => {
+              displayTotalUsersVotes(question.votes);
+            })
+            .catch((err) => {
+              throw err;
+            })
+        }
+
+        default:
+          break;
+      }
     }
     iconWrapper.appendChild(img);
   });
@@ -328,8 +412,14 @@ const createQuestionCard = async (question) => {
   const rightIcons = document.createElement('div');
   rightIcons.classList.add('question-icons__right');
 
-  addIcons(leftIcons, icons.left);
-  addIcons(rightIcons, icons.right);
+  addIcons(question, leftIcons, icons.left);
+  addIcons(question, rightIcons, icons.right);
+
+  const votes = document.createElement('p');
+  votes.classList.add('user-vote');
+  votes.id = `user-vote-${question.id}`;
+  votes.title = 'Total number of votes on this question';
+  votes.textContent = question.votes;
 
   const questionText = createQuestionCardPrimary(question);
   const comments = await getComments(question);
@@ -340,6 +430,8 @@ const createQuestionCard = async (question) => {
 
   questionTextBlock.appendChild(questionText);
   questionTextBlock.appendChild(questionIcons);
+
+  questionTextBlock.appendChild(votes);
 
   questionBlock.appendChild(questionTextBlock);
   questionBlock.appendChild(commentSection);
