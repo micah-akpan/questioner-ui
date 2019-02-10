@@ -164,6 +164,7 @@ const getUserImage = async () => {
 const createUserAvatar = async () => {
   const userImageUrl = await getUserImage();
   const userImage = document.createElement('img');
+  userImage.classList.add('rounded-border-avatar', 'light-border');
   const defaultUserAvatar = '../assets/icons/avatar1.svg';
   userImage.setAttribute('src', userImageUrl || defaultUserAvatar);
   userImage.setAttribute('alt', '');
@@ -202,6 +203,11 @@ const createCommentSection = async (comments, question) => {
         card.innerHTML = '';
         card.appendChild(commentsWrapper);
         questionComment.appendChild(commentForm);
+
+        viewComments.textContent = `View less comments`;
+        viewComments.onclick =  function() {
+          // TODO: Toggle display of all comments
+        }
 
         card.appendChild(viewComments);
         card.appendChild(questionComment);
