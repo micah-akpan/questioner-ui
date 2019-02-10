@@ -4,8 +4,6 @@
  * @class Comment
  */
 const Comment = {
-  card: null,
-
   async getComments(question) {
     try {
       const apiUrl = `${apiBaseURL}/questions/${question.id}/comments`;
@@ -127,6 +125,47 @@ const Comment = {
       })
   },
 
+  /**
+ * @func createCommentSection
+ * @param {Array} comments
+ * @returns {Promise<HTMLDivElement>} Resolves to a comment card HTML element
+ */
+  async createCommentSection(comments, question) {
+    const card = document.createElement('div');
+
+    card.classList.add('comment-box');
+    const viewComments = document.createElement('p');
+    viewComments.classList.add('view-comments__link');
+    viewComments.textContent = formCommentLinkText(comments.length);
+    const commentsWrapper = document.createElement('div');
+    commentsWrapper.classList.add('comments-wrapper');
+
+    const questionComment = document.createElement('div');
+    questionComment.classList.add('question-comment');
+
+    const userImage = await createUserAvatar();
+    const commentForm = createCommentForm(question);
+
+    viewComments.onclick = () => {
+      displayComments({
+        card,
+        commentsWrapper,
+        questionComment,
+        commentForm,
+        viewComments,
+        question
+      });
+    }
+
+    questionComment.appendChild(userImage);
+    questionComment.appendChild(commentForm);
+
+    card.appendChild(viewComments);
+    card.appendChild(questionComment);
+
+    return card;
+  },
+
   createCommentBody() {
 
   },
@@ -169,5 +208,20 @@ const Comment = {
     card.appendChild(primaryDetailsWrapper);
 
     return card;
+  },
+  /**
+ * @func formCommentLinkText
+ * @param {Number} totalComments
+ * @returns {String} Comment link text 
+ */
+  formCommentLinkText(totalComments) {
+    let linkText = '';
+    if (totalComments > 1) {
+      linkText = `View all ${totalComments} comments`
+    } else if (totalComments === 1) {
+      linkText = `View ${totalComments} comment`
+    }
+
+    return linkText;
   }
 }
