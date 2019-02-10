@@ -54,7 +54,7 @@ const postComment = async (questionId, comment) => {
     const { status, data } = responseBody;
     return status === 201 ? data[0] : null;
   } catch (e) {
-    console.error(e);
+    throw e;
   }
 }
 
@@ -122,10 +122,8 @@ const createCommentForm = (question) => {
     const formData = new FormData(commentForm);
     const questionId = commentForm.getAttribute('data-target');
     Promise.all([getQuestion(questionId), postComment(questionId, formData.get('comment'))])
-      .then((values) => {
-        // TODO: form a list of comment cards
-        const [question, comment] = values;
-
+      .then((values) => { 
+        window.location.reload();
       })
       .catch((err) => {
         console.error(err);
