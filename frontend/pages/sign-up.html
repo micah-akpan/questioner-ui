@@ -4,7 +4,7 @@
 <head>
   <title>Create a Questioner Account</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Questioner crowdsources questions to help meetup organizers prioritise questions related to a meetup">
   <link rel="stylesheet" href="../css/sign-up.css">
 </head>
@@ -33,14 +33,14 @@
     <div class="container">
       <h3 class="get-started-text">Get started with a free account</h3>
 
-      <form id="sign-up-form" method="POST">
+      <form id="sign-up-form" method="POST" action="#!">
         <p class="user-feedback error"></p>
         <div class="q-form__group">
           <div class="q-form__input-name">
             <label for="f-name" class="q-form__label">First Name
               <abbr title="required">*</abbr>
             </label>
-            <input type="text" placeholder="Dennis" id="f-name" name="firstname" class="q-form__input" pattern="[a-zA-Z]+"required>
+            <input type="text" placeholder="Dennis" id="f-name" name="firstname" class="q-form__input" pattern="[a-zA-Z]+" required>
           </div>
 
           <div class="q-form__input-name">
@@ -62,7 +62,7 @@
           <label for="pwd" class="q-form__label">Password
             <abbr title="required">*</abbr>
           </label>
-          <input type="password" placeholder="************" id="pwd" name="password" pattern="(?=.*\d)(?=.*[a-z]).{8,}" required class="q-form__input">
+          <input type="password" placeholder="********" id="pwd" name="password" pattern="(?=.*\d)(?=.*[a-z]).{8,}" required class="q-form__input">
           <button class="toggle-password-visibility" type="button" tabindex="-1">show</button>
           <span class="input-validation-feedback">Your Password must be at least 8 characters, and have at least one uppercase, one lowercase and one number</span>
          
@@ -72,7 +72,7 @@
           <label for="c-pwd" class="q-form__label">Confirm Password
             <abbr title="required">*</abbr>
           </label>
-          <input type="password" placeholder="************" id="c-pwd" class="q-form__input" pattern="(?=.*\d)(?=.*[a-z]).{8,}">
+          <input type="password" placeholder="********" id="c-pwd" class="q-form__input" pattern="(?=.*\d)(?=.*[a-z]).{8,}">
           <button class="toggle-password-visibility" type="button" tabindex="-1">show</button>
           <span class="pwd-validation-msg"></span>
         </div>
@@ -141,7 +141,6 @@
       </div>
     </div>
   </footer>
-  <script src="../js/main.js"></script>
   <script src="../js/base.js"></script>
   <script src="../js/sign-up.js"></script>
 </body>

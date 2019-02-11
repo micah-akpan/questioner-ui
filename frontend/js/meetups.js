@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 const apiBaseURL = 'http://localhost:9999/api/v1';
 const userToken = localStorage.getItem('userToken');
 
@@ -10,7 +8,6 @@ const requestHeaders = {
   }
 };
 
-const btnTrigger = document.querySelector('.dropdown-trigger-btn');
 const searchIcon = document.getElementById('search-icon');
 const searchBar = document.getElementById('search-bar');
 const cards = document.getElementById('meetup-cards');
@@ -62,18 +59,21 @@ async function getTotalQuestionsAsked(meetup) {
   }
 }
 
-/* eslint-disable */
 /**
  * @func getMeetupImages
  * @param {*} meetup Meetup
  * @returns {Promise<Array>} Resolves to a list of meetup images
  */
 const getMeetupImages = async (meetup) => {
-  const apiUrl = `${apiBaseURL}/meetups/${meetup.id}/images`;
-  const response = await fetch(apiUrl, requestHeaders);
-  const responseBody = await response.json();
-  const { status, data } = responseBody;
-  return status === 200 ? data : [];
+  try {
+    const apiUrl = `${apiBaseURL}/meetups/${meetup.id}/images`;
+    const response = await fetch(apiUrl, requestHeaders);
+    const responseBody = await response.json();
+    const { status, data } = responseBody;
+    return status === 200 ? data : [];
+  } catch (e) {
+    throw e;
+  }
 };
 
 /**
@@ -81,26 +81,38 @@ const getMeetupImages = async (meetup) => {
  * @param {*} response Response hash
  * @returns {Boolean} true if token is valid, false otherwise
  */
-const tokenIsValid = (response) => response.status !== 401;
+const tokenIsValid = response => response.status !== 401;
 
 /**
- * @function createMeetupCardPrimarySec
+ *
+ * @param {Array} images
+ * @returns {String} Returns main meetup image url;
+ */
+const getMainMeetupImage = images => images[0].imageUrl;
+
+/**
+ * @function createCardPrimaryDetails
  * @param {*} meetup Meetup object
  * @returns {HTMLElement} A wrapper HTMLElement for primary details about a meetup
  */
-const createMeetupCardPrimarySec = (meetup) => {
+const createCardPrimaryDetails = (meetup) => {
   const content = document.createElement('div');
   content.classList.add('content');
   const meetupImage = document.createElement('img');
   const defaultImage = '../assets/img/startup-meetup2.jpg';
 
   getMeetupImages(meetup)
-    .then(images => images.length > 0 ? images[0].imageUrl : defaultImage)
+    .then((images) => {
+      if (images.length > 0) {
+        return getMainMeetupImage(images);
+      }
+      return defaultImage;
+    })
     .then((image) => {
       meetupImage.setAttribute('src', image);
-    })
+    });
   meetupImage.setAttribute('alt', '');
-  meetupImage.setAttribute('class', 'meetup-main-image');
+  meetupImage.classList.add('meetup-main-image');
 
   const meetupQuestionCount = document.createElement('span');
   meetupQuestionCount.classList.add('q-asked-count');
@@ -109,6 +121,9 @@ const createMeetupCardPrimarySec = (meetup) => {
   getTotalQuestionsAsked(meetup)
     .then((value) => {
       meetupQuestionCount.textContent = value;
+    })
+    .catch((err) => {
+      throw err;
     });
 
   content.appendChild(meetupImage);
@@ -118,20 +133,20 @@ const createMeetupCardPrimarySec = (meetup) => {
 };
 
 /**
- * @func createMeetupCardSecondarySec
- * @param {*} Meetup
+ * @func createCardSecondaryDetails
+ * @param {*} meetup Meetup
  * @returns {HTMLDivElement} HTML element representing the meetup card
  */
-const createMeetupCardSecondarySec = (meetup) => {
+const createCardSecondaryDetails = (meetup) => {
   const content = document.createElement('div');
-  content.setAttribute('class', 'q-card__sec');
+  content.classList.add('content', 'q-card__sec');
 
   const meetupTitle = document.createElement('p');
-  meetupTitle.setAttribute('class', 'meetup-title');
+  meetupTitle.classList.add('meetup-title');
   meetupTitle.textContent = meetup.title;
 
   const meetupDate = document.createElement('p');
-  meetupDate.setAttribute('class', 'meetup-sched-date');
+  meetupDate.classList.add('meetup-sched-date');
   const [month, day] = parseDate(meetup.happeningOn);
   meetupDate.textContent = `${month} ${day}`;
 
@@ -151,15 +166,15 @@ const createMeetupCard = (meetup) => {
   meetupCard.classList.add('q-card');
 
   const meetupCardLink = createMeetupLink(meetup);
-  const meetupCardContentWrapper = document.createElement('div');
-  meetupCardContentWrapper.classList.add('q-card__primary');
+  const meetupCardPrimaryWrapper = document.createElement('div');
+  meetupCardPrimaryWrapper.classList.add('q-card__primary');
 
-  const primarySection = createMeetupCardPrimarySec(meetup);
-  const secondarySection = createMeetupCardSecondarySec(meetup);
+  const primarySection = createCardPrimaryDetails(meetup);
+  const secondarySection = createCardSecondaryDetails(meetup);
 
-  meetupCardContentWrapper.appendChild(primarySection);
+  meetupCardPrimaryWrapper.appendChild(primarySection);
 
-  meetupCardLink.appendChild(meetupCardContentWrapper);
+  meetupCardLink.appendChild(meetupCardPrimaryWrapper);
   meetupCardLink.appendChild(secondarySection);
 
   meetupCard.appendChild(meetupCardLink);
@@ -175,11 +190,11 @@ const createMeetupCard = (meetup) => {
 const convertMeetupsToCards = meetups => meetups.map(meetup => createMeetupCard(meetup));
 
 /**
- * @func addMeetupsToDOM
+ * @func addMeetupsToPage
  * @param {Array<HTMLElement>} meetups An array of meetups cards
  * @returns {HTMLElement} The list of meetup cards
  */
-const addMeetupsToDOM = (meetups) => {
+const addMeetupsToPage = (meetups) => {
   cards.innerHTML = '';
   const meetupsDOM = convertMeetupsToCards(meetups);
   meetupsDOM.forEach((meetup) => {
@@ -189,24 +204,23 @@ const addMeetupsToDOM = (meetups) => {
   return cards;
 };
 
-
-
-const showAllMeetups = (userToken) => {
+const showAllMeetups = () => {
   fetch(`${apiBaseURL}/meetups`, requestHeaders)
     .then(res => res.json())
     .then((res) => {
       if (tokenIsValid(res)) {
-        if (res.status === 200) {
-          const meetups = res.data;
+        const { status, data } = res;
+        if (status === 200) {
+          const meetups = data;
           const MAX_MEETUPS = 6;
           if (meetups.length > MAX_MEETUPS) {
-            const data = meetups.slice(0, MAX_MEETUPS);
-            addMeetupsToDOM(data);
+            const meetupsToBeDisplayed = meetups.slice(0, MAX_MEETUPS);
+            addMeetupsToPage(meetupsToBeDisplayed);
             const remainingMeetups = meetups.length - MAX_MEETUPS;
             const paginateText = `SEE MORE ${remainingMeetups} ${remainingMeetups > 1 ? 'MEETUPS' : 'MEETUP'}`;
             meetupCardsWrapper.appendChild(createPaginationButton(paginateText));
           } else {
-            addMeetupsToDOM(meetups);
+            addMeetupsToPage(meetups);
           }
         }
       } else {
@@ -214,8 +228,8 @@ const showAllMeetups = (userToken) => {
         window.location.assign('./sign-in.html');
       }
     })
-    .catch((err) => {
-      console.log(err);
+    .catch(() => {
+
     });
 };
 
@@ -223,10 +237,9 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     searchBar.classList.remove('show');
   }
-})
+});
 
 window.addEventListener('load', () => {
-  const userToken = localStorage.getItem('userToken');
   if (!userToken) {
     window.location.assign('./sign-in.html');
   } else {
