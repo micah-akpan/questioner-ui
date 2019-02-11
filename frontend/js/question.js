@@ -1,4 +1,36 @@
-/* eslint-disable */
+const askQuestionWrapper = document.getElementById('ask-question');
+const postQuestionDirArea = document.getElementById('post-questions-directive');
+const askGroupButton = document.getElementById('ask-group-btn');
+
+/**
+ * @func askQuestion
+ * @returns {*} Returns the newly created question
+ */
+const askQuestion = async () => {
+  try {
+    const title = document.getElementById('user-question-title');
+    const body = document.getElementById('user-question-body');
+
+    const response = await fetch(`${apiBaseURL}/questions`, {
+      method: 'POST',
+      headers: requestHeader.headers,
+      body: JSON.stringify({
+        title: title.value,
+        body: body.value,
+        meetupId: activeMeetupId
+      })
+    });
+    const responseBody = await response.json();
+    const { status, data } = responseBody;
+    if (status === 201) {
+      return data[0];
+    }
+
+    throw new Error(responseBody.error);
+  } catch (e) {
+    throw e;
+  }
+};
 
 /**
  * @func createQuestionCardPrimary
@@ -17,7 +49,7 @@ const createQuestionCardPrimary = (question) => {
 
   // TODO: Replace with dynamic content
   const askedBy = document.createElement('span');
-  askedBy.classList.add('asked-by')
+  askedBy.classList.add('asked-by');
   askedBy.textContent = 'asked by X';
   const askedWhen = document.createElement('span');
   askedWhen.classList.add('asked-when');
@@ -29,6 +61,118 @@ const createQuestionCardPrimary = (question) => {
   section.appendChild(askedWhen);
 
   return section;
+};
+
+const upvoteQuestion = (questionId) => {
+  const apiUrl = `${apiBaseURL}/questions/${questionId}/upvote`;
+  fetch(apiUrl, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${userToken}`
+    }
+  })
+    .then(response => response.json())
+    .then((response) => {
+      const { status, data } = response;
+      if (status === 200) {
+        const votes = document.getElementById(`user-vote-${questionId}`);
+        votes.textContent = data[0].votes;
+      }
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+const downvoteQuestion = (questionId) => {
+  const apiUrl = `${apiBaseURL}/questions/${questionId}/downvote`;
+  fetch(apiUrl, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${userToken}`
+    }
+  })
+    .then(response => response.json())
+    .then((response) => {
+      const { status, data } = response;
+      if (status === 200) {
+        const votes = document.getElementById(`user-vote-${questionId}`);
+        votes.textContent = data[0].votes;
+      }
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+const getQuestion = async (questionId) => {
+  const apiURL = `${apiBaseURL}/meetups/${activeMeetupId}/questions/${questionId}`;
+  try {
+    const response = await fetch(apiURL, requestHeader);
+    const responseBody = await response.json();
+    const { status, data } = responseBody;
+    return status === 200 ? data[0] : null;
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
+ * @func addIcons
+ * @param {*} question
+ * @param {HTMLElement} iconWrapper The parent container for the icons
+ * @param {Array} icons List of icons
+ * @returns {undefined} Adds icons to the page
+ */
+const addIcons = (question, iconWrapper, icons) => {
+  const urlPaths = window.location.pathname.split('/');
+  icons.forEach((icon) => {
+    const img = document.createElement('img');
+    img.alt = icon.alt;
+    img.title = icon.title;
+    img.setAttribute('data-action', icon.action);
+    img.setAttribute('data-target', question.id);
+    if (urlPaths.includes('admin')) {
+      img.src = icon.adminSrcPath;
+    } else {
+      img.src = icon.src;
+    }
+
+    img.onclick = function vote() {
+      const action = this.getAttribute('data-action');
+      switch (action) {
+        case 'upvote': {
+          const questionId = this.getAttribute('data-target');
+          upvoteQuestion(questionId);
+          getQuestion(questionId)
+            .then(() => {
+
+            })
+            .catch((err) => {
+              throw err;
+            });
+          break;
+        }
+
+        case 'downvote': {
+          const questionId = this.getAttribute('data-target');
+          downvoteQuestion(questionId);
+          getQuestion(questionId)
+            .then((meetupQuestion) => {
+              displayTotalUsersVotes(meetupQuestion.votes);
+            })
+            .catch((err) => {
+              throw err;
+            });
+          break;
+        }
+
+        default:
+          break;
+      }
+    };
+    iconWrapper.appendChild(img);
+  });
 };
 
 /**
@@ -80,13 +224,14 @@ const createQuestionCard = async (question) => {
   card.appendChild(questionBlock);
 
   return card;
-}
+};
+
 
 const createQuestionForm = () => {
   const wrapper = document.createElement('div');
   const bioSection = document.createElement('div');
   const userAvatar = document.createElement('img');
-  userAvatar.classList.add('user-profile-avatar')
+  userAvatar.classList.add('user-profile-avatar');
   const defaultAvatar = '../assets/icons/avatar1.svg';
 
   const bioText = document.createElement('p');
@@ -105,8 +250,8 @@ const createQuestionForm = () => {
       bioText.textContent = user.bio;
     })
     .catch((err) => {
-      console.log(err);
-    })
+      throw err;
+    });
   bioSection.appendChild(userAvatar);
   bioSection.appendChild(userName);
   bioSection.appendChild(bioText);
@@ -186,7 +331,7 @@ const createQuestionForm = () => {
 
   formInputs.forEach((el) => {
     form.appendChild(el);
-  })
+  });
 
   form.appendChild(postBtnArea);
 
@@ -198,8 +343,8 @@ const createQuestionForm = () => {
       })
       .catch((err) => {
         displayFormFeedback(err.message);
-      })
-  }
+      });
+  };
 
   wrapper.appendChild(bioSection);
   wrapper.appendChild(clear);
@@ -216,139 +361,9 @@ const displayQuestionBlock = () => {
   divider.classList.add('divider');
   askQuestionWrapper.appendChild(divider);
   return askQuestionWrapper;
-}
+};
 
-/**
- * @func addIcons
- * @param {HTMLElement} iconWrapper The parent container for the icons
- * @param {Array} icons List of icons
- */
-const addIcons = (question, iconWrapper, icons) => {
-  const urlPaths = window.location.pathname.split('/');
-  icons.forEach((icon) => {
-    const img = document.createElement('img');
-    img.alt = icon.alt;
-    img.title = icon.title;
-    img.setAttribute('data-action', icon.action);
-    img.setAttribute('data-target', question.id);
-    if (urlPaths.includes('admin')) {
-      img.src = icon.adminSrcPath;
-    } else {
-      img.src = icon.src;
-    }
-
-    img.onclick = function () {
-      const action = this.getAttribute('data-action');
-      switch (action) {
-        case 'upvote': {
-          const questionId = this.getAttribute('data-target');
-          upvoteQuestion(questionId);
-          getQuestion(questionId)
-            .then((question) => {
-
-            })
-            .catch((err) => {
-              throw err;
-            })
-        }
-
-        case 'downvote': {
-          const questionId = this.getAttribute('data-target');
-          downvoteQuestion(questionId);
-          getQuestion(questionId)
-            .then((question) => {
-              displayTotalUsersVotes(question.votes);
-            })
-            .catch((err) => {
-              throw err;
-            })
-        }
-
-        default:
-          break;
-      }
-    }
-    iconWrapper.appendChild(img);
-  });
-}
-
-const downvoteQuestion = (questionId) => {
-  const apiUrl = `${apiBaseURL}/questions/${questionId}/downvote`;
-  fetch(apiUrl, {
-    method: 'PATCH',
-    headers: {
-      Authorization: `Bearer ${userToken}`
-    }
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      const { status, data } = response;
-      if (status === 200) {
-        const votes = document.getElementById(`user-vote-${questionId}`);
-        votes.textContent = data[0].votes;
-      }
-    })
-    .catch((err) => {
-      throw err;
-    })
-}
-
-const upvoteQuestion = (questionId) => {
-  const apiUrl = `${apiBaseURL}/questions/${questionId}/upvote`;
-  fetch(apiUrl, {
-    method: 'PATCH',
-    headers: {
-      Authorization: `Bearer ${userToken}`
-    }
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      const { status, data } = response;
-      if (status === 200) {
-        const votes = document.getElementById(`user-vote-${questionId}`);
-        votes.textContent = data[0].votes;
-      }
-    })
-    .catch((err) => {
-      throw err;
-    })
-}
-
-const getQuestion = async (questionId) => {
-  const apiURL = `${apiBaseURL}/meetups/${activeMeetupId}/questions/${questionId}`
-  try {
-    const response = await fetch(apiURL, requestHeader);
-    const responseBody = await response.json();
-    const { status, data } = responseBody;
-    return status === 200 ? data[0] : null;
-  } catch (e) {
-    throw e;
-  }
-}
-
-
-const askQuestion = async () => {
-  try {
-    const title = document.getElementById('user-question-title');
-    const body = document.getElementById('user-question-body');
-
-    const response = await fetch(`${apiBaseURL}/questions`, {
-      method: 'POST',
-      headers: requestHeader.headers,
-      body: JSON.stringify({
-        title: title.value,
-        body: body.value,
-        meetupId: activeMeetupId
-      })
-    });
-    const responseBody = await response.json();
-    const { status, data } = responseBody;
-    if (status === 201) {
-      return data[0];
-    }
-
-    throw new Error(responseBody.error);
-  } catch (e) {
-    throw e;
-  }
-}
+askGroupButton.onclick = () => {
+  createQuestionForm();
+  displayQuestionBlock();
+};

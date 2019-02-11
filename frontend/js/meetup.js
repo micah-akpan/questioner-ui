@@ -25,12 +25,6 @@ const thumbnailPhotosWrapper = document.getElementById('meetup-photos__wrapper')
 const meetupTagsWrapper = document.getElementById('meetup-tags');
 const addedMeetups = document.getElementById('meetup-tags-added');
 const questionCards = document.getElementById('q-question-cards');
-const askGroupButton = document.getElementById('ask-group-btn');
-
-askGroupButton.onclick = () => {
-  createQuestionForm();
-  displayQuestionBlock();
-};
 
 /**
  * @func getUserImage
