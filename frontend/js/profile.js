@@ -63,10 +63,7 @@ const fetchUser = userId => fetch(`${usersAPIUrl}/${userId}`, {
   }
 })
   .then(res => res.json())
-  .then((res) => {
-    console.log(res);
-    return res.status === 200 ? res.data[0] : null;
-  })
+  .then(res => (res.status === 200 ? res.data[0] : null))
   .catch((err) => {
     throw err;
   });
@@ -76,10 +73,10 @@ const createUserDataSummaryCard = (user) => {
   card.classList.add('profile-text__wrapper');
   card.id = 'profile-text__wrapper';
   const userBio = document.createElement('p');
-  userBio.id = 'profile-username';
+  userBio.id = 'profile-bio';
   userBio.textContent = user.bio;
   const userName = document.createElement('p');
-  userName.id = 'profile-bio';
+  userName.id = 'profile-username';
   const { firstname, lastname } = user;
   userName.textContent = `${firstname} ${lastname}`;
   card.appendChild(userName);
@@ -87,12 +84,114 @@ const createUserDataSummaryCard = (user) => {
   return card;
 };
 
-const personalDataForm = document.getElementById('personal-data-form');
 const fullNameField = document.getElementById('fullName');
+const otherNameField = document.getElementById('otherNames');
+const locationField = document.getElementById('location');
+const birthDateField = document.getElementById('birthDate');
+const phoneNumberField = document.getElementById('phone-no');
+const userBioField = document.getElementById('userBio');
+const emailField = document.getElementById('userEmail');
+const usernameField = document.getElementById('username');
+const newPasswordField = document.getElementById('newPassword');
+const saveChangesButton = document.getElementById('save-changes__btn');
+
+/**
+ * @function convertDate
+ * @param {Date} date
+ * @returns {String} Parses and converts date to
+ * a different format (YYYY-MM-dd)
+ */
+const convertDate = (date) => {
+  const newDate = new Date(date);
+  const year = newDate.getFullYear();
+  let month = newDate.getMonth() + 1;
+  month = month < 10 ? `0${month}` : month;
+  let day = newDate.getDate();
+  day = day < 10 ? `0${day}` : day;
+  return `${year}-${month}-${day}`;
+};
 
 const replaceFormFields = (user) => {
-  fullNameField.placeholder = `${user.firstname} ${user.lastname}`;
-  return fullNameField;
+  const {
+    firstname, lastname,
+    othername, address, birthday, phoneNumber,
+    bio, username, email
+  } = user;
+  fullNameField.placeholder = `${firstname} ${lastname}`;
+  otherNameField.placeholder = othername;
+  locationField.placeholder = address || '';
+  birthDateField.value = convertDate(new Date(birthday));
+  phoneNumberField.placeholder = phoneNumber;
+  userBioField.placeholder = bio;
+  usernameField.placeholder = username;
+  emailField.placeholder = email;
+};
+
+const updateUserData = (newData) => {
+  const userId = localStorage.getItem('userId');
+  return fetch(`${usersAPIUrl}/${userId}`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('userToken')}`
+    },
+    body: newData
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      throw new Error('Failed to update user\'s data');
+    })
+    .then((res) => {
+      const { status, data } = res;
+      return status === 200 ? data[0] : null;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+/* eslint-disable no-restricted-syntax */
+saveChangesButton.onclick = () => {
+  const fullName = fullNameField.value;
+  const firstname = fullName.substring(0, fullName.indexOf(' '));
+  const lastname = fullName.substring(fullName.indexOf(' ') + 1);
+
+  const data = {
+    firstname,
+    lastname,
+    email: emailField.value,
+    username: usernameField.value,
+    password: newPasswordField.value,
+    birthday: birthDateField.value,
+    bio: userBioField.value,
+    othername: otherNameField.value,
+    phoneNumber: phoneNumberField.value,
+  };
+
+  const formData = new FormData();
+
+  for (const prop in data) {
+    if (Object.prototype.hasOwnProperty.call(data, prop)) {
+      formData.append(prop, data[prop]);
+    }
+  }
+
+  updateUserData(formData)
+    .then((user) => {
+      // TODO -> Display user feedback
+      replaceFormFields(user);
+      const profileUserName = document.getElementById('profile-username');
+      profileUserName.textContent = `${firstname} ${lastname}`;
+    })
+    .catch((err) => {
+
+    });
+};
+
+const focusInput = (node) => {
+  node.focus();
 };
 
 window.onload = () => {
@@ -108,4 +207,6 @@ window.onload = () => {
     .catch((err) => {
       throw err;
     });
+
+  focusInput(fullNameField);
 };

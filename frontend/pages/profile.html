@@ -141,17 +141,17 @@
                 <form class="q-form" id="personal-data-form" action="#!" method="POST">
                   <div>
                     <label class="q-form__label" for="fullName">Full Name</label>
-                    <input type="text" id="fullName" class="q-form__input" placeholder="Bob Bob" name="fullname">
+                    <input type="text" id="fullName" class="q-form__input" placeholder="" name="fullname">
                   </div>
 
                   <div>
                     <label class="q-form__label" for="otherNames">Other Names</label>
-                    <input type="text" id="fullName" class="q-form__input" placeholder="Bob" name="othername">
+                    <input type="text" id="otherNames" class="q-form__input" placeholder="" name="othernames">
                   </div>
 
                   <div>
                     <label class="q-form__label" for="location">Location</label>
-                    <input type="text" id="location" class="q-form__input" placeholder="Bob's Location" name="location">
+                    <input type="text" id="location" class="q-form__input" placeholder="" name="location">
                   </div>
 
                   <div>
@@ -166,7 +166,7 @@
                         <option value="ng">+234</option>
                         <option value="us">+1</option>
                       </select>
-                      <input type="number" id="phone-no" class="q-form__input" placeholder="" name="phone-number">
+                      <input type="number" id="phone-no" class="q-form__input" placeholder="" name="phoneNumber">
                     </div>
                   </div>
 
@@ -180,15 +180,15 @@
               <!-- Account Settings -->
               <div class="personal-data-account__wrapper account-settings">
                 <h3>Account Data</h3>
-                <form class="q-form">
+                <form class="q-form" id="account-data-form">
                   <div>
                     <label class="q-form__label" for="userEmail">Email</label>
-                    <input type="email" id="userEmail" class="q-form__input" placeholder="Bob">
+                    <input type="email" id="userEmail" class="q-form__input" placeholder="">
                   </div>
 
                   <div>
                     <label class="q-form__label" for="userEmail">Username</label>
-                    <input type="text" id="username" class="q-form__input" placeholder="Bob1234">
+                    <input type="text" id="username" class="q-form__input" placeholder="" name="username">
                   </div>
 
                   <div>
@@ -215,7 +215,7 @@
                   <h3>Account</h3>
                   <div class="misc-btns__wrapper">
                     <button class="q-btn deactivate-btn">Deactivate Account</button>
-                    <button class="q-btn">Save Changes</button>
+                    <button class="q-btn" id="save-changes__btn">Save Changes</button>
                   </div>
                 </div>
               </div>
@@ -291,7 +291,7 @@
                       <img src="../assets/icons/thumbs-up.svg" alt="upvote question">
                     </button>
                     <button id="downvote__btn" title="Downvote question">
-                      <img src="../assets/icons/thumb-down.svg" alt="Downvote question">
+                      <img src="../assets/icons/thumbs-down.svg" alt="Downvote question">
                     </button>
                   </div>
 
