@@ -67,21 +67,6 @@ const displayTotalUsersVotes = (votes) => {
   return p;
 };
 
-/**
- * @func getUser
- * @returns {*} Returns a user payload
- */
-const getUser = async () => {
-  try {
-    const apiUrl = `${apiBaseURL}/users/${userId}`;
-    const response = await fetch(apiUrl, requestHeader);
-    const responseBody = await response.json();
-    return responseBody.status === 200 ? responseBody.data[0] : null;
-  } catch (e) {
-    throw e;
-  }
-};
-
 const displayFormFeedback = (msg) => {
   const userFeedback = document.getElementById('user-feedback');
   const span = document.createElement('span');

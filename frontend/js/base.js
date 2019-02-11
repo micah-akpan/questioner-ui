@@ -103,3 +103,18 @@ for (let i = 0; i < pToggleBtns.length; i++) {
 }
 
 const matchPasswords = (val1, value2) => {};
+
+/**
+ * @func getUser
+ * @returns {*} Returns a user payload
+ */
+const getUser = async (userId) => {
+  try {
+    const apiUrl = `${apiBaseURL}/users/${userId}`;
+    const response = await fetch(apiUrl, requestHeader);
+    const responseBody = await response.json();
+    return responseBody.status === 200 ? responseBody.data[0] : null;
+  } catch (e) {
+    throw e;
+  }
+};

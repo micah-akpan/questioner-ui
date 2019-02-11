@@ -94,7 +94,7 @@ const postComment = async (questionId, comment) => {
   }
 };
 
-const handleCommentFormSubmit = (questionId, comment) => {
+const createComment = (questionId, comment) => {
   Promise.all([
     getQuestion(questionId), postComment(questionId, comment)
   ])
@@ -128,9 +128,10 @@ const createCommentForm = async (question) => {
   commentForm.classList.add('comment-form');
   commentForm.setAttribute('data-target', question.id);
   commentForm.onsubmit = (e) => {
+    e.preventDefault();
     const formData = new FormData(commentForm);
     const questionId = commentForm.getAttribute('data-target');
-    this.handleCommentFormSubmit(questionId, formData.get('comment'));
+    createComment(questionId, formData.get('comment'));
   };
   const commentTextBox = createCommentTextBox();
   const commentButton = createCommentButton();
@@ -151,19 +152,25 @@ const createCommentFormWidget = (elType,
   return widget;
 };
 
-const displayComments = ({
+const displayComments = async ({
   card, commentsWrapper,
   questionComment, commentForm, viewComments, question
 }) => {
-  Promise.all([getUser(), getComments(question)])
-    .then((values) => {
-      const [user, comments] = values;
+  getComments(question)
+    .then((comments) => {
       commentsWrapper.innerHTML = '';
-      comments.forEach((comment) => {
-        const commentCard = createCommentCard(user, comment);
-        commentsWrapper.appendChild(commentCard);
-      });
       card.innerHTML = '';
+
+      for (let i = 0; i < comments.length; i += 1) {
+        const comment = comments[i];
+        getUser(comment.createdBy)
+          .then((user) => {
+            const commentCard = createCommentCard(user, comment);
+            commentsWrapper.appendChild(commentCard);
+          }, (err) => {
+            throw err;
+          });
+      }
       card.appendChild(commentsWrapper);
       questionComment.appendChild(commentForm);
 
@@ -171,7 +178,6 @@ const displayComments = ({
 
       card.appendChild(viewComments);
       card.appendChild(questionComment);
-
       return card;
     })
     .catch((e) => {
