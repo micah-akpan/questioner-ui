@@ -56,6 +56,12 @@ const userProfileWrapper = document.getElementById('user-profile__wrapper');
 const userProfileImageTextWrapper = document.getElementById('user-profile__image-text');
 const profileTextWrapper = document.getElementById('profile-text__wrapper');
 
+const displayUserAvatar = ({ avatar, firstname }) => {
+  userImage.setAttribute('src', avatar);
+  userImage.setAttribute('alt', firstname);
+  return userImage;
+};
+
 const fetchUser = userId => fetch(`${usersAPIUrl}/${userId}`, {
   headers: {
     'Content-Type': 'application/json',
@@ -169,7 +175,7 @@ saveChangesButton.onclick = () => {
     bio: userBioField.value,
     othername: otherNameField.value,
     phoneNumber: phoneNumberField.value,
-    'user-avatar': avatarWidget.files[0]
+    avatar: avatarWidget.files[0]
   };
 
   const formData = new FormData();
@@ -186,6 +192,8 @@ saveChangesButton.onclick = () => {
       replaceFormFields(user);
       const profileUserName = document.getElementById('profile-username');
       profileUserName.textContent = `${firstname} ${lastname}`;
+      const defaultAvatar = '../assets/icons/avatar1.svg';
+      userImage.setAttribute('src', user.avatar || defaultAvatar);
     })
     .catch((err) => {
 
@@ -204,6 +212,7 @@ window.onload = () => {
         const userDataCard = createUserDataSummaryCard(user);
         userProfileImageTextWrapper.appendChild(userDataCard);
         replaceFormFields(user);
+        displayUserAvatar(user);
       }
     })
     .catch((err) => {
