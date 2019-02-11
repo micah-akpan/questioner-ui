@@ -20,6 +20,8 @@
     "curly": ["error", "multi-line"],
     "import/no-unresolved": [0, { "commonjs": true }],
     "no-shadow": ["error", { "allow": ["req", "res", "err"] }],
+    "no-undef": 0,
+    "no-unused-vars": 1,
     "valid-jsdoc": [
       "error",
       {

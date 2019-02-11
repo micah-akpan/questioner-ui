@@ -1,17 +1,11 @@
-/* eslint-disable */
 const qNavMenuWrapper = document.querySelector('.sidebar-menu__wrapper');
-const qNavMenuIconWrapper = document.getElementById('mobile-nav-sidebar__wrapper');
 const logOutButtons = document.querySelectorAll('.logout__btn');
 const dropDownTriggerButton = document.querySelector('.dropdown-trigger-btn');
 const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
+const qNavMenuIconWrapper = document.getElementById('mobile-nav-sidebar__wrapper');
 
-document.onkeydown = (e) => {
-  if (e.key === 'Escape') {
-    qNavMenuWrapper.classList.remove('nav-menu-show');
-    qNavMenuIconWrapper.classList.toggle('change');
-    dropDownMenu.classList.remove('show');
-  }
-};
+const baseURL = 'http://localhost:9999/api/v1';
+const nav = document.querySelector('.q-right-nav');
 
 const rightNavSpec = [
   {
@@ -31,6 +25,60 @@ const rightNavSpec = [
   }
 ];
 
+
+document.onkeydown = (e) => {
+  if (e.key === 'Escape') {
+    qNavMenuWrapper.classList.remove('nav-menu-show');
+    qNavMenuIconWrapper.classList.toggle('change');
+    dropDownMenu.classList.remove('show');
+  }
+};
+
+/**
+ * @returns {HTMLElement} Returns the dropdown HTML element
+ */
+const toggleDropDownMenu = () => {
+  dropDownMenu.classList.toggle('show');
+  return dropDownMenu;
+};
+
+if (dropDownTriggerButton) {
+  dropDownTriggerButton.onclick = toggleDropDownMenu;
+}
+
+// Enable all logout buttons to logout a user
+logOutButtons.forEach((logOutBtn) => {
+  logOutBtn.onclick = (e) => {
+    e.preventDefault();
+    logOutUser();
+  };
+});
+
+/**
+ * @param {Number} userId
+ * @returns {Promise<User>} Returns the user with id: `userId`
+ */
+const getUserData = async (userId) => {
+  try {
+    const response = await fetch(`${baseURL}/users/${userId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+      }
+    });
+    const responseBody = await response.json();
+    const { status, data } = responseBody;
+    return status === 200 ? data[0] : null;
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
+ * @func createRightNavList
+ * @param {Array} navSpec
+ * @returns {HTMLUListElement} Returns a new nav list
+ */
 const createRightNavList = (navSpec) => {
   const navList = document.createElement('ul');
   const navListItems = navSpec.map((spec) => {
@@ -45,7 +93,9 @@ const createRightNavList = (navSpec) => {
       li.classList.add('q-user-profile__dropdown-trigger');
     }
 
-    getUserData()
+    const userId = localStorage.getItem('userId');
+
+    getUserData(userId)
       .then((user) => {
         if (user) {
           const { avatar, firstname } = user;
@@ -76,74 +126,39 @@ const createRightNavList = (navSpec) => {
     navList.appendChild(item);
   });
   return navList;
-}
+};
 
 qNavMenuIconWrapper.onclick = function toggleMobileNav() {
   this.classList.toggle('change');
   qNavMenuWrapper.classList.toggle('nav-menu-show');
 };
 
+if (window.location.pathname !== '/') {
+  // This dynamic creates the content of the right navigation
+  const urlPath = window.location.pathname.split('/');
+  if (urlPath.includes('admin')) {
+    const navSpec = [
+      {
+        id: 1,
+        type: 'notifications',
+        src: '../../assets/icons/notifications-button.svg',
+        classNames: ['q-btn'],
+        idText: ''
+      },
 
-const toggleDropDownMenu = () => {
-  dropDownMenu.classList.toggle('show');
-}
-
-if (dropDownTriggerButton) {
-  dropDownTriggerButton.onclick = toggleDropDownMenu;
-}
-
-logOutButtons.forEach((logOutBtn) => {
-  logOutBtn.onclick = (e) => {
-    e.preventDefault();
-    logOutUser();
-  }
-});
-
-const baseURL = 'http://localhost:9999/api/v1';
-
-const getUserData = async () => {
-  const userId = localStorage.getItem('userId');
-  try {
-    const response = await fetch(`${baseURL}/users/${userId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('userToken')}`
+      {
+        id: 2,
+        type: 'profile',
+        src: '../../assets/icons/avatar1.svg',
+        classNames: ['q-btn', 'dropdown-trigger-btn'],
+        idText: 'dropdown-trigger-btn'
       }
-    });
-    const responseBody = await response.json();
-    const { status, data } = responseBody;
-    return status === 200 ? data[0] : null;
-  } catch (e) {
-    console.error(e);
+    ];
+
+    const rightNav = createRightNavList(navSpec);
+    nav.appendChild(rightNav);
+  } else {
+    const rightNav = createRightNavList(rightNavSpec);
+    nav.appendChild(rightNav);
   }
-}
-
-
-const nav = document.querySelector('.q-right-nav');
-
-const urlPath = window.location.pathname.split('/');
-if (urlPath.includes('admin')) {
-  const navSpec = [
-    {
-      id: 1,
-      type: 'notifications',
-      src: '../../assets/icons/notifications-button.svg',
-      classNames: ['q-btn'],
-      idText: ''
-    },
-
-    {
-      id: 2,
-      type: 'profile',
-      src: '../../assets/icons/avatar1.svg',
-      classNames: ['q-btn', 'dropdown-trigger-btn'],
-      idText: 'dropdown-trigger-btn'
-    }
-  ];
-
-  const rightNav = createRightNavList(navSpec);
-  nav.appendChild(rightNav);
-} else {
-  const rightNav = createRightNavList(rightNavSpec);
-  nav.appendChild(rightNav);
 }

@@ -1,6 +1,5 @@
-/* eslint-disable */
+
 const userFeedback = document.querySelector('.user-feedback');
-const form = document.querySelector('form');
 
 const displayFormFeedback = (msg) => {
   const infoImage = document.createElement('img');
@@ -11,13 +10,13 @@ const displayFormFeedback = (msg) => {
   span.textContent = msg;
   userFeedback.classList.add('info-box');
   userFeedback.appendChild(span);
-}
+};
 
 const hideFormFeedback = (secs) => {
   setTimeout(() => {
-    userFeedback.classList.add('hide')
+    userFeedback.classList.add('hide');
   }, secs * 1000);
-} 
+};
 
 /**
  * @param {String} password1
@@ -29,18 +28,18 @@ const passwordMatch = (password1, password2) => password1 === password2;
 
 /**
  * @func registerUser
- * @param {*} user User payload
+ * @param {*} newUser User payload
  * @return {undefined}
  * @description Signs up a user represented by `user`
  */
-const registerUser = (user) => {
+const registerUser = (newUser) => {
   fetch('http://localhost:9999/api/v1/auth/signup', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     mode: 'cors',
-    body: JSON.stringify(user)
+    body: JSON.stringify(newUser)
   })
     .then(res => res.json())
     .then((res) => {
@@ -52,11 +51,11 @@ const registerUser = (user) => {
         window.location.assign('./meetups.html');
       } else {
         displayFormFeedback(res.error);
-        hideFormFeedback(10)
+        hideFormFeedback(10);
       }
     })
-    .catch((err) => {
-      console.error(err);
+    .catch(() => {
+
     });
 };
 
@@ -65,24 +64,21 @@ window.onload = () => {
   if (userToken) {
     window.location.assign('./meetups.html');
   } else {
-    const
-      signUpForm = document.getElementById('sign-up-form'),
-      emailField = document.querySelector('input[name=email]'),
-      passwordField = document.querySelector('input[name=password]'),
-      confirmPasswordField = document.getElementById('c-pwd'),
-      lastNameField = document.querySelector('input[name=lastname]'),
-      firstNameField = document.querySelector('input[name=firstname]'),
-      passwordValidationMsg = document.querySelector('.pwd-validation-msg');
+    const signUpForm = document.getElementById('sign-up-form');
+    const confirmPasswordField = document.getElementById('c-pwd');
+    const emailField = document.querySelector('input[name=email]');
+    const passwordField = document.querySelector('input[name=password]');
+    const lastNameField = document.querySelector('input[name=lastname]');
+    const firstNameField = document.querySelector('input[name=firstname]');
+    const passwordValidationMsg = document.querySelector('.pwd-validation-msg');
 
-    confirmPasswordField.oninput = () => {
+    confirmPasswordField.oninput = function validate() {
       const originalPassword = passwordField.value.trim();
-      const repeatedPassword = confirmPasswordField.value.trim();
+      const repeatedPassword = this.value.trim();
 
-      const validationMsg = passwordMatch(originalPassword, repeatedPassword)
-        ? 'passwords match'
-        : 'passwords do not match';
+      const validationMessage = passwordMatch(originalPassword, repeatedPassword) ? 'passwords match' : 'passwords do not match';
 
-      passwordValidationMsg.textContent = validationMsg;
+      passwordValidationMsg.textContent = validationMessage;
     };
 
     signUpForm.onsubmit = (e) => {

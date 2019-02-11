@@ -6,7 +6,8 @@ const icons = {
       src: '../assets/icons/thumbs-up.svg',
       adminSrcPath: '../../assets/icons/thumbs-up.svg',
       alt: 'A thumb pointing upwards giving an approval',
-      title: 'Upvote Question'
+      title: 'Upvote Question',
+      action: 'upvote'
     },
 
     {
@@ -14,7 +15,8 @@ const icons = {
       src: '../assets/icons/thumbs-down.svg',
       adminSrcPath: '../../assets/icons/thumbs-down.svg',
       alt: 'A thumb pointing downwards giving a disapproval',
-      title: 'Downvote Question'
+      title: 'Downvote Question',
+      action: 'downvote'
     },
   ],
 
@@ -24,7 +26,8 @@ const icons = {
       src: '../assets/icons/share.svg',
       adminSrcPath: '../../assets/icons/share.svg',
       alt: 'A black curved arrow pointing east',
-      title: 'Share'
+      title: 'Share',
+      action: 'share'
     },
 
     {
@@ -32,7 +35,8 @@ const icons = {
       src: '../assets/icons/like.svg',
       adminSrcPath: '../../assets/icons/like.svg',
       alt: 'A red heart shape',
-      title: 'Favorite'
+      title: 'Favorite',
+      action: 'favorite'
     }
   ],
 
@@ -43,7 +47,8 @@ const icons = {
       adminSrcPath: '../../assets/icons/pencil-edit-button.svg',
       alt: 'a dark green pencil',
       className: 'edit-option',
-      text: 'edit'
+      text: 'edit',
+      action: 'edit'
     },
 
     {
@@ -52,7 +57,8 @@ const icons = {
       adminSrcPath: '../../assets/icons/delete-red.svg',
       alt: 'a red trash bin',
       className: 'delete-option',
-      text: 'delete'
+      text: 'delete',
+      action: 'delete'
     },
   ]
 };

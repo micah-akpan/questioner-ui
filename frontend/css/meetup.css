@@ -136,9 +136,16 @@ button {
   padding: 10px;
 }
 
+.q-question-cards .question-card .user-vote {
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 0 10px;
+}
+
 .question-text-block {
   min-height: 160px;
   border-bottom: 1px solid #cccccc;
+  cursor: pointer;
 }
 
 .question-icons {
