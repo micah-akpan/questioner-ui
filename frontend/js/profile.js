@@ -157,6 +157,7 @@ saveChangesButton.onclick = () => {
   const fullName = fullNameField.value;
   const firstname = fullName.substring(0, fullName.indexOf(' '));
   const lastname = fullName.substring(fullName.indexOf(' ') + 1);
+  const avatarWidget = document.getElementById('change-image__file');
 
   const data = {
     firstname,
@@ -168,6 +169,7 @@ saveChangesButton.onclick = () => {
     bio: userBioField.value,
     othername: otherNameField.value,
     phoneNumber: phoneNumberField.value,
+    'user-avatar': avatarWidget.files[0]
   };
 
   const formData = new FormData();
