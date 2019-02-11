@@ -3,26 +3,38 @@ const userFeedback = document.querySelector('.user-feedback');
 const emailField = document.getElementById('userEmail');
 const passwordField = document.getElementById('userPwd');
 
-const displayFormFeedback = (msg) => {
+/**
+ * @func displayFormFeedback
+ * @param {String} message
+ * @returns {HTMLElement} Returns HTML element representing the user feedback
+ */
+const displayFormFeedback = (message) => {
   const infoImage = document.createElement('img');
   infoImage.src = '../../assets/icons/cross.svg';
   infoImage.alt = '';
   userFeedback.innerHTML = '';
   userFeedback.appendChild(infoImage);
   const span = document.createElement('span');
-  span.textContent = msg;
+  span.textContent = message;
   userFeedback.classList.remove('hide');
   userFeedback.classList.add('info-box');
   userFeedback.appendChild(span);
+  return userFeedback;
 };
 
-const hideFormFeedback = (secs) => {
-  setTimeout(() => {
-    userFeedback.classList.add('hide');
-  }, secs * 1000);
-};
+/**
+ * @func hideFormFeedback
+ * @param {Number} secs
+ * @returns {Number} Returns a ID of this timer process
+ */
+const hideFormFeedback = secs => setTimeout(() => {
+  userFeedback.classList.add('hide');
+}, secs * 1000);
 
-
+/**
+ * @func loginUser
+ * @returns {*} Logins a user
+ */
 const loginUser = () => {
   fetch('http://localhost:9999/api/v1/auth/login', {
     method: 'POST',
@@ -38,8 +50,9 @@ const loginUser = () => {
   })
     .then(response => response.json())
     .then((response) => {
-      if (response.status === 201) {
-        const { token, user } = response.data[0];
+      const { status, data, error } = response;
+      if (status === 201) {
+        const { token, user } = data[0];
         localStorage.setItem('userToken', token);
         localStorage.setItem('userId', user.id);
 
@@ -49,12 +62,12 @@ const loginUser = () => {
           window.location.assign('./meetups.html');
         }
       } else {
-        displayFormFeedback(response.error);
+        displayFormFeedback(error);
         hideFormFeedback(10);
       }
     })
     .catch((err) => {
-      console.log(err);
+      throw err;
     });
 };
 
