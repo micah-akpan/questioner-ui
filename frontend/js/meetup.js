@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * @module meetup
  * @description Meetup Detail script
@@ -39,7 +37,6 @@ const questionFormSection = document.getElementById('ask-question');
  * @returns {Promise<String>} Resolves to the user avatar image
  */
 const getUserImage = async () => {
-  const userId = localStorage.getItem('userId');
   const apiUrl = `${apiBaseURL}/users/${userId}`;
   const response = await fetch(apiUrl, requestHeader);
   const responseBody = await response.json();
@@ -62,48 +59,20 @@ const createUserAvatar = async () => {
   return userImage;
 };
 
-const createCommentCard = (user, comment) => {
-  const card = document.createElement('div');
-  card.classList.add('comment-card');
-  const userAvatar = document.createElement('img');
-  userAvatar.setAttribute('src', user.avatar || '../assets/icons/avatar1.svg');
-  userAvatar.classList.add('rounded-border-avatar', 'light-border');
-  const userName = document.createElement('h3');
-  userName.textContent = `${user.firstname} ${user.lastname}`;
-  const commentBody = document.createElement('p');
-  commentBody.textContent = comment.body;
-  const commentDate = document.createElement('span');
-  const [month, day] = parseDate(comment.createdOn);
-  commentDate.textContent = `${month} ${day}`;
-  const primaryDetails = document.createElement('div');
-  primaryDetails.classList.add('comment-card__primary');
-  primaryDetails.appendChild(userName);
-  primaryDetails.appendChild(commentBody);
-  primaryDetails.appendChild(commentDate)
-
-  const avatarWrapper = document.createElement('div');
-  avatarWrapper.appendChild(userAvatar);
-
-  card.appendChild(avatarWrapper);
-  card.appendChild(primaryDetails);
-
-  return card;
-}
-
 const displayTotalUsersVotes = (votes) => {
   const p = document.createElement('p');
   p.classList.add('user-vote');
   p.title = 'Total number of votes on this question';
   p.textContent = votes;
   return p;
-}
+};
 
 const getUser = async () => {
   const apiUrl = `${apiBaseURL}/users/${userId}`;
   const response = await fetch(apiUrl, requestHeader);
   const responseBody = await response.json();
   return responseBody.status === 200 ? responseBody.data[0] : null;
-}
+};
 
 const displayFormFeedback = (msg) => {
   const userFeedback = document.getElementById('user-feedback');
@@ -111,9 +80,9 @@ const displayFormFeedback = (msg) => {
   span.textContent = msg;
   userFeedback.classList.add('info-box');
   userFeedback.appendChild(span);
-}
+};
 
-askGroupButton.onclick = (e) => {
+askGroupButton.onclick = () => {
   createQuestionForm();
   displayQuestionBlock();
 };
@@ -129,21 +98,19 @@ const getMeetupTags = async () => {
     return responseBody.data[0].tags;
   }
   return [];
-}
+};
 
 /**
  * @func createMeetupTags
  * @param {Array<String>} tags Meetup tags
  * @returns {Array<HTMLLiElement>} Returns an array of html list elements
  */
-const createMeetupTags = (tags) => {
-  return tags.map((tag) => {
-    const meetupTag = document.createElement('li');
-    meetupTag.classList.add('meetup-tag');
-    meetupTag.textContent = tag;
-    return meetupTag;
-  })
-}
+const createMeetupTags = tags => tags.map((tag) => {
+  const meetupTag = document.createElement('li');
+  meetupTag.classList.add('meetup-tag');
+  meetupTag.textContent = tag;
+  return meetupTag;
+});
 
 /**
  * @func displayMeetupTags
@@ -160,10 +127,10 @@ const displayMeetupTags = async () => {
   addedMeetups.appendChild(meetupList);
   meetupTagsWrapper.appendChild(addedMeetups);
   return meetupTagsWrapper;
-}
+};
 
 /**
- * @func displayMeetupQuestions;
+ * @func displayMeetupQuestions
  * @param {*} meetup Meetup
  * @returns {undefined} Makes an HTTP request for all meetup questions
  * displays them
@@ -178,12 +145,12 @@ const displayMeetupQuestions = async (meetup) => {
       const questions = data;
       questions.forEach(async (question) => {
         questionCards.appendChild(await createQuestionCard(question));
-      })
+      });
     }
   } catch (e) {
     console.log(e);
   }
-}
+};
 
 /**
  * @func addMeetupDetailsToDOM
@@ -201,7 +168,7 @@ const addMeetupDetailsToDOM = (meetup) => {
 /**
  * @func addMeetupDateToDOM
  * @param {*} meetup Meetup
- * @returns {HTMLElement} Returns an HTML element representing the date of the meetup 
+ * @returns {HTMLElement} Returns an HTML element representing the date of the meetup
  */
 const addMeetupDateToDOM = (meetup) => {
   const meetupDate = document.getElementById('meetup-date__primary');
@@ -211,12 +178,12 @@ const addMeetupDateToDOM = (meetup) => {
   lineBreak.textContent = day;
   meetupDate.appendChild(lineBreak);
   return meetupDate;
-}
+};
 
 /**
  * @func getMeetupImages
  * @param {*} meetup
- * @returns {Promise<Array>} Returns a list of meetup images 
+ * @returns {Promise<Array>} Returns a list of meetup images
  */
 const getMeetupImages = async (meetup) => {
   try {
@@ -225,15 +192,15 @@ const getMeetupImages = async (meetup) => {
     const responseBody = await response.json();
     return responseBody.data;
   } catch (e) {
-
+    throw e;
   }
-}
+};
 
 /**
  * @func addMeetupImageToPage
  * @param {*} meetup Meetup object
- * @returns {*}
- * @description Places a main meetup image on the page 
+ * @returns {HTMLImageElement} Returns the image preview HTML element
+ * @description Places a main meetup image on the page
  */
 const addMeetupImageToPage = async (meetup) => {
   try {
@@ -245,7 +212,7 @@ const addMeetupImageToPage = async (meetup) => {
   } catch (e) {
     throw e;
   }
-}
+};
 
 
 /**
@@ -258,12 +225,12 @@ const addDescriptionToPage = (meetup) => {
   const meetupDescription = document.getElementById('meetup-description');
   meetupDescription.textContent = meetup.description;
   return meetupDescription;
-}
+};
 
 /**
  * @func createMeetupImages
  * @param {Array} images An array of meetup image objects
- * @returns {Array<HTMLElement>} Returns an array of meetups 
+ * @returns {Array<HTMLElement>} Returns an array of meetups
  */
 const createMeetupImages = (images) => {
   const pics = images.map((image) => {
@@ -277,12 +244,13 @@ const createMeetupImages = (images) => {
   });
 
   return pics;
-}
+};
 
 
 /**
  * @func addMeetupImagesToPage
- * @param {*} meetup Meetup object 
+ * @param {*} meetup Meetup object
+ * @returns {undefined} Adds meetup images to page
  * @description Adds meetup images to page
  */
 const addMeetupImagesToPage = async (meetup) => {
@@ -293,14 +261,15 @@ const addMeetupImagesToPage = async (meetup) => {
       thumbnailPhotosWrapper.appendChild(image);
     });
   } catch (e) {
-
+    throw e;
   }
 };
 
 /**
  * @func addMeetupToPage
  * @param {*} meetup Meetup object
- * @description Adds Meetup Details sections to page 
+ * @returns {undefined} Meetup object
+ * @description Adds Meetup Details sections to page
  */
 const addMeetupToPage = (meetup) => {
   detailsContent.appendChild(addMeetupDetailsToDOM(meetup));
@@ -312,15 +281,14 @@ const addMeetupToPage = (meetup) => {
 
   displayMeetupQuestions(meetup);
   displayMeetupTags();
-}
+};
 /**
- * @func displayMeetup
- * @returns {*}
+ * @func getMeetup
+ * @returns {undefined}
  * @description Displays the meetup details on page
  */
-const displayMeetup = () => {
-  const activeMeetupId = localStorage.getItem('activeMeetupId');
-  const apiUrl = `${apiBaseURL}/meetups/${activeMeetupId}`
+const getMeetup = () => {
+  const apiUrl = `${apiBaseURL}/meetups/${activeMeetupId}`;
   fetch(apiUrl, {
     headers: {
       'Content-Type': 'application/json',
@@ -342,14 +310,13 @@ const displayMeetup = () => {
     })
     .catch((err) => {
       throw err;
-    })
-}
+    });
+};
 
-window.onload = (e) => {
-  const userToken = Token.getToken('userToken');
+window.onload = () => {
   if (!userToken) {
     window.location.assign('./sign-in.html');
   } else {
-    displayMeetup();
+    getMeetup();
   }
-}
+};

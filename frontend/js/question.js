@@ -63,8 +63,8 @@ const createQuestionCard = async (question) => {
   votes.textContent = question.votes;
 
   const questionText = createQuestionCardPrimary(question);
-  const comments = await Comment.getComments(question);
-  const commentSection = await Comment.createCommentSection(comments, question);
+  const comments = await getComments(question);
+  const commentSection = await createCommentSection(comments, question);
 
   questionIcons.appendChild(leftIcons);
   questionIcons.appendChild(rightIcons);
