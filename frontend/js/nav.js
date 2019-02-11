@@ -93,7 +93,9 @@ const createRightNavList = (navSpec) => {
       li.classList.add('q-user-profile__dropdown-trigger');
     }
 
-    getUserData()
+    const userId = localStorage.getItem('userId');
+
+    getUserData(userId)
       .then((user) => {
         if (user) {
           const { avatar, firstname } = user;
