@@ -19,18 +19,18 @@ const detailsContent = document.getElementById('details-content');
 const meetupTitleWrapper = document.getElementById('meetup-title__wrapper');
 const meetupTitle = document.getElementById('meetup-title');
 const meetupOrganizer = document.getElementById('meetup-host');
-const imagePreviewWrapper = document.getElementById('image-preview');
 const imagePreview = document.getElementById('meetup-image');
 const thumbnailPhotosWrapper = document.getElementById('meetup-photos__wrapper');
-const askQuestionWrapper = document.getElementById('ask-question');
 
 const meetupTagsWrapper = document.getElementById('meetup-tags');
 const addedMeetups = document.getElementById('meetup-tags-added');
 const questionCards = document.getElementById('q-question-cards');
-const postQuestionDirArea = document.getElementById('post-questions-directive');
 const askGroupButton = document.getElementById('ask-group-btn');
 
-const questionFormSection = document.getElementById('ask-question');
+askGroupButton.onclick = () => {
+  createQuestionForm();
+  displayQuestionBlock();
+};
 
 /**
  * @func getUserImage
@@ -59,6 +59,12 @@ const createUserAvatar = async () => {
   return userImage;
 };
 
+/**
+ *
+ * @param {Number} votes
+ * @returns {HTMLParagraphElement} Returns a paragraph
+ * element representing the total votes of a meetup
+ */
 const displayTotalUsersVotes = (votes) => {
   const p = document.createElement('p');
   p.classList.add('user-vote');
@@ -67,11 +73,19 @@ const displayTotalUsersVotes = (votes) => {
   return p;
 };
 
+/**
+ * @func getUser
+ * @returns {*} Returns a user payload
+ */
 const getUser = async () => {
-  const apiUrl = `${apiBaseURL}/users/${userId}`;
-  const response = await fetch(apiUrl, requestHeader);
-  const responseBody = await response.json();
-  return responseBody.status === 200 ? responseBody.data[0] : null;
+  try {
+    const apiUrl = `${apiBaseURL}/users/${userId}`;
+    const response = await fetch(apiUrl, requestHeader);
+    const responseBody = await response.json();
+    return responseBody.status === 200 ? responseBody.data[0] : null;
+  } catch (e) {
+    throw e;
+  }
 };
 
 const displayFormFeedback = (msg) => {
@@ -80,11 +94,6 @@ const displayFormFeedback = (msg) => {
   span.textContent = msg;
   userFeedback.classList.add('info-box');
   userFeedback.appendChild(span);
-};
-
-askGroupButton.onclick = () => {
-  createQuestionForm();
-  displayQuestionBlock();
 };
 
 /**
@@ -148,7 +157,7 @@ const displayMeetupQuestions = async (meetup) => {
       });
     }
   } catch (e) {
-    console.log(e);
+    throw e;
   }
 };
 
@@ -283,30 +292,15 @@ const addMeetupToPage = (meetup) => {
   displayMeetupTags();
 };
 /**
- * @func getMeetup
+ * @func displayMeetup
  * @returns {undefined}
  * @description Displays the meetup details on page
  */
-const getMeetup = () => {
-  const apiUrl = `${apiBaseURL}/meetups/${activeMeetupId}`;
-  fetch(apiUrl, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('userToken')}`
-    }
-  })
-    .then(res => res.json())
-    .then((res) => {
-      const tokenValid = Token.tokenIsValid(res.status);
-      if (tokenValid) {
-        if (res.status === 200) {
-          const meetup = res.data[0];
-          document.title = `${meetup.topic} | Questioner`;
-          addMeetupToPage(meetup);
-        }
-      } else {
-        window.location.assign('./sign-in.html');
-      }
+const displayMeetup = () => {
+  getMeetup()
+    .then((meetup) => {
+      document.title = `${meetup.topic} | Questioner`;
+      addMeetupToPage(meetup);
     })
     .catch((err) => {
       throw err;
@@ -317,6 +311,6 @@ window.onload = () => {
   if (!userToken) {
     window.location.assign('./sign-in.html');
   } else {
-    getMeetup();
+    displayMeetup();
   }
 };
