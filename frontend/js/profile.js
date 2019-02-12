@@ -214,12 +214,16 @@ const updateUserData = (newData) => {
         return null;
       }
 
-      if (fieldsAreNotEmpty(personalDataForm) && fieldsAreNotEmpty(accountDataForm)) {
+      const bothFormsAreFilled = fieldsAreNotEmpty(personalDataForm) && fieldsAreNotEmpty(accountDataForm);
+      const personalDataFormFilled = fieldsAreNotEmpty(personalDataForm);
+      const accountDataFormFilled = fieldsAreNotEmpty(accountDataForm);
+
+      if (bothFormsAreFilled) {
         displaySuccessFeedback('Changes Saved', 'personal');
         displaySuccessFeedback('Changes Saved', 'account');
-      } else if (fieldsAreNotEmpty(personalDataForm)) {
+      } else if (personalDataFormFilled) {
         displaySuccessFeedback('Changes Saved', 'personal');
-      } else {
+      } else if (accountDataFormFilled) {
         displaySuccessFeedback('Changes Saved', 'account');
       }
       return data[0];
