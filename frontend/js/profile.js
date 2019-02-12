@@ -117,13 +117,6 @@ const convertDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
-// const displayErrorFeedback = (message) => {
-//   accountFeedback.classList.remove('hide');
-//   accountFeedback.classList.add('show');
-//   accountFeedback.textContent = message;
-//   return accountFeedback;
-// }
-
 const displayUpdateFeedback = (message) => {
   const accountFeedback = document.getElementById('account-changes-feedback');
   accountFeedback.classList.remove('hide');
@@ -132,7 +125,7 @@ const displayUpdateFeedback = (message) => {
   return accountFeedback;
 };
 
-const displayErrorFeedbackMessage = (message) => {
+const displayErrorFeedback = (message) => {
   const accountFeedback = displayUpdateFeedback(message);
   accountFeedback.classList.add('error-feedback');
 };
@@ -173,7 +166,7 @@ const updateUserData = (newData) => {
     .then((res) => {
       const { status, data, error } = res;
       if (status !== 200) {
-        displayErrorFeedbackMessage(error);
+        displayErrorFeedback(error);
         return null;
       }
       displaySuccessFeedback('Changes saved');
