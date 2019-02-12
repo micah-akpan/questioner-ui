@@ -90,21 +90,13 @@
                 <a href="../../assets/img/showcase2.jpg">
                   <img src="../../assets/img/showcase2.jpg" alt="" />
                 </a>
-                <img src="../../assets/img/showcase2.jpg" alt="" />
-                <img src="../../assets/img/showcase2.jpg" alt="" />
-
-                <img src="../../assets/img/showcase2.jpg" alt="" />
-                <img src="../../assets/img/showcase2.jpg" alt="" />
-                <img src="../../assets/img/showcase2.jpg" alt="" />
-
-                <img src="../../assets/img/showcase2.jpg" alt="" />
-                <img src="../../assets/img/showcase2.jpg" alt="" />
               </div>
 
-              <form>
+              <form method="POST" enctype="multipart/form-data" action="#!" id="meetup-photos-upload-form">
                 <div>
-                  <input type="file" accept="image/*" id="meetupImage" />
+                  <input type="file" accept="image/*" id="meetupImage" name="meetupPhotos" multiple />
                   <label role="button" class="q-btn" for="meetupImage" aria-label="Upload button">Upload more photos</label>
+                  <button id="upload-photos__btn" class="q-btn hide">Upload</button>
                 </div>
               </form>
             </section>
