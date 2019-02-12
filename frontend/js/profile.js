@@ -117,21 +117,53 @@ const convertDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
-const displayUpdateFeedback = (message) => {
-  const accountFeedback = document.getElementById('account-changes-feedback');
+/* eslint-disable */
+const fieldsAreNotEmpty = (form) => {
+  const formData = new FormData(form);
+  const entries = formData.entries();
+  for (let v of entries) {
+    if (v[1] !== '') {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+const accountDataForm = document.getElementById('account-data-form');
+const personalDataForm = document.getElementById('personal-data-form');
+
+const displayUpdateFeedback = (elId, message) => {
+  const accountFeedback = document.getElementById(elId);
   accountFeedback.classList.remove('hide');
   accountFeedback.classList.add('show');
   accountFeedback.textContent = message;
   return accountFeedback;
 };
 
-const displayErrorFeedback = (message) => {
-  const accountFeedback = displayUpdateFeedback(message);
+const displayPersonalUpdateFeedback = (message) => {
+  return displayUpdateFeedback('personal-data-feedback', message);
+}
+
+const displayAccountUpdateFeedback = (message) => {
+  let a = displayUpdateFeedback('account-data-feedback', message);
+  a.classList.add('error-feedback');
+  return a;
+}
+
+const displayErrorFeedback = (message, section) => {
+  const accountFeedback = section === 'personal'
+    ? displayPersonalUpdateFeedback(message)
+    : displayAccountUpdateFeedback(message);
+  accountFeedback.classList.remove('success-feedback');
   accountFeedback.classList.add('error-feedback');
+  return accountFeedback;
 };
 
-const displaySuccessFeedback = (message) => {
-  const accountFeedback = displayUpdateFeedback(message);
+const displaySuccessFeedback = (message, section) => {
+  const accountFeedback = section === 'personal'
+    ? displayPersonalUpdateFeedback(message)
+    : displayAccountUpdateFeedback(message);
   accountFeedback.classList.remove('error-feedback');
   accountFeedback.classList.add('success-feedback');
   return accountFeedback;
@@ -153,6 +185,14 @@ const replaceFormFields = (user) => {
   emailField.placeholder = email;
 };
 
+const getErrorType = (err) => {
+  if (err.includes('username') || err.includes('email') || err.includes('password')) {
+    return 'account'
+  }
+
+  return 'personal';
+}
+
 const updateUserData = (newData) => {
   const userId = localStorage.getItem('userId');
   return fetch(`${usersAPIUrl}/${userId}`, {
@@ -166,10 +206,22 @@ const updateUserData = (newData) => {
     .then((res) => {
       const { status, data, error } = res;
       if (status !== 200) {
-        displayErrorFeedback(error);
+        if (getErrorType(error) === 'account') {
+          displayErrorFeedback(error, 'account');
+        } else {
+          displayErrorFeedback(error, 'personal');
+        }
         return null;
       }
-      displaySuccessFeedback('Changes saved');
+
+      if (fieldsAreNotEmpty(personalDataForm) && fieldsAreNotEmpty(accountDataForm)) {
+        displaySuccessFeedback('Changes Saved', 'personal');
+        displaySuccessFeedback('Changes Saved', 'account');
+      } else if (fieldsAreNotEmpty(personalDataForm)) {
+        displaySuccessFeedback('Changes Saved', 'personal');
+      } else {
+        displaySuccessFeedback('Changes Saved', 'account');
+      }
       return data[0];
     })
     .catch((err) => {
@@ -177,7 +229,6 @@ const updateUserData = (newData) => {
     });
 };
 
-/* eslint-disable no-restricted-syntax */
 saveChangesButton.onclick = () => {
   const fullName = fullNameField.value;
   const firstname = fullName.substring(0, fullName.indexOf(' '));
