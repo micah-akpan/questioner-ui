@@ -1,20 +1,26 @@
 
 
-const mPhotosWrapper = document.querySelector('.meetup-photos__wrapper');
-const uploadBtn = document.querySelector('label[role="button"]');
+const meetupPhotosWrapper = document.getElementById('meetup-photos__wrapper');
+const imageSelectButton = document.getElementById('multi-image-select');
 const fileInput = document.querySelector('input[type="file"]');
-const askGroupBtn = document.querySelector('.ask-group-btn');
 const commentBoxes = document.querySelectorAll('.comment-box .question-comment textarea');
 const imageUploadForm = document.getElementById('meetup-photos-upload-form');
 const uploadPhotosButton = document.getElementById('upload-photos__btn');
 
 fileInput.onchange = (e) => {
-  const image = new Image();
-  const imageUrl = URL.createObjectURL(e.target.files[0]);
-  image.setAttribute('src', imageUrl);
+  const images = e.target.files;
+  for (let i = 0, len = images.length; i < len; i += 1) {
+    const imageBlob = images[i];
+    const image = new Image();
+    const imageUrl = URL.createObjectURL(imageBlob);
+    image.setAttribute('src', imageUrl);
+    meetupPhotosWrapper.appendChild(image);
+  }
   uploadPhotosButton.classList.remove('hide');
   uploadPhotosButton.classList.add('show');
-  mPhotosWrapper.appendChild(image);
+
+  imageSelectButton.classList.remove('show');
+  imageSelectButton.classList.add('hide');
 };
 
 // Tags
@@ -83,5 +89,5 @@ imageUploadForm.onsubmit = (e) => {
   e.preventDefault();
   const meetupPhotosInput = document.getElementById('meetupImage');
   const imageFiles = meetupPhotosInput.files;
-  uploadMeetupImages(imageFiles)
+  uploadMeetupImages(imageFiles);
 }

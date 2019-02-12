@@ -86,16 +86,14 @@
               <hr />
 
               <!-- Meetup Images Thumbnail -->
-              <div class="meetup-photos__wrapper">
-                <a href="../../assets/img/showcase2.jpg">
-                  <img src="../../assets/img/showcase2.jpg" alt="" />
-                </a>
+              <div id="meetup-photos__wrapper" class="meetup-photos__wrapper">
+               
               </div>
 
               <form method="POST" enctype="multipart/form-data" action="#!" id="meetup-photos-upload-form">
                 <div>
                   <input type="file" accept="image/*" id="meetupImage" name="meetupPhotos" multiple />
-                  <label role="button" class="q-btn" for="meetupImage" aria-label="Upload button">Upload more photos</label>
+                  <label role="button" class="q-btn" for="meetupImage" aria-label="Upload button" id="multi-image-select">Select Images to Upload</label>
                   <button id="upload-photos__btn" class="q-btn hide">Upload</button>
                 </div>
               </form>
@@ -264,16 +262,16 @@
     </div>
   </section>
 
-   <!-- Nav User Profile DropDown Menu -->
-   <section>
-      <div class="q-user-profile__dropdown-menu">
-        <ul>
-          <li><a href="./profile.html">Account settings</a></li>
-          <li><a href="./meetup.html">Ask a question</a></li>
-          <li class="logout__btn"><a href="#">Logout</a></li>
-        </ul>
-      </div>
-    </section>
+  <!-- Nav User Profile DropDown Menu -->
+  <section>
+    <div class="q-user-profile__dropdown-menu">
+      <ul>
+        <li><a href="./profile.html">Account settings</a></li>
+        <li><a href="./meetup.html">Ask a question</a></li>
+        <li class="logout__btn"><a href="#">Logout</a></li>
+      </ul>
+    </div>
+  </section>
 
   <footer>
     <div class="container">
