@@ -151,6 +151,11 @@ const displayAccountUpdateFeedback = (message) => {
   return a;
 }
 
+/**
+ * 
+ * @param {*} message 
+ * @param {*} section 
+ */
 const displayErrorFeedback = (message, section) => {
   const accountFeedback = section === 'personal'
     ? displayPersonalUpdateFeedback(message)
@@ -160,6 +165,13 @@ const displayErrorFeedback = (message, section) => {
   return accountFeedback;
 };
 
+/**
+ * @func displaySuccessFeedback
+ * @param {String} message 
+ * @param {String} section 
+ * @returns {HTMLElement} Returns the user feedback 
+ * HTML element
+ */
 const displaySuccessFeedback = (message, section) => {
   const accountFeedback = section === 'personal'
     ? displayPersonalUpdateFeedback(message)
@@ -169,6 +181,24 @@ const displaySuccessFeedback = (message, section) => {
   return accountFeedback;
 };
 
+/**
+ * @func hideFeedback
+ * @param {Number} time 
+ * @param {HTMLElement} node
+ * @returns {Number} Returns the timer interval id
+ */
+const hideFeedback = (time, node) => {
+  return setTimeout(() => {
+    node.classList.remove('show');
+    node.classList.add('hide');
+  }, time * 1000)
+}
+
+/**
+ * @func replaceFormFields
+ * @param {*} user user data
+ * @returns {*} Replaces form fields placeholder values with data from `user`
+ */
 const replaceFormFields = (user) => {
   const {
     firstname, lastname,
@@ -185,11 +215,18 @@ const replaceFormFields = (user) => {
   emailField.placeholder = email;
 };
 
+const personalDataFeedback = document.getElementById('personal-data-feedback');
+const accountDataFeedback = document.getElementById('account-data-feedback');
+
+/**
+ * @func getErrorType
+ * @param {String} err
+ * @returns {String} Returns the type of error based on `err` 
+ */
 const getErrorType = (err) => {
   if (err.includes('username') || err.includes('email') || err.includes('password')) {
     return 'account'
   }
-
   return 'personal';
 }
 
@@ -221,10 +258,14 @@ const updateUserData = (newData) => {
       if (bothFormsAreFilled) {
         displaySuccessFeedback('Changes Saved', 'personal');
         displaySuccessFeedback('Changes Saved', 'account');
+        hideFeedback(5, personalDataFeedback);
+        hideFeedback(5, accountDataFeedback);
       } else if (personalDataFormFilled) {
         displaySuccessFeedback('Changes Saved', 'personal');
+        hideFeedback(5, personalDataFeedback);
       } else if (accountDataFormFilled) {
         displaySuccessFeedback('Changes Saved', 'account');
+        hideFeedback(5, accountDataFeedback);
       }
       return data[0];
     })
