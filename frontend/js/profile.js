@@ -117,6 +117,33 @@ const convertDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
+// const displayErrorFeedback = (message) => {
+//   accountFeedback.classList.remove('hide');
+//   accountFeedback.classList.add('show');
+//   accountFeedback.textContent = message;
+//   return accountFeedback;
+// }
+
+const displayUpdateFeedback = (message) => {
+  const accountFeedback = document.getElementById('account-changes-feedback');
+  accountFeedback.classList.remove('hide');
+  accountFeedback.classList.add('show');
+  accountFeedback.textContent = message;
+  return accountFeedback;
+};
+
+const displayErrorFeedbackMessage = (message) => {
+  const accountFeedback = displayUpdateFeedback(message);
+  accountFeedback.classList.add('error-feedback');
+};
+
+const displaySuccessFeedback = (message) => {
+  const accountFeedback = displayUpdateFeedback(message);
+  accountFeedback.classList.remove('error-feedback');
+  accountFeedback.classList.add('success-feedback');
+  return accountFeedback;
+};
+
 const replaceFormFields = (user) => {
   const {
     firstname, lastname,
@@ -142,16 +169,15 @@ const updateUserData = (newData) => {
     },
     body: newData
   })
+    .then(res => res.json())
     .then((res) => {
-      if (res.ok) {
-        return res.json();
+      const { status, data, error } = res;
+      if (status !== 200) {
+        displayErrorFeedbackMessage(error);
+        return null;
       }
-
-      throw new Error('Failed to update user\'s data');
-    })
-    .then((res) => {
-      const { status, data } = res;
-      return status === 200 ? data[0] : null;
+      displaySuccessFeedback('Changes saved');
+      return data[0];
     })
     .catch((err) => {
       throw err;
@@ -189,11 +215,13 @@ saveChangesButton.onclick = () => {
   updateUserData(formData)
     .then((user) => {
       // TODO -> Display user feedback
-      replaceFormFields(user);
-      const profileUserName = document.getElementById('profile-username');
-      profileUserName.textContent = `${firstname} ${lastname}`;
-      const defaultAvatar = '../assets/icons/avatar1.svg';
-      userImage.setAttribute('src', user.avatar || defaultAvatar);
+      if (user) {
+        replaceFormFields(user);
+        const profileUserName = document.getElementById('profile-username');
+        profileUserName.textContent = `${firstname} ${lastname}`;
+        const defaultAvatar = '../assets/icons/avatar1.svg';
+        userImage.setAttribute('src', user.avatar || defaultAvatar);
+      }
     })
     .catch((err) => {
 
