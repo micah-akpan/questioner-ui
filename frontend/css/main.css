@@ -168,6 +168,21 @@ section {
   border: 1px solid #116466;
 }
 
+.error-feedback {
+  background: #a30916;
+  color: #fff;
+  font-weight: bold;
+}
+
+.error-feedback:not(:empty) {
+  padding: 10px;
+}
+
+.success-feedback {
+  background: #ffcb9a;
+  padding: 10px;
+}
+
 /* App Main Header */
 header {
   position: fixed;
