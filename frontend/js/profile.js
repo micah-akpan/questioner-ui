@@ -8,6 +8,19 @@ const uploadNewPicBtn = document.querySelector('.change-image__btn');
 const uploadNewPicWidget = document.querySelector('.change-image__file');
 const userImage = document.querySelector('.user-image');
 
+const fullNameField = document.getElementById('fullName');
+const otherNameField = document.getElementById('otherNames');
+const locationField = document.getElementById('location');
+const birthDateField = document.getElementById('birthDate');
+const phoneNumberField = document.getElementById('phone-no');
+const userBioField = document.getElementById('userBio');
+const emailField = document.getElementById('userEmail');
+const usernameField = document.getElementById('username');
+const newPasswordField = document.getElementById('newPassword');
+const saveChangesButton = document.getElementById('save-changes__btn');
+const accountDataForm = document.getElementById('account-data-form');
+const personalDataForm = document.getElementById('personal-data-form');
+
 const usersAPIUrl = 'http://localhost:9999/api/v1/users';
 
 tabListItems.forEach((listItem) => {
@@ -55,9 +68,10 @@ uploadNewPicWidget.onchange = function changeAvatar(e) {
 const userProfileWrapper = document.getElementById('user-profile__wrapper');
 const userProfileImageTextWrapper = document.getElementById('user-profile__image-text');
 const profileTextWrapper = document.getElementById('profile-text__wrapper');
+const defaultAvatar = '../assets/icons/avatar1.svg';
 
 const displayUserAvatar = ({ avatar, firstname }) => {
-  userImage.setAttribute('src', avatar);
+  userImage.setAttribute('src', avatar || defaultAvatar);
   userImage.setAttribute('alt', firstname);
   return userImage;
 };
@@ -90,17 +104,6 @@ const createUserDataSummaryCard = (user) => {
   return card;
 };
 
-const fullNameField = document.getElementById('fullName');
-const otherNameField = document.getElementById('otherNames');
-const locationField = document.getElementById('location');
-const birthDateField = document.getElementById('birthDate');
-const phoneNumberField = document.getElementById('phone-no');
-const userBioField = document.getElementById('userBio');
-const emailField = document.getElementById('userEmail');
-const usernameField = document.getElementById('username');
-const newPasswordField = document.getElementById('newPassword');
-const saveChangesButton = document.getElementById('save-changes__btn');
-
 /**
  * @function convertDate
  * @param {Date} date
@@ -118,6 +121,12 @@ const convertDate = (date) => {
 };
 
 /* eslint-disable */
+/**
+ * @func fieldsAreNotEmpty
+ * @param {HTMLFormElement} form
+ * @returns {Boolean} Returns true if `form`
+ * contains non-empty form fields
+ */
 const fieldsAreNotEmpty = (form) => {
   const formData = new FormData(form);
   const entries = formData.entries();
@@ -130,9 +139,13 @@ const fieldsAreNotEmpty = (form) => {
   return false;
 }
 
-const accountDataForm = document.getElementById('account-data-form');
-const personalDataForm = document.getElementById('personal-data-form');
-
+/**
+ * @func displayUpdateFeedback
+ * @param {Number} elId 
+ * @param {String} message 
+ * @returns {HTMLElement} Returns the user feedback
+ * HTML element
+ */
 const displayUpdateFeedback = (elId, message) => {
   const accountFeedback = document.getElementById(elId);
   accountFeedback.classList.remove('hide');
@@ -141,20 +154,32 @@ const displayUpdateFeedback = (elId, message) => {
   return accountFeedback;
 };
 
+/**
+ * @func displayPersonalUpdateFeedback
+ * @param {String} message
+ * @returns {HTMLElement} Returns the user feedback
+ * HTML element for account data
+ */
 const displayPersonalUpdateFeedback = (message) => {
   return displayUpdateFeedback('personal-data-feedback', message);
 }
 
+/**
+ * @func displayAccountUpdateFeedback
+ * @param {String} message 
+ * @returns {HTMLElement} Returns the user feedback
+ * HTML element for account data
+ */
 const displayAccountUpdateFeedback = (message) => {
-  let a = displayUpdateFeedback('account-data-feedback', message);
-  a.classList.add('error-feedback');
-  return a;
+  return displayUpdateFeedback('account-data-feedback', message);
 }
 
 /**
- * 
- * @param {*} message 
- * @param {*} section 
+ * @func displayErrorFeedback
+ * @param {String} message 
+ * @param {String} section 
+ * @returns {HTMLElement} Returns the user feedback
+ * HTML element
  */
 const displayErrorFeedback = (message, section) => {
   const accountFeedback = section === 'personal'
@@ -230,6 +255,11 @@ const getErrorType = (err) => {
   return 'personal';
 }
 
+/**
+ * @func updateUserData
+ * @param {*} newData user
+ * @returns {Promise<any>} Resolves to an updated user data or null
+ */
 const updateUserData = (newData) => {
   const userId = localStorage.getItem('userId');
   return fetch(`${usersAPIUrl}/${userId}`, {
@@ -303,12 +333,10 @@ saveChangesButton.onclick = () => {
 
   updateUserData(formData)
     .then((user) => {
-      // TODO -> Display user feedback
       if (user) {
         replaceFormFields(user);
         const profileUserName = document.getElementById('profile-username');
         profileUserName.textContent = `${firstname} ${lastname}`;
-        const defaultAvatar = '../assets/icons/avatar1.svg';
         userImage.setAttribute('src', user.avatar || defaultAvatar);
       }
     })
