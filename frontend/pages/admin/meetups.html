@@ -122,12 +122,12 @@
     </div>
   </section>
 
-  <div class="modal">
+  <div class="modal" id="delete-modal">
     <div class="modal-overlay">
       <div class="modal-content">
         <div class="modal-dialog">
           <div class="modal-content-card">
-            <button class="close-modal-btn" id="close-modal-btn">
+            <button class="close-modal-btn" id="close-delete-modal__btn">
               <img src="../../assets/icons/cross.svg" alt="close modal" />
             </button>
             <div class="delete-modal-content">
@@ -138,8 +138,8 @@
               </p>
 
               <div class="button__wrapper">
-                <button class="cancel-btn q-btn btn__rounded">Cancel</button>
-                <button class="delete-btn q-btn btn__rounded">
+                <button class="cancel-btn q-btn btn__rounded" id="cancel-delete-op__btn">Cancel</button>
+                <button class="delete-btn q-btn btn__rounded" id="delete-meetup__btn">
                   <img src="../../assets/icons/delete-grey.svg" alt="delete icon" />
                   <span>Delete</span>
                 </button>
@@ -199,6 +199,7 @@
   <script src="../../js/icons.js"></script>
   <script src="../../js/nav.js"></script>
   <script src="../../js/m.js"></script>
+  <script src="../../js/modal.js"></script>
   <script src="../../js/admin/meetups.js"></script>
 </body>
 

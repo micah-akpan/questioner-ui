@@ -1,3 +1,7 @@
+const deleteModal = document.getElementById('delete-modal');
+const closeDeleteModalButton = document.getElementById('close-delete-modal__btn');
+const cancelDeleteOpButton = document.getElementById('cancel-delete-op__btn');
+const deleteMeetupButton = document.getElementById('delete-meetup__btn');
 
 /**
  * @func deleteMeetup
@@ -23,6 +27,11 @@ const deleteMeetup = (meetupId) => {
     });
 };
 
+const attachMeetupIdToModal = (modal, meetupId) => {
+  modal.setAttribute('data-target', meetupId);
+  return modal;
+};
+
 /**
  * @func createDropDownMenuItems
  * @param {*} meetup
@@ -33,8 +42,8 @@ const createDropDownMenuItems = meetup => icons.meetups.map((icon) => {
   const li = document.createElement('li');
   li.classList.add(icon.className);
   li.onclick = () => {
-    const meetupId = meetup.id;
-    deleteMeetup(meetupId);
+    showModal(deleteModal);
+    attachMeetupIdToModal(deleteModal, meetup.id);
   };
   const img = document.createElement('img');
   img.src = icon.src;
@@ -149,6 +158,16 @@ const showAllMeetups = () => {
 };
 
 addProfileAvatarToNav('../../assets/icons/avatar1.svg');
+
+if (closeDeleteModalButton) {
+  closeDeleteModalButton.onclick = () => {
+    hideModal(deleteModal);
+  };
+}
+
+cancelDeleteOpButton.onclick = () => {
+  hideModal(deleteModal);
+};
 
 window.addEventListener('load', () => {
   const userToken = localStorage.getItem('userToken');
