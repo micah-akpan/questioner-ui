@@ -345,6 +345,8 @@ saveChangesButton.onclick = () => {
     });
 };
 
+addProfileAvatarToNav('../assets/icons/avatar1.jpg');
+
 const focusInput = (node) => {
   node.focus();
 };
