@@ -59,8 +59,6 @@ const numMonthToStr = {
 const passwordToggleButtons = document.querySelectorAll('.toggle-password-visibility');
 const passwordVisible = false;
 
-console.log(passwordToggleButtons);
-
 /**
  * @function getMonth
  * @param {Number} date

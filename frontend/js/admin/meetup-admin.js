@@ -5,6 +5,7 @@ const imageSelectButton = document.getElementById('multi-image-select');
 const fileInput = document.querySelector('input[type="file"]');
 const imageUploadForm = document.getElementById('meetup-photos-upload-form');
 const uploadPhotosButton = document.getElementById('upload-photos__btn');
+// const meetupTagsWrapper = document.getElementById('meetup-tags');
 
 fileInput.onchange = (e) => {
   const images = e.target.files;
@@ -29,25 +30,27 @@ const addTagsContainer = document.querySelector('.meetup-tags-added');
 
 let tags = null;
 
-addTagBtn.onclick = (e) => {
-  // allowed separators for tags are commas and hashes (#)
-  tags = tagField.value.split(',');
-  if (tags.length === 1 && tags[0].includes('#')) {
-    tags = tags[0].split('#');
-  }
-
-  addTagsContainer.innerHTML = '';
-  tags.forEach((tag, i) => {
-    if (tag !== '') {
-      const span = d.createElement('span');
-
-      // to support deleting the tags later
-      span.id = i;
-      span.textContent = `#${tag}`;
-      addTagsContainer.appendChild(span);
+if (addTagBtn) {
+  addTagBtn.onclick = (e) => {
+    // allowed separators for tags are commas and hashes (#)
+    tags = tagField.value.split(',');
+    if (tags.length === 1 && tags[0].includes('#')) {
+      tags = tags[0].split('#');
     }
-  });
-};
+
+    addTagsContainer.innerHTML = '';
+    tags.forEach((tag, i) => {
+      if (tag !== '') {
+        const span = d.createElement('span');
+
+        // to support deleting the tags later
+        span.id = i;
+        span.textContent = `#${tag}`;
+        addTagsContainer.appendChild(span);
+      }
+    });
+  };
+}
 
 /**
  * @func uploadMeetupImages
@@ -82,6 +85,37 @@ const uploadMeetupImages = (images) => {
       throw err;
     });
 };
+
+const createTagForm = () => {
+  const section = document.createElement('section');
+  const form = document.createElement('form');
+  const label = document.createElement('label');
+  const tagInputField = document.createElement('input');
+  const tip = document.createElement('span');
+  const button = document.createElement('q-btn', 'btn__tag');
+
+  section.classList.add('meetup-tags__box');
+  label.classList.add('q-form__label');
+  label.htmlFor = 'tag';
+  label.textContent = 'Add Tags';
+  tagInputField.classList.add('q-input__small');
+  tagInputField.id = 'tag';
+
+  tip.textContent = 'Start tags with # or separate them with commas';
+
+  const div = document.createElement('div');
+  div.classList.add('q-form__group');
+  div.appendChild(label);
+  div.appendChild(tagInputField);
+  div.appendChild(tip);
+
+  form.appendChild(div);
+
+  section.appendChild(form);
+  return section;
+};
+
+meetupTagsWrapper.appendChild(createTagForm());
 
 imageUploadForm.onsubmit = (e) => {
   e.preventDefault();
