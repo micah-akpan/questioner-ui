@@ -8,11 +8,11 @@ const deleteMeetup = (meetupId) => {
     }
   })
     .then(res => res.json())
-    .then((res) => {
+    .then(() => {
       window.location.reload();
     })
     .catch((err) => {
-      console.error(err);
+      throw err;
     });
 };
 
@@ -116,6 +116,8 @@ const showAllMeetups = () => {
     }
   });
 };
+
+addProfileAvatarToNav('../../assets/icons/avatar1.svg');
 
 window.addEventListener('load', () => {
   const userToken = localStorage.getItem('userToken');
