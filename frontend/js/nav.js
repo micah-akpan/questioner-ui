@@ -3,6 +3,7 @@ const logOutButtons = document.querySelectorAll('.logout__btn');
 const dropDownTriggerButton = document.querySelector('.dropdown-trigger-btn');
 const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
 const qNavMenuIconWrapper = document.getElementById('mobile-nav-sidebar__wrapper');
+const list = document.querySelector('.q-right-nav > ul');
 
 const baseURL = 'http://localhost:9999/api/v1';
 const nav = document.querySelector('.q-right-nav');
@@ -35,6 +36,7 @@ document.onkeydown = (e) => {
 };
 
 /**
+ * @func toggleDropDownMenu
  * @returns {HTMLElement} Returns the dropdown HTML element
  */
 const toggleDropDownMenu = () => {
@@ -74,8 +76,6 @@ const getUserData = async (userId) => {
   }
 };
 
-const list = document.querySelector('.q-right-nav > ul');
-
 const createUserProfileAvatar = (avatarSrcPath) => {
   const userId = localStorage.getItem('userId');
   return getUserData(userId)
@@ -93,6 +93,7 @@ const createUserProfileAvatar = (avatarSrcPath) => {
         img.alt = firstname;
         button.appendChild(img);
         li.appendChild(button);
+        li.onclick = toggleDropDownMenu;
         return li;
       }
 
@@ -110,7 +111,6 @@ const createUserProfileAvatar = (avatarSrcPath) => {
 const addProfileAvatarToNav = (avatarSrcPath) => {
   createUserProfileAvatar(avatarSrcPath)
     .then((userAvatar) => {
-      console.log(userAvatar);
       list.appendChild(userAvatar);
     })
     .catch((error) => {
