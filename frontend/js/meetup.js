@@ -25,34 +25,6 @@ const thumbnailPhotosWrapper = document.getElementById('meetup-photos__wrapper')
 const meetupTagsWrapper = document.getElementById('meetup-tags');
 const addedMeetups = document.getElementById('meetup-tags-added');
 const questionCards = document.getElementById('q-question-cards');
-
-/**
- * @func getUserImage
- * @returns {Promise<String>} Resolves to the user avatar image
- */
-const getUserImage = async () => {
-  const apiUrl = `${apiBaseURL}/users/${userId}`;
-  const response = await fetch(apiUrl, requestHeader);
-  const responseBody = await response.json();
-  const { status, data } = responseBody;
-  const userImage = status === 200 ? data[0].avatar : '';
-  return userImage;
-};
-
-/**
- * @func createUserAvatar
- * @returns {HTMLImageElement} Returns an HTML Image
- */
-const createUserAvatar = async () => {
-  const userImageUrl = await getUserImage();
-  const userImage = document.createElement('img');
-  userImage.classList.add('rounded-border-avatar', 'light-border');
-  const defaultUserAvatar = '../assets/icons/avatar1.svg';
-  userImage.setAttribute('src', userImageUrl || defaultUserAvatar);
-  userImage.setAttribute('alt', '');
-  return userImage;
-};
-
 /**
  *
  * @param {Number} votes

@@ -8,24 +8,6 @@ const list = document.querySelector('.q-right-nav > ul');
 const baseURL = 'http://localhost:9999/api/v1';
 const nav = document.querySelector('.q-right-nav');
 
-// const rightNavSpec = [
-//   {
-//     id: 1,
-//     type: 'notifications',
-//     src: '../assets/icons/notifications-button.svg',
-//     classNames: ['q-btn'],
-//     idText: ''
-//   },
-
-//   {
-//     id: 2,
-//     type: 'profile',
-//     src: '../assets/icons/avatar1.svg',
-//     classNames: ['q-btn', 'dropdown-trigger-btn'],
-//     idText: 'dropdown-trigger-btn'
-//   }
-// ];
-
 
 document.onkeydown = (e) => {
   if (e.key === 'Escape') {
@@ -76,11 +58,27 @@ const getUserData = async (userId) => {
   }
 };
 
+/**
+ * @func getUserImage
+ * @returns {Promise<String>} Resolves to the user avatar image
+ */
+const getUserImage = () => {
+  getUserData()
+    .then((user) => {
+      if (user) {
+        return user.avatar;
+      }
+      return '../assets/icons/avatar1.svg';
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 const createUserProfileAvatar = (avatarSrcPath) => {
   const userId = localStorage.getItem('userId');
   return getUserData(userId)
     .then((user) => {
-      const { avatar, firstname } = user;
       const li = document.createElement('li');
       li.classList.add('nav-avatar__list-item');
       const button = document.createElement('button');
@@ -89,18 +87,17 @@ const createUserProfileAvatar = (avatarSrcPath) => {
       button.title = 'Profile';
       const img = document.createElement('img');
       if (user) {
+        const { avatar, firstname } = user;
         img.src = avatar || avatarSrcPath;
         img.alt = firstname;
-        button.appendChild(img);
-        li.appendChild(button);
-        li.onclick = toggleDropDownMenu;
-        return li;
+      } else {
+        img.src = avatarSrcPath;
+        img.alt = 'User';
       }
 
-      img.src = avatarSrcPath;
-      img.alt = 'User';
       button.appendChild(img);
       li.appendChild(button);
+      li.onclick = toggleDropDownMenu;
       return li;
     })
     .catch((err) => {
@@ -108,12 +105,16 @@ const createUserProfileAvatar = (avatarSrcPath) => {
     });
 };
 
-const addProfileAvatarToNav = (avatarSrcPath) => {
-  createUserProfileAvatar(avatarSrcPath)
-    .then((userAvatar) => {
-      list.appendChild(userAvatar);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
+/**
+ * @func addProfileAvatarToNav
+ * @param {String} avatarSrcPath The path to the avatar image -> fallback if the user has no avatar
+ * @returns {Promise<HTMLLIElement>} Returns a Promise
+ * that resolves to nav list item HTML element
+ */
+const addProfileAvatarToNav = avatarSrcPath => createUserProfileAvatar(avatarSrcPath)
+  .then((userAvatar) => {
+    list.appendChild(userAvatar);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
