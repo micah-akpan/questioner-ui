@@ -1,20 +1,28 @@
-const qNavMenuWrapper = document.querySelector('.sidebar-menu__wrapper');
 const logOutButtons = document.querySelectorAll('.logout__btn');
+
+// Right Nav Profile Dropdown menu
 const dropDownTriggerButton = document.querySelector('.dropdown-trigger-btn');
 const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
-const qNavMenuIconWrapper = document.getElementById('mobile-nav-sidebar__wrapper');
-const list = document.querySelector('.q-right-nav > ul');
+const rightNavBarList = document.querySelector('.q-right-nav > ul');
+
+// Mobile Nav Dropdown Menu
+const mobileNavIconsBlock = document.getElementById('mobile-nav-sidebar__wrapper');
+const mobileNavMenuBlock = document.querySelector('.sidebar-menu__wrapper');
 
 const baseURL = 'http://localhost:9999/api/v1';
 const nav = document.querySelector('.q-right-nav');
 
-
 document.onkeydown = (e) => {
   if (e.key === 'Escape') {
-    qNavMenuWrapper.classList.remove('nav-menu-show');
-    qNavMenuIconWrapper.classList.toggle('change');
+    mobileNavMenuBlock.classList.remove('nav-menu-show');
+    mobileNavIconsBlock.classList.toggle('change');
     dropDownMenu.classList.remove('show');
   }
+};
+
+mobileNavIconsBlock.onclick = function toggleMobileNav() {
+  mobileNavMenuBlock.classList.toggle('nav-menu-show');
+  this.classList.toggle('change');
 };
 
 /**
@@ -75,6 +83,13 @@ const getUserImage = () => {
     });
 };
 
+/**
+ * @func createUserProfileAvatar
+ * @param {String} avatarSrcPath
+ * @returns {Promise<HTMLLIElement>} Returns a promise
+ * that resolves to an HTML list item element
+ * representing a nav list item
+ */
 const createUserProfileAvatar = (avatarSrcPath) => {
   const userId = localStorage.getItem('userId');
   return getUserData(userId)
@@ -113,7 +128,7 @@ const createUserProfileAvatar = (avatarSrcPath) => {
  */
 const addProfileAvatarToNav = avatarSrcPath => createUserProfileAvatar(avatarSrcPath)
   .then((userAvatar) => {
-    list.appendChild(userAvatar);
+    rightNavBarList.appendChild(userAvatar);
   })
   .catch((error) => {
     console.error(error);
