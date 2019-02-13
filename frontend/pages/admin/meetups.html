@@ -27,6 +27,13 @@
         </nav>
 
         <nav class="q-right-nav notify-user__nav no-flex">
+          <ul>
+            <li>
+              <button class="q-btn notifications__btn" title="Notifications">
+                <img src="../../assets/icons/notifications-button.svg" alt="your notifications">
+              </button>
+            </li>
+          </ul>
         </nav>
       </div>
     </div>
@@ -36,9 +43,21 @@
   <section>
     <div class="q-user-profile__dropdown-menu q-user-profile__admin">
       <ul>
-        <li><a href="../profile.html">Account settings</a></li>
-        <li><a href="./meetup-new.html">Start a meetup</a></li>
-        <li><a href="#!">Logout</a></li>
+        <li>
+          <a href="../profile.html">
+            Account settings
+          </a>
+        </li>
+        <li>
+          <a href="./new-meetup.html">
+            Start a meetup
+          </a>
+        </li>
+        <li class="logout__btn">
+          <a href="#!" role="button">
+            Logout
+          </a>
+        </li>
       </ul>
     </div>
   </section>
@@ -115,24 +134,24 @@
     </div>
   </section>
 
-  <div class="modal">
+  <div class="modal" id="delete-modal">
     <div class="modal-overlay">
       <div class="modal-content">
         <div class="modal-dialog">
           <div class="modal-content-card">
-            <button class="close-modal-btn" id="close-modal-btn">
+            <button class="close-modal-btn" id="close-delete-modal__btn">
               <img src="../../assets/icons/cross.svg" alt="close modal" />
             </button>
-            <div class="delete-modal-content">
-              <h3>Delete Meetup 1</h3>
+            <div class="delete-modal-content" id="delete-modal-content">
+              <h3 id="delete-modal-header"></h3>
               <p>
                 Are you sure you want to delete this meetup? You can't get
                 back this meetup once you delete it
               </p>
 
               <div class="button__wrapper">
-                <button class="cancel-btn q-btn btn__rounded">Cancel</button>
-                <button class="delete-btn q-btn btn__rounded">
+                <button class="cancel-btn q-btn btn__rounded" id="cancel-delete-op__btn">Cancel</button>
+                <button class="delete-btn q-btn btn__rounded" id="delete-meetup__btn">
                   <img src="../../assets/icons/delete-grey.svg" alt="delete icon" />
                   <span>Delete</span>
                 </button>
@@ -192,6 +211,7 @@
   <script src="../../js/icons.js"></script>
   <script src="../../js/nav.js"></script>
   <script src="../../js/m.js"></script>
+  <script src="../../js/modal.js"></script>
   <script src="../../js/admin/meetups.js"></script>
 </body>
 

@@ -270,6 +270,14 @@ nav.no-flex {
   background: radial-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
 }
 
+.nav-avatar__list-item {
+  
+}
+
+.nav-avatar__list-item img {
+  border-radius: 10px;
+}
+
 @media (max-width: 768px) {
   .show {
     width: 200px !important;

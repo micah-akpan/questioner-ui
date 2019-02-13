@@ -1,40 +1,32 @@
-const qNavMenuWrapper = document.querySelector('.sidebar-menu__wrapper');
 const logOutButtons = document.querySelectorAll('.logout__btn');
+
+// Right Nav Profile Dropdown menu
 const dropDownTriggerButton = document.querySelector('.dropdown-trigger-btn');
 const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
-const qNavMenuIconWrapper = document.getElementById('mobile-nav-sidebar__wrapper');
+const rightNavBarList = document.querySelector('.q-right-nav > ul');
+
+// Mobile Nav Dropdown Menu
+const mobileNavIconsBlock = document.getElementById('mobile-nav-sidebar__wrapper');
+const mobileNavMenuBlock = document.querySelector('.sidebar-menu__wrapper');
 
 const baseURL = 'http://localhost:9999/api/v1';
 const nav = document.querySelector('.q-right-nav');
 
-const rightNavSpec = [
-  {
-    id: 1,
-    type: 'notifications',
-    src: '../assets/icons/notifications-button.svg',
-    classNames: ['q-btn'],
-    idText: ''
-  },
-
-  {
-    id: 2,
-    type: 'profile',
-    src: '../assets/icons/avatar1.svg',
-    classNames: ['q-btn', 'dropdown-trigger-btn'],
-    idText: 'dropdown-trigger-btn'
-  }
-];
-
-
 document.onkeydown = (e) => {
   if (e.key === 'Escape') {
-    qNavMenuWrapper.classList.remove('nav-menu-show');
-    qNavMenuIconWrapper.classList.toggle('change');
+    mobileNavMenuBlock.classList.remove('nav-menu-show');
+    mobileNavIconsBlock.classList.toggle('change');
     dropDownMenu.classList.remove('show');
   }
 };
 
+mobileNavIconsBlock.onclick = function toggleMobileNav() {
+  mobileNavMenuBlock.classList.toggle('nav-menu-show');
+  this.classList.toggle('change');
+};
+
 /**
+ * @func toggleDropDownMenu
  * @returns {HTMLElement} Returns the dropdown HTML element
  */
 const toggleDropDownMenu = () => {
@@ -75,90 +67,69 @@ const getUserData = async (userId) => {
 };
 
 /**
- * @func createRightNavList
- * @param {Array} navSpec
- * @returns {HTMLUListElement} Returns a new nav list
+ * @func getUserImage
+ * @returns {Promise<String>} Resolves to the user avatar image
  */
-const createRightNavList = (navSpec) => {
-  const navList = document.createElement('ul');
-  const navListItems = navSpec.map((spec) => {
-    const li = document.createElement('li');
-    const button = document.createElement('button');
-    button.classList.add(...spec.classNames);
-    button.title = spec.type;
-    const img = document.createElement('img');
-
-
-    if (spec.type === 'profile') {
-      li.classList.add('q-user-profile__dropdown-trigger');
-    }
-
-    const userId = localStorage.getItem('userId');
-
-    getUserData(userId)
-      .then((user) => {
-        if (user) {
-          const { avatar, firstname } = user;
-          if (avatar) {
-            img.src = avatar;
-            img.alt = spec.type === 'profile' ? firstname : 'A light yellow colored bell';
-          } else {
-            img.src = spec.src;
-            img.alt = spec.type === 'profile' ? firstname : 'A light yellow colored bell';
-          }
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-
-    if (spec.type === 'profile') {
-      button.onclick = toggleDropDownMenu;
-    }
-
-    button.appendChild(img);
-    li.appendChild(button);
-
-    return li;
-  });
-
-  navListItems.forEach((item) => {
-    navList.appendChild(item);
-  });
-  return navList;
-};
-
-qNavMenuIconWrapper.onclick = function toggleMobileNav() {
-  this.classList.toggle('change');
-  qNavMenuWrapper.classList.toggle('nav-menu-show');
-};
-
-if (window.location.pathname !== '/') {
-  // This dynamic creates the content of the right navigation
-  const urlPath = window.location.pathname.split('/');
-  if (urlPath.includes('admin')) {
-    const navSpec = [
-      {
-        id: 1,
-        type: 'notifications',
-        src: '../../assets/icons/notifications-button.svg',
-        classNames: ['q-btn'],
-        idText: ''
-      },
-
-      {
-        id: 2,
-        type: 'profile',
-        src: '../../assets/icons/avatar1.svg',
-        classNames: ['q-btn', 'dropdown-trigger-btn'],
-        idText: 'dropdown-trigger-btn'
+const getUserImage = () => {
+  getUserData()
+    .then((user) => {
+      if (user) {
+        return user.avatar;
       }
-    ];
+      return '../assets/icons/avatar1.svg';
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
-    const rightNav = createRightNavList(navSpec);
-    nav.appendChild(rightNav);
-  } else {
-    const rightNav = createRightNavList(rightNavSpec);
-    nav.appendChild(rightNav);
-  }
-}
+/**
+ * @func createUserProfileAvatar
+ * @param {String} avatarSrcPath
+ * @returns {Promise<HTMLLIElement>} Returns a promise
+ * that resolves to an HTML list item element
+ * representing a nav list item
+ */
+const createUserProfileAvatar = (avatarSrcPath) => {
+  const userId = localStorage.getItem('userId');
+  return getUserData(userId)
+    .then((user) => {
+      const li = document.createElement('li');
+      li.classList.add('nav-avatar__list-item');
+      const button = document.createElement('button');
+      button.classList.add('q-btn', 'dropdown-trigger-btn');
+      button.id = 'dropdown-trigger-btn';
+      button.title = 'Profile';
+      const img = document.createElement('img');
+      if (user) {
+        const { avatar, firstname } = user;
+        img.src = avatar || avatarSrcPath;
+        img.alt = firstname;
+      } else {
+        img.src = avatarSrcPath;
+        img.alt = 'User';
+      }
+
+      button.appendChild(img);
+      li.appendChild(button);
+      li.onclick = toggleDropDownMenu;
+      return li;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+/**
+ * @func addProfileAvatarToNav
+ * @param {String} avatarSrcPath The path to the avatar image -> fallback if the user has no avatar
+ * @returns {Promise<HTMLLIElement>} Returns a Promise
+ * that resolves to nav list item HTML element
+ */
+const addProfileAvatarToNav = avatarSrcPath => createUserProfileAvatar(avatarSrcPath)
+  .then((userAvatar) => {
+    rightNavBarList.appendChild(userAvatar);
+  })
+  .catch((error) => {
+    console.error(error);
+  });

@@ -1,76 +1,23 @@
-/* eslint-disable */
 
-(() => {
-  const d = document;
 
-  // comments modal
-  const commentModal = d.getElementById('comments-modal');
-  const commentModalOverlay = d.getElementById('c-modal-overlay');
-  const commentCloseBtn = d.getElementById('close-modal-btn-comment');
-  const commentModalDialog = d.getElementById('c-modal-dialog');
-  const commentModalTriggerBtn = d.querySelector('.question-card__img > button');
+/**
+ * @func hideModal
+ * @param {HTMLElement} modal
+ * @returns {HTMLElement} Returns the `modal` HTML element
+ */
+const hideModal = (modal) => {
+  modal.classList.remove('enabled');
+  modal.classList.add('disabled');
+  return modal;
+};
 
-  // Questions modal
-  const questionModal = d.getElementById('questions-modal');
-  const questionModalOverlay = d.getElementById('q-modal-overlay');
-  const questionModalDialog = d.getElementById('q-modal-dialog');
-  const questionModalCloseBtn = d.querySelector('#close-modal-btn-question');
-  const questionModalTriggerBtn = d.querySelector('.ask-group-btn');
-
-  function hideModal(modal) {
-    modal.classList.remove('enabled');
-    modal.classList.add('disabled');
-  }
-
-  function showModal(modal) {
-    modal.classList.remove('disabled');
-    modal.classList.add('enabled');
-  }
-
-  commentModalDialog.onclick = (e) => {
-    e.stopPropagation();
-  };
-
-  if (questionModalDialog) {
-    questionModalDialog.onclick = (e) => {
-      e.stopPropagation();
-    };
-  }
-
-  d.onkeydown = (e) => {
-    if (e.key === 'Escape') {
-      hideModal(commentModal);
-      hideModal(questionModal);
-    }
-  };
-
-  commentCloseBtn.onclick = (e) => {
-    hideModal(commentModal);
-  };
-
-  if (questionModalCloseBtn) {
-    questionModalCloseBtn.onclick = (e) => {
-      hideModal(questionModal);
-    };
-  }
-
-  if (commentModalTriggerBtn) {
-    commentModalTriggerBtn.onclick = (e) => {
-      showModal(commentModal);
-    };
-  }
-
-  questionModalTriggerBtn.onclick = (e) => {
-    showModal(questionModal);
-  };
-
-  commentModalOverlay.onclick = (e) => {
-    hideModal(commentModal);
-  };
-
-  if (questionModalOverlay) {
-    questionModalOverlay.onclick = (e) => {
-      hideModal(questionModal);
-    };
-  }
-})();
+/**
+ * @func showModal
+ * @param {HTMLElement} modal
+ * @returns {HTMLElement} Returns the `modal` HTML element
+ */
+const showModal = (modal) => {
+  modal.classList.remove('disabled');
+  modal.classList.add('enabled');
+  return modal;
+};

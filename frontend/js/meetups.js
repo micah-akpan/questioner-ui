@@ -22,6 +22,8 @@ const showAllMeetups = () => {
   });
 };
 
+addProfileAvatarToNav('../assets/icons/avatar.svg');
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     searchBar.classList.remove('show');
