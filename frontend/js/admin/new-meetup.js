@@ -165,6 +165,8 @@ createForm.onsubmit = (e) => {
   createMeetup();
 };
 
+addProfileAvatarToNav('../../assets/icons/avatar1.jpg');
+
 window.onload = () => {
   const userToken = Token.getToken('userToken');
   if (!userToken) {
