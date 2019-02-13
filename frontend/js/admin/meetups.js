@@ -2,6 +2,7 @@ const deleteModal = document.getElementById('delete-modal');
 const closeDeleteModalButton = document.getElementById('close-delete-modal__btn');
 const cancelDeleteOpButton = document.getElementById('cancel-delete-op__btn');
 const deleteMeetupButton = document.getElementById('delete-meetup__btn');
+const deleteModalContent = document.getElementById('delete-modal-content');
 
 /**
  * @func deleteMeetup
@@ -27,6 +28,13 @@ const deleteMeetup = (meetupId) => {
     });
 };
 
+/**
+ * @func attachMeetupIdToModal
+ * @param {*} modal
+ * @param {*} meetupId
+ * @returns {HTMLElement} Set the meetup id as an attribute of `modal`
+ * and returns `modal`
+ */
 const attachMeetupIdToModal = (modal, meetupId) => {
   modal.setAttribute('data-target', meetupId);
   return modal;
@@ -167,6 +175,11 @@ if (closeDeleteModalButton) {
 
 cancelDeleteOpButton.onclick = () => {
   hideModal(deleteModal);
+};
+
+deleteMeetupButton.onclick = () => {
+  const meetupId = deleteModal.getAttribute('data-target');
+  deleteMeetup(meetupId);
 };
 
 window.addEventListener('load', () => {
