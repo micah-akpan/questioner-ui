@@ -1,10 +1,17 @@
+
+/**
+ * @func deleteMeetup
+ * @param {Number|String} meetupId
+ * @returns {Promise} Returns a promise that resolves
+ * to the deleted meetup record
+ */
 const deleteMeetup = (meetupId) => {
   const apiUrl = `${apiBaseURL}/meetups/${meetupId}`;
-  fetch(apiUrl, {
+  return fetch(apiUrl, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${getUserToken()}`
+      Authorization: `Bearer ${Token.getToken('userToken')}`
     }
   })
     .then(res => res.json())
