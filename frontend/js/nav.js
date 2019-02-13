@@ -7,23 +7,23 @@ const qNavMenuIconWrapper = document.getElementById('mobile-nav-sidebar__wrapper
 const baseURL = 'http://localhost:9999/api/v1';
 const nav = document.querySelector('.q-right-nav');
 
-const rightNavSpec = [
-  {
-    id: 1,
-    type: 'notifications',
-    src: '../assets/icons/notifications-button.svg',
-    classNames: ['q-btn'],
-    idText: ''
-  },
+// const rightNavSpec = [
+//   {
+//     id: 1,
+//     type: 'notifications',
+//     src: '../assets/icons/notifications-button.svg',
+//     classNames: ['q-btn'],
+//     idText: ''
+//   },
 
-  {
-    id: 2,
-    type: 'profile',
-    src: '../assets/icons/avatar1.svg',
-    classNames: ['q-btn', 'dropdown-trigger-btn'],
-    idText: 'dropdown-trigger-btn'
-  }
-];
+//   {
+//     id: 2,
+//     type: 'profile',
+//     src: '../assets/icons/avatar1.svg',
+//     classNames: ['q-btn', 'dropdown-trigger-btn'],
+//     idText: 'dropdown-trigger-btn'
+//   }
+// ];
 
 
 document.onkeydown = (e) => {
@@ -74,91 +74,134 @@ const getUserData = async (userId) => {
   }
 };
 
-/**
- * @func createRightNavList
- * @param {Array} navSpec
- * @returns {HTMLUListElement} Returns a new nav list
- */
-const createRightNavList = (navSpec) => {
-  const navList = document.createElement('ul');
-  const navListItems = navSpec.map((spec) => {
-    const li = document.createElement('li');
-    const button = document.createElement('button');
-    button.classList.add(...spec.classNames);
-    button.title = spec.type;
-    const img = document.createElement('img');
+// /**
+//  * @func createRightNavList
+//  * @param {Array} navSpec
+//  * @returns {HTMLUListElement} Returns a new nav list
+//  */
+// const createRightNavList = (navSpec) => {
+//   const navList = document.createElement('ul');
+//   const navListItems = navSpec.map((spec) => {
+//     const li = document.createElement('li');
+//     const button = document.createElement('button');
+//     button.classList.add(...spec.classNames);
+//     button.title = spec.type;
+//     const img = document.createElement('img');
 
 
-    if (spec.type === 'profile') {
-      li.classList.add('q-user-profile__dropdown-trigger');
-    }
+//     if (spec.type === 'profile') {
+//       li.classList.add('q-user-profile__dropdown-trigger');
+//     }
 
-    const userId = localStorage.getItem('userId');
+//     const userId = localStorage.getItem('userId');
 
-    getUserData(userId)
-      .then((user) => {
-        if (user) {
-          const { avatar, firstname } = user;
-          if (avatar) {
-            img.src = avatar;
-            img.alt = spec.type === 'profile' ? firstname : 'A light yellow colored bell';
-          } else {
-            img.src = spec.src;
-            img.alt = spec.type === 'profile' ? firstname : 'A light yellow colored bell';
-          }
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+//     getUserData(userId)
+//       .then((user) => {
+//         if (user) {
+//           const { avatar, firstname } = user;
+//           if (avatar) {
+//             img.src = spec.type === 'profile' ? avatar : spec.src;
+//             img.alt = spec.type === 'profile' ? firstname : 'A light yellow colored bell';
+//           } else {
+//             img.src = spec.src;
+//             img.alt = spec.type === 'profile' ? firstname : 'A light yellow colored bell';
+//           }
+//         }
+//       })
+//       .catch((err) => {
+//         console.error(err);
+//       });
 
-    if (spec.type === 'profile') {
-      button.onclick = toggleDropDownMenu;
-    }
+//     if (spec.type === 'profile') {
+//       button.onclick = toggleDropDownMenu;
+//     }
 
-    button.appendChild(img);
-    li.appendChild(button);
+//     button.appendChild(img);
+//     li.appendChild(button);
 
-    return li;
-  });
+//     return li;
+//   });
 
-  navListItems.forEach((item) => {
-    navList.appendChild(item);
-  });
-  return navList;
-};
+//   navListItems.forEach((item) => {
+//     navList.appendChild(item);
+//   });
+//   return navList;
+// };
 
-qNavMenuIconWrapper.onclick = function toggleMobileNav() {
-  this.classList.toggle('change');
-  qNavMenuWrapper.classList.toggle('nav-menu-show');
-};
+// qNavMenuIconWrapper.onclick = function toggleMobileNav() {
+//   this.classList.toggle('change');
+//   qNavMenuWrapper.classList.toggle('nav-menu-show');
+// };
 
-if (window.location.pathname !== '/') {
-  // This dynamic creates the content of the right navigation
-  const urlPath = window.location.pathname.split('/');
-  if (urlPath.includes('admin')) {
-    const navSpec = [
-      {
-        id: 1,
-        type: 'notifications',
-        src: '../../assets/icons/notifications-button.svg',
-        classNames: ['q-btn'],
-        idText: ''
-      },
+// if (window.location.pathname !== '/') {
+//   // This dynamic creates the content of the right navigation
+//   const urlPath = window.location.pathname.split('/');
+//   if (urlPath.includes('admin')) {
+//     const navSpec = [
+//       {
+//         id: 1,
+//         type: 'notifications',
+//         src: '../../assets/icons/notifications-button.svg',
+//         classNames: ['q-btn'],
+//         idText: ''
+//       },
 
-      {
-        id: 2,
-        type: 'profile',
-        src: '../../assets/icons/avatar1.svg',
-        classNames: ['q-btn', 'dropdown-trigger-btn'],
-        idText: 'dropdown-trigger-btn'
+//       {
+//         id: 2,
+//         type: 'profile',
+//         src: '../../assets/icons/avatar1.svg',
+//         classNames: ['q-btn', 'dropdown-trigger-btn'],
+//         idText: 'dropdown-trigger-btn'
+//       }
+//     ];
+
+//     const rightNav = createRightNavList(navSpec);
+//     nav.appendChild(rightNav);
+//   } else {
+//     const rightNav = createRightNavList(rightNavSpec);
+//     nav.appendChild(rightNav);
+//   }
+// }
+
+const list = document.querySelector('.q-right-nav > ul');
+
+const createUserAvatar = (avatarSrcPath) => {
+  const userId = localStorage.getItem('userId');
+  return getUserData(userId)
+    .then((user) => {
+      const { avatar, firstname } = user;
+      const li = document.createElement('li');
+      li.classList.add('nav-avatar__list-item');
+      const button = document.createElement('button');
+      button.classList.add('q-btn', 'dropdown-trigger-btn');
+      button.id = 'dropdown-trigger-btn';
+      button.title = 'Profile';
+      const img = document.createElement('img');
+      if (user) {
+        img.src = avatar || avatarSrcPath;
+        img.alt = firstname;
+        button.appendChild(img);
+        li.appendChild(button);
+        return li;
       }
-    ];
 
-    const rightNav = createRightNavList(navSpec);
-    nav.appendChild(rightNav);
-  } else {
-    const rightNav = createRightNavList(rightNavSpec);
-    nav.appendChild(rightNav);
-  }
-}
+      img.src = avatarSrcPath;
+      img.alt = 'User';
+      button.appendChild(img);
+      li.appendChild(button);
+      return li;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+const addProfileAvatarToNav = (avatarSrcPath) => {
+  createUserAvatar(avatarSrcPath)
+    .then((userAvatar) => {
+      list.appendChild(userAvatar);
+    })
+    .catch((error) => {
+      console.error(err);
+    });
+};
