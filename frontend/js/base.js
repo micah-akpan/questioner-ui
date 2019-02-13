@@ -1,20 +1,39 @@
-/* eslint-disable */
 
+
+/**
+ * @class Token
+ * @description Contains a collection of token related statics
+ */
 class Token {
+  /**
+   * @method setToken
+   * @param {String} key
+   * @param {String} value
+   * @returns {String} Sets token to web storage and
+   * returns a confirmation message
+   */
   static setToken(key, value) {
     localStorage.setItem(key, value);
+    return 'token set';
   }
 
+  /**
+   * @method getToken
+   * @param {String} key
+   * @returns {String} Returns the set token
+   */
   static getToken(key) {
     return localStorage.getItem(key);
   }
 
+  /**
+   * @method tokenIsValid
+   * @param {Number} status
+   * @return {Boolean} Returns true if token
+   * representing `status` is valid
+   */
   static tokenIsValid(status) {
-    if (status === 401) {
-      return false;
-    }
-
-    return true;
+    return status !== 401;
   }
 }
 
@@ -37,14 +56,17 @@ const numMonthToStr = {
   12: 'Dec'
 };
 
+const passwordToggleButtons = document.querySelectorAll('.toggle-password-visibility');
+const passwordVisible = false;
+
+console.log(passwordToggleButtons);
+
 /**
  * @function getMonth
  * @param {Number} date
  * @returns {String} A string version of date e.g 1 -> Jan
  */
-const getMonth = (date) => {
-  return numMonthToStr[date];
-}
+const getMonth = date => numMonthToStr[date];
 
 /**
  * @function parseDate
@@ -60,52 +82,71 @@ const parseDate = (date) => {
   return [monthShortForm, day];
 };
 
-
+/**
+ * @const genericRequestHeader
+ * @description Customizable generic request header
+ */
 const genericRequestHeader = {
   'Content-Type': 'application/json',
   Authorization: `Bearer ${Token.getToken('userToken')}`
 };
 
+/**
+ * @func logOutUser
+ * @returns {undefined} Logs out the user and redirect to the index page
+ */
 const logOutUser = () => {
   localStorage.removeItem('userToken');
   window.location.replace('../index.html');
 };
 
-
-const setAttributes = (el, attrs) => {
+/**
+ * @func setAttributes
+ * @param {Element} elem
+ * @param {*} attrs A hash of attributes keys to values
+ * @returns {HTMLElement} Returns `elem` with attributes in `attrs` set
+ */
+const setAttributes = (elem, attrs) => {
   const attrKeys = Object.keys(attrs);
   attrKeys.forEach((key) => {
-    el.setAttribute(key, attrs[key]);
+    elem.setAttribute(key, attrs[key]);
   });
-  return el;
-}
+  return elem;
+};
 
+/**
+ * @func getUserFullName
+ * @param {String} firstname
+ * @param {*} lastname
+ * @returns {String} User's full name
+ */
 const getUserFullName = (firstname, lastname) => `${firstname} ${lastname}`;
 
-const pToggleBtns = document.querySelectorAll('.toggle-password-visibility');
-const passwordVisible = false;
-
-// adds toggle password functionality
-for (let i = 0; i < pToggleBtns.length; i++) {
-  const toggleBtn = pToggleBtns[i];
-  toggleBtn.setAttribute('p-visible', passwordVisible);
-  toggleBtn.onclick = function () {
-    const inputEl = this.parentElement.querySelector('input');
-
-    if (inputEl.type === 'password') {
-      inputEl.type = 'text';
-      this.textContent = 'hide';
-    } else {
-      inputEl.type = 'password';
-      this.textContent = 'show';
-    }
-  };
-}
-
-const matchPasswords = (val1, value2) => {};
+/**
+ * @func togglePasswordVisibility
+ * @returns {undefined}
+ */
+const togglePasswordVisibility = () => {
+  // adds toggle password functionality
+  for (let i = 0; i < passwordToggleButtons.length; i += 1) {
+    const toggleButton = passwordToggleButtons[i];
+    toggleButton.setAttribute('p-visible', passwordVisible);
+    toggleButton.onclick = function toggle() {
+      const inputField = this.parentElement.querySelector('input');
+      if (inputField.type === 'password') {
+        inputField.type = 'text';
+        this.textContent = 'hide';
+      } else {
+        inputField.type = 'password';
+        this.textContent = 'show';
+      }
+    };
+  }
+};
 
 /**
  * @func getUser
+ * @param {Number|String} userId
  * @returns {*} Returns a user payload
  */
 const getUser = async (userId) => {
@@ -118,3 +159,5 @@ const getUser = async (userId) => {
     throw e;
   }
 };
+
+togglePasswordVisibility();
