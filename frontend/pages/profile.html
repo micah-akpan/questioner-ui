@@ -31,13 +31,8 @@
         <nav class="q-right-nav notify-user__nav no-flex">
           <ul>
             <li>
-              <button class="q-btn" title="Notifications">
-                <img src="../assets/icons/notifications-button.svg" alt="your notifications">
-              </button>
-            </li>
-            <li class="q-user-profile__dropdown-trigger">
-              <button class="q-btn dropdown-trigger-btn" title="Profile">
-                <img src="../assets/icons/avatar1.svg" alt="your profile">
+              <button class="q-btn notifications__btn" title="Notifications">
+                <img src="../../assets/icons/notifications-button.svg" alt="your notifications">
               </button>
             </li>
           </ul>
@@ -45,6 +40,29 @@
       </div>
     </div>
   </header>
+
+  <!-- Nav User Profile DropDown Menu -->
+  <section>
+    <div class="q-user-profile__dropdown-menu">
+      <ul>
+        <li>
+          <a href="../profile.html">
+            Account settings
+          </a>
+        </li>
+        <li>
+          <a href="./meetups.html">
+            Meetups
+          </a>
+        </li>
+        <li class="logout__btn">
+          <a href="#!" role="button">
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
 
   <section id="nav__profile">
     <nav>
@@ -392,7 +410,7 @@
     </div>
   </section>
 
-
+  <script src="../js/base.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/profile.js"></script>
 </body>

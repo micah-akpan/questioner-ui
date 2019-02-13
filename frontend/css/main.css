@@ -291,12 +291,18 @@ header .q-logo-w-border::after {
 }
 
 .notify-user__nav button {
-  width: 38px;
-  height: 38px;
+  padding: 0;
+  width: 33px;
+  height: 33px;
 }
 
 .notify-user__nav button img {
   width: 100%;
+  padding: 3px;
+}
+
+.notifications__btn {
+  padding: 3px !important;
 }
 
 /* Mobile Menu */

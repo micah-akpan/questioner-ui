@@ -55,8 +55,7 @@ const loginUser = () => {
         const { token, user } = data[0];
         localStorage.setItem('userToken', token);
         localStorage.setItem('userId', user.id);
-
-        if (user.isadmin) {
+        if (user.isAdmin) {
           window.location.assign('./admin/meetups.html');
         } else {
           window.location.assign('./meetups.html');

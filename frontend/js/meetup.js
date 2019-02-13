@@ -26,35 +26,9 @@ const meetupTagsWrapper = document.getElementById('meetup-tags');
 const addedMeetups = document.getElementById('meetup-tags-added');
 const questionCards = document.getElementById('q-question-cards');
 
-/**
- * @func getUserImage
- * @returns {Promise<String>} Resolves to the user avatar image
- */
-const getUserImage = async () => {
-  const apiUrl = `${apiBaseURL}/users/${userId}`;
-  const response = await fetch(apiUrl, requestHeader);
-  const responseBody = await response.json();
-  const { status, data } = responseBody;
-  const userImage = status === 200 ? data[0].avatar : '';
-  return userImage;
-};
 
 /**
- * @func createUserAvatar
- * @returns {HTMLImageElement} Returns an HTML Image
- */
-const createUserAvatar = async () => {
-  const userImageUrl = await getUserImage();
-  const userImage = document.createElement('img');
-  userImage.classList.add('rounded-border-avatar', 'light-border');
-  const defaultUserAvatar = '../assets/icons/avatar1.svg';
-  userImage.setAttribute('src', userImageUrl || defaultUserAvatar);
-  userImage.setAttribute('alt', '');
-  return userImage;
-};
-
-/**
- *
+ * @func displayTotalUsersVotes
  * @param {Number} votes
  * @returns {HTMLParagraphElement} Returns a paragraph
  * element representing the total votes of a meetup
@@ -67,12 +41,19 @@ const displayTotalUsersVotes = (votes) => {
   return p;
 };
 
+/**
+ * @func displayFormFeedback
+ * @param {String} msg
+ * @returns {HTMLEmbedElement} Returns HTML Element
+ * representing the feedback to the user
+ */
 const displayFormFeedback = (msg) => {
   const userFeedback = document.getElementById('user-feedback');
   const span = document.createElement('span');
   span.textContent = msg;
   userFeedback.classList.add('info-box');
   userFeedback.appendChild(span);
+  return userFeedback;
 };
 
 /**
@@ -185,6 +166,14 @@ const getMeetupImages = async (meetup) => {
 };
 
 /**
+ * @func isAdminPage
+ * @param {String} urlPath
+ * @returns {Boolean} Returns true if current page is
+ * an admin page, false otherwise
+ */
+const isAdminPage = urlPath => urlPath.split('/').includes('admin');
+
+/**
  * @func addMeetupImageToPage
  * @param {*} meetup Meetup object
  * @returns {HTMLImageElement} Returns the image preview HTML element
@@ -194,7 +183,7 @@ const addMeetupImageToPage = async (meetup) => {
   try {
     const meetupImages = await getMeetupImages(meetup);
     const image = meetupImages[0];
-    const defaultImage = '../assets/img/showcase2.jpg';
+    const defaultImage = isAdminPage ? '../../assets/img/showcase2.jpg' : './assets/img/showcase2.jpg';
     imagePreview.setAttribute('src', (image && image.imageUrl) || defaultImage);
     return imagePreview;
   } catch (e) {
@@ -285,6 +274,8 @@ const displayMeetup = () => {
       throw err;
     });
 };
+
+addProfileAvatarToNav('../assets/icons/avatar1.svg');
 
 window.onload = () => {
   if (!userToken) {
