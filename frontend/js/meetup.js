@@ -286,6 +286,8 @@ const displayMeetup = () => {
     });
 };
 
+addProfileAvatarToNav('../assets/icons/avatar1.svg');
+
 window.onload = () => {
   if (!userToken) {
     window.location.assign('./sign-in.html');
