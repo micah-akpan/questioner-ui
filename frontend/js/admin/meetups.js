@@ -23,6 +23,12 @@ const deleteMeetup = (meetupId) => {
     });
 };
 
+/**
+ * @func createDropDownMenuItems
+ * @param {*} meetup
+ * @returns {Array<HTMLLIElement>} Returns a list of
+ * dropdown HTML list items
+ */
 const createDropDownMenuItems = meetup => icons.meetups.map((icon) => {
   const li = document.createElement('li');
   li.classList.add(icon.className);
@@ -41,6 +47,12 @@ const createDropDownMenuItems = meetup => icons.meetups.map((icon) => {
   return li;
 });
 
+/**
+ * @func createDropDownMenu
+ * @param {*} meetup
+ * @returns {HTMLDivElement} Returns an HTML element
+ * representing the dropdown menu
+ */
 const createDropDownMenu = (meetup) => {
   const menuBlock = document.createElement('div');
   menuBlock.classList.add('dropdown-menu');
@@ -54,10 +66,18 @@ const createDropDownMenu = (meetup) => {
   return menuBlock;
 };
 
+/**
+ * @func showDropDownMenu
+ * @param {*} meetup
+ * @returns {HTMLElement} Displays and returns the
+ * dropdown menu element
+ */
 const showDropDownMenu = (meetup) => {
   const dropDownMenu = document.getElementById(`dropdown-menu-${meetup.id}`);
   dropDownMenu.classList.toggle('show');
+  return dropDownMenu;
 };
+
 /**
  * @function createMeetupPrimarySec
  * @param {*} meetup Meetup object
@@ -102,6 +122,10 @@ const createMeetupPrimarySec = (meetup) => {
   return content;
 };
 
+/**
+ * @func showAllMeetups
+ * @returns {undefined} Adds and displays all meetups
+ */
 const showAllMeetups = () => {
   getMeetups().then((res) => {
     if (tokenIsValid(res)) {
