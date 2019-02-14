@@ -8,8 +8,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  /* height: 100%;
-  width: 100%; */
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.65);
 }
@@ -56,37 +54,10 @@
   overflow: hidden;
 }
 
-.modal-dialog .modal-content-card h3 {
-  width: 100%;
-  border-bottom: #cccccc 1px solid;
-  padding: 1rem 0;
-}
-
-.modal-dialog .modal-content-card textarea {
-  box-sizing: border-box;
-  width: 100%;
-  resize: vertical;
-  height: 100px;
-  padding: 1rem;
-  max-height: 200px;
-  outline: none;
-  border: 1px solid #cccccc;
-}
-
-.modal-content-card .post-comment-btn-box,
-.modal-content-card .post-question-btn-box {
-  width: 100%;
-  text-align: right;
-}
-
-.modal-dialog .modal-content-card .close-modal-btn {
-  /* position: relative;
-  left: 40%; */
-  /* top: 0; */
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  background: none;
+.modal-content-card h3 {
+  text-align: left;
+  padding: 2em;
+  margin: 0;
 }
 
 .modal-content-card .close-modal-btn img {
@@ -122,10 +93,46 @@
   display: none;
 }
 
+.modal-header {
+  background-color: #116466;
+  width: 100%;
+  height: 50px;
+}
+
+.modal-header .close-modal-btn {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  float: right;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.modal-header h3 {
+  float: left;
+  width: 80%;
+  color: #f0f0f0;
+  padding: 1em;
+}
+
+.modal-content-card {
+  width: 100%;
+  
+}
+
+/* Delete Modal */
+#delete-modal .modal-content-card {
+  height: auto !important;
+  padding-bottom: 10px;
+}
+
+#delete-modal .modal-body {
+  padding: 10px;
+}
+
 /* Image Modal */
 #image-upload-modal .modal-header {
   background-color: #116466;
-  height: 40px;
   width: 100%;
 }
 
@@ -140,6 +147,7 @@
 
 #image-upload-modal .modal-content-card {
   max-width: 700px;
+  width: 100%;
   height: 500px;
 }
 
@@ -186,4 +194,26 @@
 .photo-upload-action__btns button {
   float: right;
   margin-top: 40px; 
+}
+
+@media(max-width: 768px) {
+  .modal .modal-content {
+    width: 100%;
+  }
+
+  #image-upload-modal .modal-content-card {
+    max-width: 500px;
+  }
+  
+}
+
+@media(min-width: 768px) and (max-width: 992px) {
+  .modal .modal-content {
+    width: 100%;
+  }
+
+  #image-upload-modal .modal-content-card {
+    max-width: 700px;
+  }
+  
 }
