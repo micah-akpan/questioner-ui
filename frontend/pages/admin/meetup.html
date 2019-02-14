@@ -93,14 +93,13 @@
 
               <!-- Meetup Images Thumbnail -->
               <div id="meetup-photos__wrapper" class="meetup-photos__wrapper">
-               
+
               </div>
 
               <form method="POST" enctype="multipart/form-data" action="#!" id="meetup-photos-upload-form">
                 <div>
                   <input type="file" accept="image/jpeg, image/png" id="meetupImage" name="meetupPhotos" multiple />
-                  <label role="button" class="q-btn" for="meetupImage" aria-label="Upload button" id="multi-image-select">Select Images to Upload</label>
-                  <button id="upload-photos__btn" class="q-btn hide">Upload</button>
+                  <button id="upload-photos__btn" class="q-btn" type="button">Upload Photos</button>
                 </div>
               </form>
             </section>
@@ -173,34 +172,38 @@
     </div>
   </section>
 
-  <!-- Comments Modal -->
-  <section id="comments-modal" class="modal comment-modal">
-    <div class="modal-overlay" id="c-modal-overlay">
+  <div class="modal" id="image-upload-modal">
+    <div class="modal-overlay">
       <div class="modal-content">
-        <div class="modal-dialog" id="c-modal-dialog">
+        <div class="modal-dialog">
           <div class="modal-content-card">
-            <button class="close-modal-btn" id="close-modal-btn-comment">
-              <img src="../../assets/icons/cross.svg" alt="close modal" />
-            </button>
-            <h3 class="modal-content-title question-text">
-              Elitr invidunt ea diam stet erat erat sit amet et, lorem sit
-              lorem elitr duo elitr, sit et sit sed.
-            </h3>
-            <form>
-              <div>
-                <label for="user-comment"></label>
-                <textarea placeholder="Write your comment"></textarea>
-                <span class="user-comment-word-count"></span>
+            <div class="modal-header">
+              <h3>Upload Meetup Photos</h3>
+              <button class="close-modal-btn" id="close-image-modal__btn">
+                <img src="../../assets/icons/cross.svg" alt="close modal" />
+              </button>
+            </div>
+            <div class="clear"></div>
+            <div class="modal-body">
+              <p id="photo-upload-feedback"></p>
+              <div class="upload-widget">
+                <p>Drag and Drop Images Here to Upload</p>
+                <span class="or-option">OR</span>
+                <button class="q-btn" id="select-photos__btn">Select Photos to Upload</button>
               </div>
-              <div class="post-comment-btn-box">
-                <button class="q-btn post-comment-btn">Post</button>
+              <div class="photo-upload-handler">
+                <input type="file" id="upload-photo-input" multiple class="hide" />
+                <div class="photo-upload-action__btns">
+                  <button class="q-btn disabled__btn" disabled id="upload__btn">Upload</button>
+                </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+  </div>
 
   <!-- Meetup Floating Btns UI -->
   <div id="meetup-floating-icons">
@@ -314,6 +317,7 @@
   <script src="../../js/comment.js"></script>
   <script src="../../js/question.js"></script>
   <script src="../../js/meetup.js"></script>
+  <script src="../../js/modal.js"></script>
   <script src="../../js/admin/meetup-admin.js"></script>
   <script>
     function showMeetupLocationOnMap() {

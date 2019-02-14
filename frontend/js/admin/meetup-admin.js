@@ -5,7 +5,14 @@ const imageSelectButton = document.getElementById('multi-image-select');
 const fileInput = document.getElementById('meetupImage');
 const imageUploadForm = document.getElementById('meetup-photos-upload-form');
 const uploadPhotosButton = document.getElementById('upload-photos__btn');
+const imageUploadModal = document.getElementById('image-upload-modal');
+const uploadPhotoInput = document.getElementById('upload-photo-input');
+const selectPhotosButton = document.getElementById('select-photos__btn');
 // const meetupTagsWrapper = document.getElementById('meetup-tags');
+
+uploadPhotosButton.onclick = () => {
+  showModal(imageUploadModal);
+};
 
 /**
  * @func displayImagePreviews
@@ -129,6 +136,34 @@ const createTagForm = () => {
 
   section.appendChild(form);
   return section;
+};
+
+selectPhotosButton.onclick = () => {
+  uploadPhotoInput.click();
+};
+
+const uploadButton = document.getElementById('upload__btn');
+
+const photoUploadFeedback = document.getElementById('photo-upload-feedback');
+const photoUploadHandler = document.querySelector('.photo-upload-handler');
+
+uploadButton.onclick = () => {
+  const imageFiles = uploadPhotoInput.files;
+  uploadMeetupImages(imageFiles);
+};
+
+uploadPhotoInput.onchange = (e) => {
+  const { files } = e.target;
+  const totalImageSelected = files.length;
+  if (totalImageSelected > 5) {
+    photoUploadFeedback.textContent = 'You selected more than 5 images';
+  } else {
+    const p = document.createElement('p');
+    p.textContent = `${totalImageSelected} meetup images will be uploaded`;
+    photoUploadHandler.appendChild(p);
+    uploadButton.disabled = false;
+    uploadButton.classList.remove('disabled__btn');
+  }
 };
 
 meetupTagsWrapper.appendChild(createTagForm());
