@@ -47,6 +47,7 @@ logOutButtons.forEach((logOutBtn) => {
 });
 
 /**
+ * @func getUserData
  * @param {Number} userId
  * @returns {Promise<User>} Returns the user with id: `userId`
  */
@@ -71,7 +72,8 @@ const getUserData = async (userId) => {
  * @returns {Promise<String>} Resolves to the user avatar image
  */
 const getUserImage = () => {
-  getUserData()
+  const userId = localStorage.getItem('userId');
+  return getUserData(userId)
     .then((user) => {
       if (user) {
         return user.avatar;

@@ -9,6 +9,8 @@ const getComments = async (question) => {
       const comments = status === 200 ? data : [];
       return comments;
     }
+
+    return [];
   } catch (e) {
     throw e;
   }
@@ -204,7 +206,7 @@ const createCommentSection = async (comments, question) => {
   const questionComment = document.createElement('div');
   questionComment.classList.add('question-comment');
 
-  const userImage = await createUserAvatar();
+  const userImage = await createUserProfileAvatar('../assets/icons/avatar1.svg');
   const commentForm = await createCommentForm(question);
 
   viewComments.onclick = () => {
