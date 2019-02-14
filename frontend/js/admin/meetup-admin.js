@@ -66,7 +66,7 @@ if (addTagBtn) {
 
 /**
  * @func uploadMeetupImages
- * @param {Array<File>} images
+ * @param {FileList<File>} images
  * @returns {Promise} Returns a promise
  * that resolves to the newly updated meetup
  */
@@ -76,7 +76,10 @@ const uploadMeetupImages = (images) => {
   const apiUrl = `http://localhost:9999/api/v1/meetups/${meetupId}/images`;
 
   const formData = new FormData();
-  formData.append('meetupPhotos', images);
+  for (let i = 0; i < images.length; i += 1) {
+    const image = images.item(i);
+    formData.append('meetupPhotos', image);
+  }
   return fetch(apiUrl, {
     headers: {
       Authorization: `Bearer ${userToken}`
