@@ -8,7 +8,11 @@ const uploadPhotosButton = document.getElementById('upload-photos__btn');
 const imageUploadModal = document.getElementById('image-upload-modal');
 const uploadPhotoInput = document.getElementById('upload-photo-input');
 const selectPhotosButton = document.getElementById('select-photos__btn');
-// const meetupTagsWrapper = document.getElementById('meetup-tags');
+const uploadButton = document.getElementById('upload__btn');
+
+const photoUploadFeedback = document.getElementById('photo-upload-feedback');
+const photoUploadHandler = document.querySelector('.photo-upload-handler');
+const cancelPhotoUploadButton = document.getElementById('close-image-modal__btn');
 
 uploadPhotosButton.onclick = () => {
   showModal(imageUploadModal);
@@ -94,15 +98,18 @@ const uploadMeetupImages = (images) => {
     method: 'POST',
     body: formData
   })
+    .then(res => res.json())
     .then((res) => {
-      if (res.ok) {
-        uploadPhotosButton.textContent = 'Uploading...';
-        return res.json();
+      const { status, error } = res;
+      if (status === 201) {
+        photoUploadFeedback.textContent = 'Meetup images were uploaded successfully';
+        setTimeout(() => {
+          photoUploadFeedback.classList.add('hide');
+        }, 3000);
+        hideModal(imageUploadModal);
+      } else {
+        photoUploadFeedback.textContent = error;
       }
-      throw new Error('Meetup images upload failed');
-    })
-    .then((res) => {
-
     })
     .catch((err) => {
       throw err;
@@ -142,11 +149,6 @@ selectPhotosButton.onclick = () => {
   uploadPhotoInput.click();
 };
 
-const uploadButton = document.getElementById('upload__btn');
-
-const photoUploadFeedback = document.getElementById('photo-upload-feedback');
-const photoUploadHandler = document.querySelector('.photo-upload-handler');
-
 uploadButton.onclick = () => {
   const imageFiles = uploadPhotoInput.files;
   uploadMeetupImages(imageFiles);
@@ -164,6 +166,10 @@ uploadPhotoInput.onchange = (e) => {
     uploadButton.disabled = false;
     uploadButton.classList.remove('disabled__btn');
   }
+};
+
+cancelPhotoUploadButton.onclick = () => {
+  hideModal(imageUploadModal);
 };
 
 meetupTagsWrapper.appendChild(createTagForm());
