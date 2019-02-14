@@ -208,7 +208,6 @@ const createQuestionCard = async (question) => {
 
   const questionText = createQuestionCardPrimary(question);
   const comments = await getComments(question);
-  console.log(comments);
   const commentSection = await createCommentSection(comments, question);
 
   questionIcons.appendChild(leftIcons);

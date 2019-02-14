@@ -190,8 +190,8 @@ button {
   display: block;
   width: 40px;
   height: 40px;
-  padding: 10px;
   margin-right: 5px;
+  border-radius: 50%;
 }
 
 .question-block .comment-box form {
