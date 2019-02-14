@@ -75,7 +75,7 @@ const getUserImage = () => {
   const userId = localStorage.getItem('userId');
   return getUserData(userId)
     .then((user) => {
-      if (user) {
+      if (user && user.avatar) {
         return user.avatar;
       }
       return '../assets/icons/avatar1.svg';
