@@ -2,13 +2,18 @@
 
 const meetupPhotosWrapper = document.getElementById('meetup-photos__wrapper');
 const imageSelectButton = document.getElementById('multi-image-select');
-const fileInput = document.querySelector('input[type="file"]');
+const fileInput = document.getElementById('meetupImage');
 const imageUploadForm = document.getElementById('meetup-photos-upload-form');
 const uploadPhotosButton = document.getElementById('upload-photos__btn');
 // const meetupTagsWrapper = document.getElementById('meetup-tags');
 
-fileInput.onchange = (e) => {
-  const images = e.target.files;
+/**
+ * @func displayImagePreviews
+ * @param {Array<File>} images
+ * @returns {HTMLElement} Shows a preview of all
+ * images and returns the container element
+ */
+const displayImagePreviews = (images) => {
   for (let i = 0, len = images.length; i < len; i += 1) {
     const imageBlob = images[i];
     const image = new Image();
@@ -16,11 +21,18 @@ fileInput.onchange = (e) => {
     image.setAttribute('src', imageUrl);
     meetupPhotosWrapper.appendChild(image);
   }
+
   uploadPhotosButton.classList.remove('hide');
   uploadPhotosButton.classList.add('show');
 
   imageSelectButton.classList.remove('show');
   imageSelectButton.classList.add('hide');
+  return meetupPhotosWrapper;
+};
+
+fileInput.onchange = (e) => {
+  const images = e.target.files;
+  displayImagePreviews(images);
 };
 
 // Tags
@@ -74,6 +86,7 @@ const uploadMeetupImages = (images) => {
   })
     .then((res) => {
       if (res.ok) {
+        uploadPhotosButton.textContent = 'Uploading...';
         return res.json();
       }
       throw new Error('Meetup images upload failed');
