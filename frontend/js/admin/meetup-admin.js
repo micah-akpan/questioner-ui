@@ -14,9 +14,26 @@ const photoUploadFeedback = document.getElementById('photo-upload-feedback');
 const photoUploadHandler = document.querySelector('.photo-upload-handler');
 const cancelPhotoUploadButton = document.getElementById('close-image-modal__btn');
 
-uploadPhotosButton.onclick = () => {
-  showModal(imageUploadModal);
-};
+
+/**
+ * @author https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
+ * @description Polyfill for `String.prototype.includes`
+ */
+if (!String.prototype.includes) {
+  /* eslint-disable no-extend-native */
+  Object.defineProperty(String.prototype, 'includes', {
+    value: (search, start) => {
+      if (typeof start !== 'number') {
+        start = 0;
+      }
+
+      if (start + search.length > this.length) {
+        return false;
+      }
+      return this.indexOf(search, start) !== -1;
+    }
+  });
+}
 
 /**
  * @func displayImagePreviews
@@ -40,40 +57,6 @@ const displayImagePreviews = (images) => {
   imageSelectButton.classList.add('hide');
   return meetupPhotosWrapper;
 };
-
-fileInput.onchange = (e) => {
-  const images = e.target.files;
-  displayImagePreviews(images);
-};
-
-// Tags
-const addTagBtn = document.querySelector('.btn__tag');
-const tagField = document.querySelector('input[id="tag"]');
-const addTagsContainer = document.querySelector('.meetup-tags-added');
-
-let tags = null;
-
-if (addTagBtn) {
-  addTagBtn.onclick = (e) => {
-    // allowed separators for tags are commas and hashes (#)
-    tags = tagField.value.split(',');
-    if (tags.length === 1 && tags[0].includes('#')) {
-      tags = tags[0].split('#');
-    }
-
-    addTagsContainer.innerHTML = '';
-    tags.forEach((tag, i) => {
-      if (tag !== '') {
-        const span = d.createElement('span');
-
-        // to support deleting the tags later
-        span.id = i;
-        span.textContent = `#${tag}`;
-        addTagsContainer.appendChild(span);
-      }
-    });
-  };
-}
 
 /**
  * @func uploadMeetupImages
@@ -116,33 +99,142 @@ const uploadMeetupImages = (images) => {
     });
 };
 
+/**
+ * @func clearInputField
+ * @param {HTMLElement} inputFieldNode
+ * @returns {HTMLElement} clears value in `inputFieldNode` and returns `inputFieldNode`
+ */
+const clearTagInputField = (inputFieldNode) => {
+  inputFieldNode.value = '';
+  return inputFieldNode;
+};
+
+/**
+ * @func parseTags
+ * @param {String} tags
+ * @returns {Array<String> | String } Takes a string an parses it
+ * into an array of tags
+ */
+const parseTags = (tags) => {
+  let newTags = null;
+  // Delimiters for tags (# and comma)
+  if (tags.includes('#')) {
+    newTags = tags.split('#');
+    newTags = newTags.filter(tag => tag !== '');
+  } else if (tags.includes(',')) {
+    newTags = tags.split(',');
+  } else {
+    return 'Please separate your tags with # or comma';
+  }
+  return newTags;
+};
+
+const addMeetupTags = (tags) => {
+  const meetupId = localStorage.getItem('activeMeetupId');
+  const tagAPIUrl = `${baseURL}/meetups/${meetupId}/tags`;
+  return fetch(tagAPIUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Token.getToken('userToken')}`
+    },
+    body: JSON.stringify({
+      tags
+    })
+  })
+    .then(response => response.json())
+    .then((response) => {
+      const { status, error, data } = response;
+      const tagFeedback = document.getElementById('tag-feedback');
+      if (status === 201) {
+        const tagInputField = document.getElementById('tag-input');
+        const meetupTags = createMeetupTags(data[0].tags);
+        displayMeetupTags(meetupTags);
+        tagFeedback.classList.add('success-feedback');
+        tagFeedback.textContent = 'New Tags were added successfully';
+        clearTagInputField(tagInputField);
+      } else {
+        tagFeedback.classList.add('error-feedback');
+        tagFeedback.textContent = error;
+      }
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+/**
+ * @func createTagForm
+ * @returns {HTMLElement} Returns a block element that
+ * wraps the tag form
+ */
 const createTagForm = () => {
   const section = document.createElement('section');
   const form = document.createElement('form');
+  form.setAttribute('name', 'tag-form');
   const label = document.createElement('label');
   const tagInputField = document.createElement('input');
-  const tip = document.createElement('span');
-  const button = document.createElement('q-btn', 'btn__tag');
+  const tip1 = document.createElement('span');
+
+  const tagFeedbackPara = document.createElement('p');
+  tagFeedbackPara.id = 'tag-feedback';
+  const proTip = document.createElement('span');
+  proTip.textContent = 'Pro-Tip: ';
+  proTip.classList.add('text__thick');
 
   section.classList.add('meetup-tags__box');
   label.classList.add('q-form__label');
   label.htmlFor = 'tag';
   label.textContent = 'Add Tags';
   tagInputField.classList.add('q-input__small');
-  tagInputField.id = 'tag';
+  tagInputField.id = 'tag-input';
 
-  tip.textContent = 'Start tags with # or separate them with commas';
+  tip1.textContent = 'Start tags with # or separate them with commas';
+  tip1.insertAdjacentElement('afterbegin', proTip);
 
+  const meetupId = localStorage.getItem('activeMeetupId');
+  const MAX_TAGS_PER_MEETUP = 5;
+  getMeetup(meetupId)
+    .then(({ tags }) => {
+      const totalTagsInMeetup = tags.length;
+      const tagDifference = MAX_TAGS_PER_MEETUP - totalTagsInMeetup;
+      // Tag maximum limit not exceeded yet
+      const msg = tagDifference > 0 ? ` (Max ${tagDifference})` : '';
+      label.textContent += msg;
+    })
+    .catch((err) => {
+      const msg = '(Max 5)';
+      label.textContent += msg;
+    });
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    const inputField = document.getElementById('tag-input');
+    const tags = parseTags(inputField.value);
+    addMeetupTags(tags);
+  };
   const div = document.createElement('div');
   div.classList.add('q-form__group');
   div.appendChild(label);
   div.appendChild(tagInputField);
-  div.appendChild(tip);
 
+  div.appendChild(tip1);
+
+  form.appendChild(tagFeedbackPara);
   form.appendChild(div);
 
   section.appendChild(form);
   return section;
+};
+
+
+fileInput.onchange = (e) => {
+  const images = e.target.files;
+  displayImagePreviews(images);
+};
+
+uploadPhotosButton.onclick = () => {
+  showModal(imageUploadModal);
 };
 
 selectPhotosButton.onclick = () => {

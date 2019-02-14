@@ -1,3 +1,7 @@
+/**
+ * @func showAllMeetups
+ * @returns {undefined} Displays all meetups on the page
+ */
 const showAllMeetups = () => {
   getMeetups().then((res) => {
     if (tokenIsValid(res)) {
@@ -22,7 +26,7 @@ const showAllMeetups = () => {
   });
 };
 
-addProfileAvatarToNav('../assets/icons/avatar.svg');
+addProfileAvatarToNav('../assets/icons/avatar1.svg');
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {

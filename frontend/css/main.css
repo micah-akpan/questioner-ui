@@ -125,6 +125,10 @@ section {
   font-size: 0.5em;
 }
 
+.text__thick {
+  font-weight: 600;
+}
+
 .btn-large__40 {
   width: 40%;
 }
@@ -180,6 +184,7 @@ section {
 
 .success-feedback {
   background: #ffcb9a;
+  color: #333;
   padding: 10px;
 }
 
