@@ -1,31 +1,59 @@
-/* eslint-disable */
 
-(() => {
-  const d = document;
 
-  const mPhotosWrapper = d.querySelector('.meetup-photos__wrapper');
-  const uploadBtn = d.querySelector('label[role="button"]');
-  const fileInput = d.querySelector('input[type="file"]');
-  const askQuestionWrapper = d.querySelector('#ask-question');
-  const postQuestionDirArea = d.querySelector('#post-questions-directive');
-  const askGroupBtn = d.querySelector('.ask-group-btn');
-  const commentBoxes = d.querySelectorAll('.comment-box .question-comment textarea');
+const meetupPhotosWrapper = document.getElementById('meetup-photos__wrapper');
+const imageSelectButton = document.getElementById('multi-image-select');
+const fileInput = document.getElementById('meetupImage');
+const imageUploadForm = document.getElementById('meetup-photos-upload-form');
+const uploadPhotosButton = document.getElementById('upload-photos__btn');
+const imageUploadModal = document.getElementById('image-upload-modal');
+const uploadPhotoInput = document.getElementById('upload-photo-input');
+const selectPhotosButton = document.getElementById('select-photos__btn');
+const uploadButton = document.getElementById('upload__btn');
 
-  fileInput.onchange = (e) => {
+const photoUploadFeedback = document.getElementById('photo-upload-feedback');
+const photoUploadHandler = document.querySelector('.photo-upload-handler');
+const cancelPhotoUploadButton = document.getElementById('close-image-modal__btn');
+
+uploadPhotosButton.onclick = () => {
+  showModal(imageUploadModal);
+};
+
+/**
+ * @func displayImagePreviews
+ * @param {Array<File>} images
+ * @returns {HTMLElement} Shows a preview of all
+ * images and returns the container element
+ */
+const displayImagePreviews = (images) => {
+  for (let i = 0, len = images.length; i < len; i += 1) {
+    const imageBlob = images[i];
     const image = new Image();
-    const imageUrl = URL.createObjectURL(e.target.files[0]);
+    const imageUrl = URL.createObjectURL(imageBlob);
     image.setAttribute('src', imageUrl);
+    meetupPhotosWrapper.appendChild(image);
+  }
 
-    mPhotosWrapper.appendChild(image);
-  };
+  uploadPhotosButton.classList.remove('hide');
+  uploadPhotosButton.classList.add('show');
 
-  // Tags
-  const addTagBtn = d.querySelector('.btn__tag');
-  const tagField = d.querySelector('input[id="tag"]');
-  const addTagsContainer = d.querySelector('.meetup-tags-added');
+  imageSelectButton.classList.remove('show');
+  imageSelectButton.classList.add('hide');
+  return meetupPhotosWrapper;
+};
 
-  let tags = null;
+fileInput.onchange = (e) => {
+  const images = e.target.files;
+  displayImagePreviews(images);
+};
 
+// Tags
+const addTagBtn = document.querySelector('.btn__tag');
+const tagField = document.querySelector('input[id="tag"]');
+const addTagsContainer = document.querySelector('.meetup-tags-added');
+
+let tags = null;
+
+if (addTagBtn) {
   addTagBtn.onclick = (e) => {
     // allowed separators for tags are commas and hashes (#)
     tags = tagField.value.split(',');
@@ -45,39 +73,110 @@
       }
     });
   };
+}
 
+/**
+ * @func uploadMeetupImages
+ * @param {FileList<File>} images
+ * @returns {Promise} Returns a promise
+ * that resolves to the newly updated meetup
+ */
+const uploadMeetupImages = (images) => {
+  const meetupId = localStorage.getItem('activeMeetupId');
+  const userToken = localStorage.getItem('userToken');
+  const apiUrl = `http://localhost:9999/api/v1/meetups/${meetupId}/images`;
 
-  commentBoxes.forEach((commentBox) => {
-    commentBox.oninput = function () {
-      const text = this.value;
-      // TODO: Implement auto-resize as user types feature
-    };
-  });
-
-  askGroupBtn.onclick = function () {
-    showEl({
-      elem: askQuestionWrapper,
-      activeClassName: 'active'
+  const formData = new FormData();
+  for (let i = 0; i < images.length; i += 1) {
+    const image = images.item(i);
+    formData.append('meetupPhotos', image);
+  }
+  return fetch(apiUrl, {
+    headers: {
+      Authorization: `Bearer ${userToken}`
+    },
+    method: 'POST',
+    body: formData
+  })
+    .then(res => res.json())
+    .then((res) => {
+      const { status, error } = res;
+      if (status === 201) {
+        photoUploadFeedback.textContent = 'Meetup images were uploaded successfully';
+        setTimeout(() => {
+          photoUploadFeedback.classList.add('hide');
+        }, 3000);
+        hideModal(imageUploadModal);
+      } else {
+        photoUploadFeedback.textContent = error;
+      }
+    })
+    .catch((err) => {
+      throw err;
     });
-    // User should not see
-    // post question directive
-    // after enabling ask questions UI
-    postQuestionDirArea.classList.add('inactive');
-    const divider = d.createElement('hr');
-    divider.classList.add('divider');
-    askQuestionWrapper.appendChild(divider);
-  };
+};
 
-  /**
-   *
-   * @param {*} elem an object with Element and activeClassName props
-   * @returns {Element} elem
-   * @description Shows an hidden element, applying the styles in activeClassName to it
-   */
-  const showEl = ({ elem, activeClassName }) => {
-    elem.classList.add(activeClassName);
-    return elem;
-  };
+const createTagForm = () => {
+  const section = document.createElement('section');
+  const form = document.createElement('form');
+  const label = document.createElement('label');
+  const tagInputField = document.createElement('input');
+  const tip = document.createElement('span');
+  const button = document.createElement('q-btn', 'btn__tag');
 
-  // Meetup location on the map
-})();
+  section.classList.add('meetup-tags__box');
+  label.classList.add('q-form__label');
+  label.htmlFor = 'tag';
+  label.textContent = 'Add Tags';
+  tagInputField.classList.add('q-input__small');
+  tagInputField.id = 'tag';
+
+  tip.textContent = 'Start tags with # or separate them with commas';
+
+  const div = document.createElement('div');
+  div.classList.add('q-form__group');
+  div.appendChild(label);
+  div.appendChild(tagInputField);
+  div.appendChild(tip);
+
+  form.appendChild(div);
+
+  section.appendChild(form);
+  return section;
+};
+
+selectPhotosButton.onclick = () => {
+  uploadPhotoInput.click();
+};
+
+uploadButton.onclick = () => {
+  const imageFiles = uploadPhotoInput.files;
+  uploadMeetupImages(imageFiles);
+};
+
+uploadPhotoInput.onchange = (e) => {
+  const { files } = e.target;
+  const totalImageSelected = files.length;
+  if (totalImageSelected > 5) {
+    photoUploadFeedback.textContent = 'You selected more than 5 images';
+  } else {
+    const p = document.createElement('p');
+    p.textContent = `${totalImageSelected} meetup images will be uploaded`;
+    photoUploadHandler.appendChild(p);
+    uploadButton.disabled = false;
+    uploadButton.classList.remove('disabled__btn');
+  }
+};
+
+cancelPhotoUploadButton.onclick = () => {
+  hideModal(imageUploadModal);
+};
+
+meetupTagsWrapper.appendChild(createTagForm());
+
+imageUploadForm.onsubmit = (e) => {
+  e.preventDefault();
+  const meetupPhotosInput = document.getElementById('meetupImage');
+  const imageFiles = meetupPhotosInput.files;
+  uploadMeetupImages(imageFiles);
+};

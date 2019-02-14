@@ -1,4 +1,5 @@
 @import url("../css/form.css");
+@import url("../css/modal.css");
 
 h3 {
   text-align: left;
@@ -189,8 +190,8 @@ button {
   display: block;
   width: 40px;
   height: 40px;
-  padding: 10px;
   margin-right: 5px;
+  border-radius: 50%;
 }
 
 .question-block .comment-box form {
@@ -292,6 +293,10 @@ button {
 
 #meetup-image-upload form input {
   display: none;
+}
+
+#meetup-image-upload form button {
+  width: 200px !important;
 }
 
 .q-questions__pagination .paginate-btn {

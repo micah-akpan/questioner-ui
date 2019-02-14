@@ -226,6 +226,39 @@ const createQuestionCard = async (question) => {
   return card;
 };
 
+/**
+ * @const formInputSpec
+ * @description Form input fields related information
+ */
+const formInputSpec = [
+  {
+    id: 1,
+    idText: 'user-question-title',
+    labelClass: 'question-label',
+    labelText: 'Give your question a title',
+    placeholder: 'What, why, where or when are great words to start with',
+    type: 'input'
+  },
+
+  {
+    id: 2,
+    idText: 'user-question-body',
+    labelClass: 'question-label',
+    labelText: 'Your question',
+    placeholder: 'What, why, where or when are great words to start with',
+    type: 'textarea'
+  },
+
+  {
+    id: 3,
+    idText: 'user-question-label',
+    labelClass: 'question-label',
+    labelText: 'Add tags to this question (Max 5)',
+    placeholder: 'What, why, where or when are great words to start with',
+    type: 'input'
+  },
+
+];
 
 const createQuestionForm = () => {
   const wrapper = document.createElement('div');
@@ -239,8 +272,7 @@ const createQuestionForm = () => {
   const userName = document.createElement('p');
   const clear = document.createElement('div');
   clear.classList.add('clear');
-
-  Promise.all([getUserImage(), getUser()])
+  Promise.all([getUserImage(), getUser(userId)])
     .then((results) => {
       const [userImage, user] = results;
       userAvatar.setAttribute('src', userImage || defaultAvatar);
@@ -262,37 +294,6 @@ const createQuestionForm = () => {
   userFeedback.classList.add('user-feedback');
   userFeedback.id = 'user-feedback';
 
-
-  const formInputSpec = [
-    {
-      id: 1,
-      idText: 'user-question-title',
-      labelClass: 'question-label',
-      labelText: 'Give your question a title',
-      placeholder: 'What, why, where or when are great words to start with',
-      type: 'input'
-    },
-
-    {
-      id: 2,
-      idText: 'user-question-body',
-      labelClass: 'question-label',
-      labelText: 'Your question',
-      placeholder: 'What, why, where or when are great words to start with',
-      type: 'textarea'
-    },
-
-    {
-      id: 3,
-      idText: 'user-question-label',
-      labelClass: 'question-label',
-      labelText: 'Add tags to this question (Max 5)',
-      placeholder: 'What, why, where or when are great words to start with',
-      type: 'input'
-    },
-
-  ];
-
   const formInputs = formInputSpec.map((spec) => {
     const formGroup = document.createElement('div');
     formGroup.classList.add('q-form__group');
@@ -303,7 +304,6 @@ const createQuestionForm = () => {
     const requireValidation = document.createElement('abbr');
     requireValidation.textContent = ' * ';
     requireValidation.title = 'required';
-    const emptyText = document.createTextNode('');
     const field = document.createElement(spec.type);
     field.id = spec.idText;
     field.placeholder = spec.placeholder;

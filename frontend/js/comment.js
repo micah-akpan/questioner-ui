@@ -9,6 +9,8 @@ const getComments = async (question) => {
       const comments = status === 200 ? data : [];
       return comments;
     }
+
+    return [];
   } catch (e) {
     throw e;
   }
@@ -204,7 +206,10 @@ const createCommentSection = async (comments, question) => {
   const questionComment = document.createElement('div');
   questionComment.classList.add('question-comment');
 
-  const userImage = await createUserAvatar();
+  const userImage = await getUserImage();
+  const commentUserAvatar = document.createElement('img');
+  commentUserAvatar.src = userImage;
+  commentUserAvatar.alt = '';
   const commentForm = await createCommentForm(question);
 
   viewComments.onclick = () => {
@@ -218,7 +223,7 @@ const createCommentSection = async (comments, question) => {
     });
   };
 
-  questionComment.appendChild(userImage);
+  questionComment.appendChild(commentUserAvatar);
   questionComment.appendChild(commentForm);
 
   card.appendChild(viewComments);
