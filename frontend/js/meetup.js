@@ -83,16 +83,16 @@ const createMeetupTags = tags => tags.map((tag) => {
 
 /**
  * @func displayMeetupTags
+ * @param {Array<HTMLElement>} tags
  * @returns {HTMLElement} Returns the container that holds the tags
  */
-const displayMeetupTags = async () => {
-  const meetupTags = await getMeetupTags();
-  const meetupTagElems = createMeetupTags(meetupTags);
+const displayMeetupTags = async (tags) => {
   const meetupList = document.createElement('ul');
-  meetupTagElems.forEach((item) => {
+  tags.forEach((item) => {
     meetupList.appendChild(item);
   });
 
+  addedMeetups.innerHTML = '';
   addedMeetups.appendChild(meetupList);
   meetupTagsWrapper.appendChild(addedMeetups);
   return meetupTagsWrapper;
@@ -257,7 +257,14 @@ const addMeetupToPage = (meetup) => {
   addDescriptionToPage(meetup);
 
   displayMeetupQuestions(meetup);
-  displayMeetupTags();
+  getMeetupTags()
+    .then(tags => createMeetupTags(tags))
+    .then((tagElems) => {
+      displayMeetupTags(tagElems);
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 /**
  * @func displayMeetup
