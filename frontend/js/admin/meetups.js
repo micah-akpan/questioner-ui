@@ -4,6 +4,8 @@ const cancelDeleteOpButton = document.getElementById('cancel-delete-op__btn');
 const deleteMeetupButton = document.getElementById('delete-meetup__btn');
 const deleteModalContent = document.getElementById('delete-modal-content');
 const deleteModalHeader = document.getElementById('delete-modal-header');
+const editModal = document.getElementById('edit-modal');
+const editModalHeader = document.getElementById('edit-modal-header');
 
 /**
  * @func deleteMeetup
@@ -77,15 +79,18 @@ const getMeetup = meetupId => getMeetups()
 const createDropDownMenuItems = meetup => icons.meetups.map((icon) => {
   const li = document.createElement('li');
   li.classList.add(icon.className);
+  const selectedModal = icon.action === 'edit' ? editModal : deleteModal;
   li.onclick = () => {
     getMeetup(meetup.id)
       .then((selectedMeetup) => {
-        changeModalHeadingContent(deleteModalHeader, `Delete ${selectedMeetup.title}`);
+        const selectedModalHeader = icon.action === 'edit' ? editModalHeader : deleteModalHeader;
+        const modalHeaderContent = icon.action === 'edit' ? `Edit ${selectedMeetup.title}` : `Delete ${selectedMeetup.title}`;
+        changeModalHeadingContent(selectedModalHeader, modalHeaderContent);
       }, (err) => {
         throw err;
       });
-    showModal(deleteModal);
-    attachMeetupIdToModal(deleteModal, meetup.id);
+    showModal(selectedModal);
+    attachMeetupIdToModal(selectedModal, meetup.id);
   };
   const img = document.createElement('img');
   img.src = icon.src;
