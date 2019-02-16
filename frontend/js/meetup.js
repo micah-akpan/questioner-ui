@@ -26,7 +26,6 @@ const meetupTagsWrapper = document.getElementById('meetup-tags');
 const addedMeetups = document.getElementById('meetup-tags-added');
 const questionCards = document.getElementById('q-question-cards');
 
-
 /**
  * @func displayTotalUsersVotes
  * @param {Number} votes
@@ -128,7 +127,7 @@ const displayMeetupQuestions = async (meetup) => {
  */
 const addMeetupDetailsToDOM = (meetup) => {
   meetupTitle.textContent = meetup.topic;
-  meetupOrganizer.textContent = 'Organized by X';
+  meetupOrganizer.textContent = meetup.location;
   meetupTitleWrapper.appendChild(meetupTitle);
   meetupTitleWrapper.appendChild(meetupOrganizer);
   return meetupTitleWrapper;
@@ -282,12 +281,14 @@ const displayMeetup = () => {
     });
 };
 
-addProfileAvatarToNav('../assets/icons/avatar1.svg');
-
 window.onload = () => {
   if (!userToken) {
     window.location.assign('./sign-in.html');
   } else {
+    const currentPageURL = window.location.pathname;
+    const avatarSrcPath = isAdminPage(currentPageURL) ? '../../assets/icons/avatar1.svg' : '../assets/icons/avatar1.svg';
+
+    addProfileAvatarToNav(avatarSrcPath);
     displayMeetup();
   }
 };
