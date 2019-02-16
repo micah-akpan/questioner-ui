@@ -469,6 +469,10 @@ button {
   height: 50px;
 }
 
+#meetup-image-upload {
+  margin-top: 40px;
+}
+
 @media (max-width: 768px) {
   #q-meetups-preview .q-meetups-preview__block {
     flex-direction: column;

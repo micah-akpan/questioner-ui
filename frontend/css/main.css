@@ -172,14 +172,15 @@ section {
   border: 1px solid #116466;
 }
 
+/* User related action feedback */
+.error-feedback, .success-feedback {
+  padding: 10px;
+}
+
 .error-feedback {
   background: #a30916;
   color: #fff;
   font-weight: bold;
-}
-
-.error-feedback:not(:empty) {
-  padding: 10px;
 }
 
 .success-feedback {
@@ -187,6 +188,20 @@ section {
   color: #333;
   padding: 10px;
 }
+
+.feedback {
+  width: 100%;
+  padding: 10px;
+}
+
+.active {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
 
 /* App Main Header */
 header {

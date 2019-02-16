@@ -12,8 +12,12 @@ const imgBlock = document.querySelector('.outer-upload__block');
 const imgUploadBtns = document.querySelector('.image-upload-btns');
 const cancelUploadBtn = document.querySelector('.img-upload-cancel__btn');
 const imageUploadWrapper = document.querySelector('.image-upload__wrapper');
-const userFeedback = document.querySelector('.user-feedback');
+const userFeedback = document.querySelector('.feedback');
 
+/**
+ * @func createImageUploadFormWidget
+ * @returns {HTMLElement} Returns the image upload wrapper element
+ */
 const createImageUploadFormWidget = () => {
   const imageUploadWrapper = document.querySelector('.image-upload__wrapper');
   const outerLabel = document.createElement('label');
@@ -61,6 +65,12 @@ cancelUploadBtn.onclick = () => {
 
 const createForm = document.querySelector('form');
 
+/**
+ * 
+ * @param {String} msg 
+ * @returns {HTMLDivElement} The HTML element wrapping the
+ * user action feedback
+ */
 const createFeedbackAlert = (msg) => {
   const displayBox = document.createElement('div');
   displayBox.textContent = msg;
@@ -68,11 +78,22 @@ const createFeedbackAlert = (msg) => {
   return displayBox;
 }
 
+/**
+ * @func displayFeedbackAlert
+ * @param {String} msg 
+ * @returns {HTMLDivElement} Appends the feedback HTML element
+ * and returns it
+ */
 const displayFeedbackAlert = (msg) => {
   return document.body.appendChild(createFeedbackAlert(msg));
 }
 
-
+/**
+ * @func displayFormFeedback
+ * @param {String} msg 
+ * @returns {HTMLElement} Returns the HTML element wrapping
+ * the Form feedback
+ */
 const displayFormFeedback = (msg) => {
   const infoImage = document.createElement('img');
   infoImage.src = '../../../assets/icons/cross.svg';
@@ -82,16 +103,59 @@ const displayFormFeedback = (msg) => {
   const span = document.createElement('span');
   span.textContent = msg;
   userFeedback.classList.remove('hide');
-  userFeedback.classList.add('info-box');
+  userFeedback.classList.add('');
   userFeedback.appendChild(span);
+  return userFeedback;
 };
 
-const hideFormFeedback = (secs) => {
-  setTimeout(() => {
-    userFeedback.classList.add('hide');
+/**
+ * @func addFeedbackMessage
+ * @param {String} msg 
+ * @param {String} feedbackType
+ * @returns {HTMLElement} Adds error/success classes
+ * to feedback element, according to `feedbackType`
+ */
+const addFeedbackMessage = (msg, feedbackType = 'error') => {
+  const userFeedback = document.querySelector('.feedback');
+  userFeedback.textContent = msg;
+  userFeedback.classList.add(feedbackType === 'error' ?
+    'error-feedback' : 'success-feedback');
+  return userFeedback;
+}
+
+/**
+ * @func displayFeedback
+ * @param {String} msg
+ * @param {String} feedbackType 
+ * @returns {HTMLElement} 
+ * @description Displays the feedback pop-up
+ */
+const displayFeedback = (msg, feedbackType) => {
+  const userFeedback = addFeedbackMessage(msg, feedbackType);
+  userFeedback.classList.remove('hidden');
+  userFeedback.classList.add('active');
+  return userFeedback;
+}
+
+/**
+ * @func hideFeedback
+ * @param {Number} secs 
+ * @return {Number} Timer Interval
+ * @description Hides the feedback pop-up
+ */
+const hideFeedback = (secs) => {
+  return setTimeout(() => {
+    userFeedback.classList.remove('active');
+    userFeedback.classList.add('hidden');
   }, secs * 1000);
 };
 
+/**
+ * @func loadImagePreview
+ * @param {Event} e 
+ * @returns {undefined}
+ * @description Shows a preview of the selected meetup image
+ */
 const loadImagePreview = (e) => {
   const uploadedImg = document.createElement('img');
   const imgBlock = document.querySelector('.outer-upload__block');
@@ -112,6 +176,11 @@ const loadImagePreview = (e) => {
   reader.readAsDataURL(file);
 }
 
+/**
+ * @func createMeetup
+ * @returns {undefined} 
+ * @description Creates a meetup
+ */
 const createMeetup = () => {
   const imagesField = document.getElementById('m-images');
   const topic = topicField.value;
@@ -144,19 +213,19 @@ const createMeetup = () => {
   })
     .then(res => res.json())
     .then((res) => {
-      const { status, data } = res;
+      const { status, data, error } = res;
       if (status === 201) {
-        displayFeedbackAlert(`${topic} has been successfully created. Redirecting in 5 seconds`);
+        displayFeedback(`${data[0].topic} meetup was successfully created`, 'success');
         setTimeout(() => {
           window.location.assign('./meetups.html');
         }, 5000);
       } else {
-        displayFormFeedback(res.error);
-        hideFormFeedback(5);
+        displayFeedback(error, 'error');
+        hideFeedback(10);
       }
     })
     .catch((err) => {
-      console.error(err);
+
     })
 };
 
@@ -165,7 +234,7 @@ createForm.onsubmit = (e) => {
   createMeetup();
 };
 
-addProfileAvatarToNav('../../assets/icons/avatar1.jpg');
+addProfileAvatarToNav('../../assets/icons/avatar1.svg');
 
 window.onload = () => {
   const userToken = Token.getToken('userToken');
