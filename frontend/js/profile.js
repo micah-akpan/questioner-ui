@@ -106,9 +106,11 @@ const createUserDataSummaryCard = (user) => {
 
 /**
  * @function convertDate
- * @param {Date} date
- * @returns {String} Parses and converts date to
+ * @param {String} date
+ * @returns {String} Parses and converts `date` to
  * a different format (YYYY-MM-dd)
+ * @description This util function prepares a date
+ * suitable for use in date widget of form inputs
  */
 const convertDate = (date) => {
   const newDate = new Date(date);

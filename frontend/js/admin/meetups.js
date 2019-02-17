@@ -6,6 +6,11 @@ const deleteModalContent = document.getElementById('delete-modal-content');
 const deleteModalHeader = document.getElementById('delete-modal-header');
 const editModal = document.getElementById('edit-modal');
 const editModalHeader = document.getElementById('edit-modal-header');
+const closeEditModalButton = document.getElementById('close-edit-modal__btn');
+
+const meetupTopicField = document.getElementById('mTopic');
+const meetupLocationField = document.getElementById('mLocation');
+const meetupDateField = document.getElementById('mDate');
 
 /**
  * @func deleteMeetup
@@ -71,6 +76,33 @@ const getMeetup = meetupId => getMeetups()
   });
 
 /**
+ * @function convertDate
+ * @param {String} date
+ * @returns {String} Parses and converts `date` to
+ * a different format (YYYY-MM-dd)
+ * @description This util function prepares a date
+ * suitable for use in date widget of form inputs
+ */
+const convertDate = (date) => {
+  const newDate = new Date(date);
+  const year = newDate.getFullYear();
+  let month = newDate.getMonth() + 1;
+  month = month < 10 ? `0${month}` : month;
+  let day = newDate.getDate();
+  day = day < 10 ? `0${day}` : day;
+  return `${year}-${month}-${day}`;
+};
+
+const prefillUpdateMeetupModalFormFields = (meetup) => {
+  const { title, location, happeningOn } = meetup;
+  meetupTopicField.placeholder = title;
+  meetupLocationField.placeholder = location;
+  const date = convertDate(happeningOn);
+  meetupDateField.value = date;
+  return meetup;
+};
+
+/**
  * @func createDropDownMenuItems
  * @param {*} meetup
  * @returns {Array<HTMLLIElement>} Returns a list of
@@ -83,13 +115,22 @@ const createDropDownMenuItems = meetup => icons.meetups.map((icon) => {
   li.onclick = () => {
     getMeetup(meetup.id)
       .then((selectedMeetup) => {
-        const selectedModalHeader = icon.action === 'edit' ? editModalHeader : deleteModalHeader;
-        const modalHeaderContent = icon.action === 'edit' ? `Edit ${selectedMeetup.title}` : `Delete ${selectedMeetup.title}`;
+        const selectedModalHeader = icon.action === 'edit'
+          ? editModalHeader
+          : deleteModalHeader;
+        const modalHeaderContent = icon.action === 'edit'
+          ? `Update ${selectedMeetup.title}`
+          : `Delete ${selectedMeetup.title}`;
         changeModalHeadingContent(selectedModalHeader, modalHeaderContent);
       }, (err) => {
         throw err;
       });
     showModal(selectedModal);
+    // only edit modal comes with a form
+    // with fields that should be pre-populated
+    if (editModal) {
+      prefillUpdateMeetupModalFormFields(meetup);
+    }
     attachMeetupIdToModal(selectedModal, meetup.id);
   };
   const img = document.createElement('img');
@@ -212,6 +253,12 @@ if (closeDeleteModalButton) {
   };
 }
 
+if (closeEditModalButton) {
+  closeEditModalButton.onclick = () => {
+    hideModal(editModal);
+  };
+}
+
 cancelDeleteOpButton.onclick = () => {
   hideModal(deleteModal);
 };
@@ -219,6 +266,13 @@ cancelDeleteOpButton.onclick = () => {
 deleteMeetupButton.onclick = () => {
   const meetupId = deleteModal.getAttribute('data-target');
   deleteMeetup(meetupId);
+};
+
+document.onkeydown = (e) => {
+  if (e.key === 'Escape') {
+    hideModal(deleteModal);
+    hideModal(editModal);
+  }
 };
 
 window.addEventListener('load', () => {
