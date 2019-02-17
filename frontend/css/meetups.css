@@ -3,6 +3,7 @@
 @import "./main.css";
 @import "./home.css";
 @import "./modal.css";
+@import "./form.css";
 
 /* Search Bar for meetups */
 #q-search {
@@ -276,6 +277,26 @@ nav.no-flex {
 
 .nav-avatar__list-item img {
   border-radius: 10px;
+}
+
+/* Form styling specifics for meetups page */
+#q-form {
+  width: 90%;
+  border: none;
+  margin: 10px auto;
+  min-width: 90%;
+}
+
+.save__btn::before {
+  content: '';
+  background: url('../assets/icons/save.svg');
+  background-size: cover;
+  background-position: center;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 2px;
 }
 
 @media (max-width: 768px) {

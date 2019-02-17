@@ -177,14 +177,14 @@
           <div class="modal-content-card">
             <div class="modal-header">
               <h3 id="edit-modal-header"></h3>
-              <button class="close-modal-btn" id="close-delete-modal__btn">
+              <button class="close-modal-btn" id="close-edit-modal__btn">
                 <img src="../../assets/icons/cross.svg" alt="close modal" />
               </button>
             </div>
             <div class="clear"></div>
             <div class="modal-body">
               <div class="edit-modal-content" id="edit-modal-content">
-                <form>
+                <form id="q-form">
                   <div class="q-form__group">
                     <label class="q-form__label" for="mTopic">Meetup Topic</label>
                     <input class="q-form__input" id="mTopic" name="topic">
@@ -208,18 +208,12 @@
                   </div>
 
                   <div class="q-form__group">
-                    <button class="q-btn btn">Save</button>
+                    <button class="q-btn btn save__btn">
+                      <!-- <img src="../../assets/icons/save.svg" alt=""> -->
+                      Save
+                    </button>
                   </div>
                 </form>
-
-
-                <div class="button__wrapper">
-                  <button class="cancel-btn q-btn btn__rounded" id="cancel-delete-op__btn">Cancel</button>
-                  <button class="delete-btn q-btn btn__rounded" id="delete-meetup__btn">
-                    <img src="../../assets/icons/delete-grey.svg" alt="delete icon" />
-                    <span>Delete</span>
-                  </button>
-                </div>
               </div>
             </div>
           </div>

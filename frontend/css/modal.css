@@ -100,12 +100,15 @@
 }
 
 .modal-header .close-modal-btn {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   background: transparent;
   float: right;
   margin-top: 10px;
+  margin-right: 10px;
   cursor: pointer;
+  border-radius: 4px;
+  background: #ccc;
 }
 
 .modal-header h3 {
@@ -128,6 +131,12 @@
 
 #delete-modal .modal-body {
   padding: 10px;
+}
+
+/* Edit Modal */
+#edit-modal .modal-content {
+  text-align: initial;
+  height: auto;
 }
 
 /* Image Modal */
