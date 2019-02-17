@@ -299,6 +299,25 @@ nav.no-flex {
   margin-right: 2px;
 }
 
+.meetup-tag__badge {
+  background-color: #ccc;
+  border-radius: 3px;
+  color: #333;
+  padding: 5px;
+  margin-right: 5px;
+}
+
+.meetup-tag__badge-btn {
+  width: 20px;
+  height: 20px;
+  margin-left: 2px;
+  cursor: pointer;
+}
+
+.meetup-tag__badge-img {
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .show {
     width: 200px !important;

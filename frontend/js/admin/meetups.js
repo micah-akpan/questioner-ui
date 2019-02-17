@@ -11,6 +11,8 @@ const closeEditModalButton = document.getElementById('close-edit-modal__btn');
 const meetupTopicField = document.getElementById('mTopic');
 const meetupLocationField = document.getElementById('mLocation');
 const meetupDateField = document.getElementById('mDate');
+const editModalForm = document.forms['edit-meetup-modal-form'];
+const meetupInnerTagWrapper = document.getElementById('meetup-inner-tags__wrapper');
 
 /**
  * @func deleteMeetup
@@ -93,6 +95,11 @@ const convertDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
+/**
+ * @func prefillUpdateMeetupModalFormFields
+ * @param {*} meetup
+ * @returns {*} Returns `meetup`
+ */
 const prefillUpdateMeetupModalFormFields = (meetup) => {
   const { title, location, happeningOn } = meetup;
   meetupTopicField.placeholder = title;
@@ -100,6 +107,77 @@ const prefillUpdateMeetupModalFormFields = (meetup) => {
   const date = convertDate(happeningOn);
   meetupDateField.value = date;
   return meetup;
+};
+
+/**
+ *
+ * @param {Strin} tag
+ * @param {Boolean} toBeDeleted
+ * @returns {HTMLSpanElement} Returns a meetup tag badge
+ * @description if `toBeDeleted` is true, it adds a delete
+ * button to each badge
+ */
+const createMeetupTagBadge = (tag, toBeDeleted = true) => {
+  const span = document.createElement('span');
+  span.classList.add('meetup-tag__badge');
+  span.textContent = tag.text;
+  span.setAttribute('data-target', tag.id);
+  let deleteButton = null;
+  if (toBeDeleted) {
+    deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    const img = document.createElement('img');
+    img.src = '../../assets/icons/cross.svg';
+    img.classList.add('meetup-tag__badge-img');
+    deleteButton.appendChild(img);
+    deleteButton.classList.add('meetup-tag__badge-btn', 'btn');
+  }
+  span.appendChild(deleteButton);
+  return span;
+};
+
+/**
+ * @func createMeetupTagBadges
+ * @param {Array<String>} tags
+ * @return {Array<HTMLSpanElement>} Returns an array of meetup tag badges
+ */
+const createMeetupTagBadges = tags => tags.map((tag) => {
+  const tagBadge = createMeetupTagBadge(tag);
+  return tagBadge;
+});
+
+/**
+ * @func prepareTags
+ * @param {Array<String>} tags
+ * @returns {Array} Takes a list of tags in string form
+ * and creates object of tags
+ */
+const prepareTags = (tags) => {
+  const hashTags = tags.map((tag, counter) => {
+    const hashTag = {};
+    hashTag.id = counter + 1;
+    hashTag.text = tag;
+    return hashTag;
+  });
+
+  return hashTags;
+};
+
+/**
+ * @func addMeetupTagBadgesToUpdateForm
+ * @param {*} meetup
+ * @returns {HTMLElement} Returns the HTML element
+ * that wraps the meetup tag element
+ */
+const addMeetupTagBadgesToUpdateForm = (meetup) => {
+  const { tags } = meetup;
+  const hashTags = prepareTags(tags);
+  const tagBadges = createMeetupTagBadges(hashTags);
+  tagBadges.forEach((tagBadge) => {
+    meetupInnerTagWrapper.appendChild(tagBadge);
+  });
+
+  return meetupInnerTagWrapper;
 };
 
 /**
@@ -129,6 +207,7 @@ const createDropDownMenuItems = meetup => icons.meetups.map((icon) => {
     // only edit modal comes with a form
     // with fields that should be pre-populated
     if (editModal) {
+      addMeetupTagBadgesToUpdateForm(meetup);
       prefillUpdateMeetupModalFormFields(meetup);
     }
     attachMeetupIdToModal(selectedModal, meetup.id);

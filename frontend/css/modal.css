@@ -139,6 +139,10 @@
   height: auto;
 }
 
+#edit-modal .modal-content .modal-content-card {
+  height: auto;
+}
+
 /* Image Modal */
 #image-upload-modal .modal-header {
   background-color: #116466;
