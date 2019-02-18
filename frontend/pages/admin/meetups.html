@@ -134,6 +134,7 @@
     </div>
   </section>
 
+  <!-- DELETE Modal -->
   <div class="modal" id="delete-modal">
     <div class="modal-overlay">
       <div class="modal-content">
@@ -160,6 +161,58 @@
                     <span>Delete</span>
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT Meetup Modal -->
+  <div class="modal" id="edit-modal">
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-dialog">
+          <div class="modal-content-card">
+            <div class="modal-header">
+              <h3 id="edit-modal-header"></h3>
+              <button class="close-modal-btn" id="close-edit-modal__btn">
+                <img src="../../assets/icons/cross.svg" alt="close modal" />
+              </button>
+            </div>
+            <div class="clear"></div>
+            <div class="modal-body">
+              <div class="edit-modal-content" id="edit-modal-content">
+                <form id="q-form" name="edit-meetup-modal-form">
+                  <div class="q-form__group">
+                    <label class="q-form__label" for="mTopic">Meetup Topic</label>
+                    <input class="q-form__input" id="mTopic" name="topic">
+                  </div>
+
+                  <div class="q-form__group">
+                    <label class="q-form__label" for="mLocation">Meetup Location</label>
+                    <input class="q-form__input" id="mLocation" name="mLocation">
+                  </div>
+
+                  <div class="q-form__group">
+                    <label class="q-form__label" for="mDate">Meetup Date</label>
+                    <input class="q-form__input" id="mDate" name="happeningOn" type="date">
+                  </div>
+
+                  <div class="q-form__group">
+                    <label class="q-form__label" for="mTags">Meetup Tags</label>
+                    <div class="meetup-inner-tags__wrapper" id="meetup-inner-tags__wrapper">
+
+                    </div>
+                  </div>
+
+                  <div class="q-form__group">
+                    <button class="q-btn btn save__btn">
+                      Save
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
