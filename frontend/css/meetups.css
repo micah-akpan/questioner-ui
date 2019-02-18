@@ -287,6 +287,10 @@ nav.no-flex {
   min-width: 90%;
 }
 
+#q-form .q-form__input {
+  width: 90%;
+}
+
 .save__btn::before {
   content: '';
   background: url('../assets/icons/save.svg');

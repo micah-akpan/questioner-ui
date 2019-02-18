@@ -165,7 +165,7 @@ form input:invalid:focus ~ .input-validation-feedback {
   padding: 1rem;
   color: #596377;
   outline: none;
-  width: 90%;
+  width: 100%;
   display: block;
   margin-bottom: 8px;
 }
