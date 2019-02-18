@@ -39,6 +39,30 @@ const deleteMeetup = (meetupId) => {
 };
 
 /**
+ * @func updateMeetup
+ * @param {*} newData New meetup data
+ * @param {Number|String} meetupId
+ * @returns {Promise} Resolves to the updated meetup, or null
+ */
+const updateMeetup = (newData, meetupId) => {
+  const updateMeetupUrl = `${apiBaseURL}/meetups/${meetupId}`;
+  return fetch(updateMeetupUrl, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'PUT',
+    body: JSON.stringify(newData)
+  })
+    .then(res => res.json())
+    .then((res) => {
+      const { status, data } = res;
+      if (status === 200) {
+        // meetup updated
+      }
+    });
+};
+
+/**
  * @func attachMeetupIdToModal
  * @param {*} modal
  * @param {*} meetupId
