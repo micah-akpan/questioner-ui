@@ -48,17 +48,21 @@ const updateMeetup = (newData, meetupId) => {
   const updateMeetupUrl = `${apiBaseURL}/meetups/${meetupId}`;
   return fetch(updateMeetupUrl, {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Token.getToken('userToken')}`
     },
-    mode: 'PUT',
+    method: 'PUT',
     body: JSON.stringify(newData)
   })
     .then(res => res.json())
     .then((res) => {
       const { status, data } = res;
       if (status === 200) {
-        // meetup updated
+        // TODO: Display some feedback here
       }
+    })
+    .catch((err) => {
+      throw err;
     });
 };
 
@@ -369,6 +373,24 @@ cancelDeleteOpButton.onclick = () => {
 deleteMeetupButton.onclick = () => {
   const meetupId = deleteModal.getAttribute('data-target');
   deleteMeetup(meetupId);
+};
+
+editModalForm.onsubmit = (e) => {
+  e.preventDefault();
+  const newMeetupData = {
+    topic: meetupTopicField.value,
+    location: meetupLocationField.value,
+    happeningOn: meetupDateField.value
+  };
+  const meetupId = editModal.getAttribute('data-target');
+  updateMeetup(newMeetupData, meetupId)
+    .then(() => {
+      hideModal(editModal);
+      showAllMeetups();
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 
 document.onkeydown = (e) => {
