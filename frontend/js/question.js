@@ -181,6 +181,8 @@ const addIcons = (question, iconWrapper, icons) => {
   });
 };
 
+const cards = document.getElementById('q-question-cards');
+
 /**
  * @func createQuestionCard
  * @param {*} question Meetup question
@@ -345,7 +347,13 @@ const createQuestionForm = () => {
     e.preventDefault();
     askQuestion()
       .then((question) => {
-        window.location.reload();
+        createQuestionCard(question)
+          .then((questionCard) => {
+            cards.appendChild(questionCard);
+          })
+          .catch((err) => {
+            throw err;
+          });
       })
       .catch((err) => {
         displayFormFeedback(err.message);
