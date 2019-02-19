@@ -6,6 +6,12 @@ const locationField = document.getElementById('m-location');
 const dateField = document.getElementById('m-date');
 const tagsField = document.getElementById('m-tags');
 
+const addressField = document.getElementById('mAddress');
+const cityField = document.getElementById('mCity');
+const stateField = document.getElementById('mState');
+const countryField = document.getElementById('mCountry');
+
+
 // Image preview
 const imgUpload = document.querySelector('.q-form__image-upload');
 const imgBlock = document.querySelector('.outer-upload__block');
@@ -177,6 +183,22 @@ const loadImagePreview = (e) => {
 }
 
 /**
+ * @func formMeetupLocation
+ * @returns {String} Returns a meetup location
+ * By concatenating all location parts to
+ * form a whole
+ */
+const formMeetupLocation = () => {
+  const address = addressField.value;
+  const city = cityField.value;
+  const state = stateField.value;
+  const country = countryField.value;
+
+  const location = `${address} ${city} ${state} ${country}`;
+  return location;
+}
+
+/**
  * @func createMeetup
  * @returns {undefined} 
  * @description Creates a meetup
@@ -184,7 +206,7 @@ const loadImagePreview = (e) => {
 const createMeetup = () => {
   const imagesField = document.getElementById('m-images');
   const topic = topicField.value;
-  const location = locationField.value;
+  const location = formMeetupLocation();
   const happeningOn = dateField.value;
   const tags = tagsField.value.split(',');
   const image = imagesField.file;
