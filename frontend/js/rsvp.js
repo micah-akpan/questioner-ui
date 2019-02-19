@@ -19,6 +19,12 @@ const rsvpBtnSpecs = [
   }
 ];
 
+/**
+ * @func getMeetupRsvps
+ * @param {*} meetup 
+ * @return {Promise<Array>} Resolves to the array
+ * of the meetup rsvps
+ */
 const getMeetupRsvps = async (meetup) => {
   try {
     const apiUrl = `${apiBaseURL}/meetups/${meetup.id}/rsvps`;
