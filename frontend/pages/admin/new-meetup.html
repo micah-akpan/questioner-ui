@@ -104,7 +104,8 @@
                       <abbr title="required">*</abbr>
                     </label>
                     <input placeholder="Ikeja" name="city" class="q-form__input location__input
-                    location--long" id="mCity">
+                    location--long"
+                      id="mCity">
                   </div>
 
                   <div class="locations__location">
@@ -113,7 +114,8 @@
                       <abbr title="required">*</abbr>
                     </label>
                     <input placeholder="Lagos" name="state" class="q-form__input
-                    location__input location__input--no-margin" id="mState">
+                    location__input location__input--no-margin"
+                      id="mState">
                   </div>
 
                   <div class="locations__location">
@@ -122,8 +124,14 @@
                       <abbr title="required">*</abbr>
                     </label>
                     <select class="q-form__select location__input location__input--margin
-                    location--long" name="country" id="mCountry">
-
+                    location--long"
+                      name="country" id="mCountry">
+                      <!-- placeholder countries will be replaced by dynamic ones from API -->
+                      <option value="NG" selected>Nigeria</option>
+                      <option value="FR">France</option>
+                      <option value="DE">Germany</option>
+                      <option value="CA">Canada</option>
+                      <option value="US">United States</option>
                     </select>
                   </div>
                 </div>
