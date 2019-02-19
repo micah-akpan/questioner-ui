@@ -11,6 +11,116 @@ const cityField = document.getElementById('mCity');
 const stateField = document.getElementById('mState');
 const countryField = document.getElementById('mCountry');
 
+/**
+ * @func getAllCountries
+ * @returns {Promise<Array>} Resolves
+ * to an array of array of promises
+ */
+const getAllCountries = () => {
+  const apiURL = 'https://restcountries-v1.p.rapidapi.com/all';
+  return fetch(apiURL, {
+    headers: {
+      'X-RapidAPI-Key': 'm3xBJzCDi0mshlFG6gTOfdrrU5h3p16dIgIjsngT7YwCyj5VmL',
+    }
+  })
+    .then(res => res.json())
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    })
+}
+
+/**
+ * @func lookUpIP
+ * @returns {*} Location object from http://ip-api.com
+ */
+const lookUpIP = () => {
+  return fetch('http://ip-api.com/json')
+    .then(res => res.json())
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      console.log('Can\'t get your location');
+    })
+}
+
+/**
+ * @func flatten
+ * @param {Array} array A multi-dimensional array
+ * @returns {Array} Flattens `array` to a single-dimensional array
+ */
+const flatten = (array) => array.reduce((prev, curr) => prev.concat(curr), []);
+
+/**
+ * @func createCountrySelectOptions
+ * @description Creates form options field
+ * and populate with country details
+ */
+const createCountrySelectOptions = () => {
+  Promise.all([getAllCountries(), lookUpIP()])
+    .then((values) => {
+      const [countries, location] = values;
+      const allCountries = flatten(countries);
+      const currentUserCountry = location.country;
+      allCountries.forEach((country) => {
+        const option = document.createElement('option');
+        option.textContent = country.name;
+        option.value = country.name;
+        option.selected = currentUserCountry === country.name;
+        countryField.appendChild(option);
+      });
+    })
+    .catch((err) => {
+      throw err;
+    })
+}
+
+createCountrySelectOptions();
+
+const geoOptions = {
+  enableHighAccuracy: true,
+  maximumAge: 10000
+};
+
+const geoErrorCallback = () => {
+
+}
+
+lookUpIP();
+
+const geoSuccessCallback = (position) => {
+  const { latitude, longitude } = position.coords;
+}
+
+const geolocationSupported = 'geolocation' in navigator;
+
+const getUserLocation = () => {
+  if (geolocationSupported) {
+    Promise.all([lookUpIP(), getAllCountries()])
+      .then((results) => {
+        const [ipResult, countries] = results;
+        const allCountries = flatten(countries);
+        const { country } = ipResult;
+        const selectedCountry = allCountries.filter((c) => c.name === country)[0];
+        countryField.setAttribute('selected', selectedCountry.name);
+      })
+
+  } else {
+    // geo location feature not supported in
+    // this browser
+  }
+}
+
+const watchUserLocation = () => {
+  if (geolocationSupported) {
+    navigator.geolocation.watchPosition(geoSuccessCallback)
+  }
+}
+
+getUserLocation();
 
 // Image preview
 const imgUpload = document.querySelector('.q-form__image-upload');
