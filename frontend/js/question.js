@@ -50,7 +50,13 @@ const createQuestionCardPrimary = (question) => {
   // TODO: Replace with dynamic content
   const askedBy = document.createElement('span');
   askedBy.classList.add('asked-by');
-  askedBy.textContent = 'asked by X';
+  getUser(question.createdby)
+    .then((user) => {
+      askedBy.textContent = `asked by ${user.firstname} ${user.lastname}`;
+    })
+    .catch((err) => {
+      throw err;
+    });
   const askedWhen = document.createElement('span');
   askedWhen.classList.add('asked-when');
   askedWhen.textContent = '';
