@@ -170,7 +170,8 @@ form input:invalid:focus ~ .input-validation-feedback {
   margin-bottom: 8px;
 }
 
-.q-form__input, .q-form__textarea {
+.q-form__input, .q-form__textarea, 
+.q-form__select {
   color: #596377;
 }
 

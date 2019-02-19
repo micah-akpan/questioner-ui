@@ -84,12 +84,49 @@
             </div>
 
             <div class="q-form__group">
-              <label for="m-location" class="q-form__label">Meetup Location
-                <abbr title="required">*</abbr>
-              </label>
-              <input type="text" name="location" placeholder="Where will your meetup be?" id="m-location" class="q-form__input"
-                required />
-              <span class="user-current-location"></span>
+              <fieldset class="location-fieldset">
+                <legend class="location-legend">Meetup Location</legend>
+
+                <div class="locations">
+                    <div class="locations__location">
+                      <label for="m-location" class="q-form__label">
+                        Address
+                        <abbr title="required">*</abbr>
+                      </label>
+                      <input placeholder="443 Allen Avenue" name="address" class="q-form__input location__input location__input--no-margin">
+                    </div>
+    
+                    <div class="locations__location">
+                      <label for="m-location" class="q-form__label">
+                        City
+                        <abbr title="required">*</abbr>
+                      </label>
+                      <input placeholder="Ikeja" name="city" class="q-form__input location__input">
+                    </div>
+    
+                    <div class="locations__location">
+                      <label for="m-location" class="q-form__label">
+                        State
+                        <abbr title="required">*</abbr>
+                      </label> 
+                      <input placeholder="Lagos" name="state" class="q-form__input">
+                    </div>
+    
+                    <div class="locations__location">
+                      <label for="m-location" class="q-form__label">
+                        Country
+                        <abbr title="required">*</abbr>
+                      </label>
+                      <select class="q-form__select location__input location__input--margin">
+                        <option value="">Nigeria</option>
+                        <option value="">France</option>
+                        <option value="">Switzerland</option>
+                        <option value="">United States of America</option>
+                        <option value="">Canada</option>
+                      </select>
+                    </div>
+                  </div>
+              </fieldset> 
             </div>
 
             <div class="q-form__group">
@@ -111,15 +148,6 @@
               <label for="m-tag" class="q-form__label">Meetup Tags (Max 5)
               </label>
               <input type="text" name="tags" placeholder="Tag1,Tag2,Tag3,Tag4" id="m-tags" class="q-form__input" />
-            </div>
-
-
-            <div class="q-form__group">
-              <label for="description" class="q-form__label">Description
-                <abbr title="required">*</abbr>
-              </label>
-              <textarea placeholder="What will your meetup be about?" name="description" class="q-form__textarea"></textarea>
-              <span class="word-count"></span>
             </div>
 
             <div class="q-form__group">
