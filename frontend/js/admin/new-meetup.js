@@ -6,6 +6,124 @@ const locationField = document.getElementById('m-location');
 const dateField = document.getElementById('m-date');
 const tagsField = document.getElementById('m-tags');
 
+const addressField = document.getElementById('mAddress');
+const cityField = document.getElementById('mCity');
+const stateField = document.getElementById('mState');
+const countryField = document.getElementById('mCountry');
+
+const createButton = document.querySelector('.progress-button > button');
+
+/**
+ * @func getAllCountries
+ * @returns {Promise<Array>} Resolves
+ * to an array of array of promises
+ */
+const getAllCountries = () => {
+  const apiURL = 'https://restcountries-v1.p.rapidapi.com/all';
+  return fetch(apiURL, {
+    headers: {
+      'X-RapidAPI-Key': 'm3xBJzCDi0mshlFG6gTOfdrrU5h3p16dIgIjsngT7YwCyj5VmL',
+    }
+  })
+    .then(res => res.json())
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    })
+}
+
+/**
+ * @func lookUpIP
+ * @returns {*} Location object from http://ip-api.com
+ */
+const lookUpIP = () => {
+  return fetch('http://ip-api.com/json')
+    .then(res => res.json())
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      console.log('Can\'t get your location');
+    })
+}
+
+/**
+ * @func flatten
+ * @param {Array} array A multi-dimensional array
+ * @returns {Array} Flattens `array` to a single-dimensional array
+ */
+const flatten = (array) => array.reduce((prev, curr) => prev.concat(curr), []);
+
+/**
+ * @func createCountrySelectOptions
+ * @description Creates form options field
+ * and populate with country details
+ */
+const createCountrySelectOptions = () => {
+  Promise.all([getAllCountries(), lookUpIP()])
+    .then((values) => {
+      const [countries, location] = values;
+      const allCountries = flatten(countries);
+      const currentUserCountry = location.country;
+      allCountries.forEach((country) => {
+        const option = document.createElement('option');
+        option.textContent = country.name;
+        option.value = country.name;
+        option.selected = currentUserCountry === country.name;
+        countryField.appendChild(option);
+      });
+    })
+    .catch((err) => {
+      throw err;
+    })
+}
+
+createCountrySelectOptions();
+
+const geoOptions = {
+  enableHighAccuracy: true,
+  maximumAge: 10000
+};
+
+const geoErrorCallback = () => {
+
+}
+
+lookUpIP();
+
+const geoSuccessCallback = (position) => {
+  const { latitude, longitude } = position.coords;
+}
+
+const geolocationSupported = 'geolocation' in navigator;
+
+const getUserLocation = () => {
+  if (geolocationSupported) {
+    Promise.all([lookUpIP(), getAllCountries()])
+      .then((results) => {
+        const [ipResult, countries] = results;
+        const allCountries = flatten(countries);
+        const { country } = ipResult;
+        const selectedCountry = allCountries.filter((c) => c.name === country)[0];
+        countryField.setAttribute('selected', selectedCountry.name);
+      })
+
+  } else {
+    // geo location feature not supported in
+    // this browser
+  }
+}
+
+const watchUserLocation = () => {
+  if (geolocationSupported) {
+    navigator.geolocation.watchPosition(geoSuccessCallback)
+  }
+}
+
+getUserLocation();
+
 // Image preview
 const imgUpload = document.querySelector('.q-form__image-upload');
 const imgBlock = document.querySelector('.outer-upload__block');
@@ -177,6 +295,32 @@ const loadImagePreview = (e) => {
 }
 
 /**
+ * @func formMeetupLocation
+ * @returns {String} Returns a meetup location
+ * By concatenating all location parts to
+ * form a whole
+ */
+const formMeetupLocation = () => {
+  const address = addressField.value;
+  const city = cityField.value;
+  const state = stateField.value;
+  const country = countryField.value;
+
+  const location = `${address} ${city} ${state} ${country}`;
+  return location;
+}
+
+const enableButtonSpinner = (button, spinnerClass) => {
+  button.classList.add(spinnerClass);
+  return button;
+}
+
+const disableButtonSpinner = (button, spinnerClass) => {
+  button.classList.remove(spinnerClass);
+  return button;
+}
+
+/**
  * @func createMeetup
  * @returns {undefined} 
  * @description Creates a meetup
@@ -184,7 +328,7 @@ const loadImagePreview = (e) => {
 const createMeetup = () => {
   const imagesField = document.getElementById('m-images');
   const topic = topicField.value;
-  const location = locationField.value;
+  const location = formMeetupLocation();
   const happeningOn = dateField.value;
   const tags = tagsField.value.split(',');
   const image = imagesField.file;
@@ -203,6 +347,8 @@ const createMeetup = () => {
     formData.append(prop, data[prop]);
   }
 
+  enableButtonSpinner(createButton, 'spinner');
+
   fetch(`${apiBaseURL}/meetups`, {
     method: 'POST',
     mode: 'cors',
@@ -215,17 +361,19 @@ const createMeetup = () => {
     .then((res) => {
       const { status, data, error } = res;
       if (status === 201) {
+        disableButtonSpinner(createButton, 'spinner');
         displayFeedback(`${data[0].topic} meetup was successfully created`, 'success');
         setTimeout(() => {
           window.location.assign('./meetups.html');
         }, 5000);
       } else {
+        disableButtonSpinner(createButton, 'spinner');
         displayFeedback(error, 'error');
         hideFeedback(10);
       }
     })
     .catch((err) => {
-
+      disableButtonSpinner(createButton, 'spinner');
     })
 };
 

@@ -50,7 +50,13 @@ const createQuestionCardPrimary = (question) => {
   // TODO: Replace with dynamic content
   const askedBy = document.createElement('span');
   askedBy.classList.add('asked-by');
-  askedBy.textContent = 'asked by X';
+  getUser(question.createdby)
+    .then((user) => {
+      askedBy.textContent = `asked by ${user.firstname} ${user.lastname}`;
+    })
+    .catch((err) => {
+      throw err;
+    });
   const askedWhen = document.createElement('span');
   askedWhen.classList.add('asked-when');
   askedWhen.textContent = '';
@@ -174,6 +180,8 @@ const addIcons = (question, iconWrapper, icons) => {
     iconWrapper.appendChild(img);
   });
 };
+
+const cards = document.getElementById('q-question-cards');
 
 /**
  * @func createQuestionCard
@@ -339,7 +347,13 @@ const createQuestionForm = () => {
     e.preventDefault();
     askQuestion()
       .then((question) => {
-        window.location.reload();
+        createQuestionCard(question)
+          .then((questionCard) => {
+            cards.appendChild(questionCard);
+          })
+          .catch((err) => {
+            throw err;
+          });
       })
       .catch((err) => {
         displayFormFeedback(err.message);

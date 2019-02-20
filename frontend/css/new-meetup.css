@@ -1,5 +1,3 @@
-
-
 @import url("./meetups.css");
 @import url("./meetup.css");
 @import url("./modal.css");
@@ -27,7 +25,8 @@
 
 #q-new-meetup .wrapper .new-feature-content {
   flex: 0 0 35%;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/img/andela.jpeg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("../assets/img/andela.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -94,7 +93,88 @@
   top: 20%;
   left: 50%;
   max-height: 50px;
-  
+}
+
+.locations {
+  display: flex;
+}
+
+.locations__location {
+  flex: 1 0 calc(100% / 4);
+}
+
+.location-fieldset {
+  border: #d4d9e2 1px solid;
+}
+
+.location-legend {
+}
+
+.location__input {
+  padding: 1em;
+  width: 95%;
+  margin-right: 0;
+}
+
+.location__input--no-margin {
+  margin-left: 0;
+}
+
+.location__input--margin {
+  /* margin-left: 5px; */
+}
+
+.location--long {
+  /* width: 100%; */
+}
+
+.q-form__select {
+  border: #d4d9e2 1px solid;
+  border-radius: 3px;
+  padding: 1em;
+  color: #596377;
+  outline: none;
+  display: block;
+  margin-bottom: 8px;
+  background: none;
+}
+
+.progress-button {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.progress-button button {
+  display: block;
+  margin: 0 auto;
+  padding: 0;
+  width: 250px;
+  height: 70px;
+  border: 2px solid #116466;
+  border-radius: 40px;
+  background: transparent;
+  color: #116466;
+  letter-spacing: 1px;
+  font-size: 18px;
+  font-family: "Roboto", sans-serif;
+  cursor: pointer;
+  -webkit-transition: background-color 0.3s, color 0.3s, width 0.3s,
+    border-width 0.3s, border-color 0.3s;
+  transition: background-color 0.3s, color 0.3s, width 0.3s, border-width 0.3s,
+    border-color 0.3s;
+  position: relative;
+}
+
+.progress-button button:hover {
+  background-color: #116466;
+  color: #fff;
+}
+
+.progress-button button:focus {
+  outline: focus;
 }
 
 @media (max-width: 768px) {
@@ -108,5 +188,31 @@
 
   header .header-content {
     justify-content: center;
+  }
+
+  .locations {
+    flex-wrap: wrap;
+  }
+
+  .locations__location {
+    flex: 1 1 calc(100% / 2);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  #q-new-meetup .wrapper {
+    flex-direction: column;
+  }
+
+  #q-new-meetup .wrapper .new-feature-content {
+    display: none;
+  }
+
+  .locations {
+    flex-wrap: wrap;
+  }
+  
+  .locations__location {
+    flex: 1 1 calc(100% / 2);
   }
 }

@@ -158,4 +158,38 @@ const getUser = async (userId) => {
   }
 };
 
+/**
+ * @func createSpinner
+ * @param {Array<String>} classNames
+ * @returns {HTMLDivElement} Returns a spinner UI
+ */
+const createSpinner = (classNames) => {
+  const spinner = document.createElement('div');
+  spinner.classList.add(...classNames);
+  return spinner;
+};
+
+/**
+ * @func showMeetupsSpinner
+ * @returns {HTMLElement} Returns cards wrapper element
+ * @description Displays meetup loading spinner
+ */
+const showMeetupsSpinner = () => {
+  const cards = document.querySelector('.cards');
+  // cards.innerHTML = '';
+  const spinner = createSpinner(['spinner', 'meetups-spinner']);
+  cards.appendChild(spinner);
+  return cards;
+};
+
+/**
+ * @func hideMeetupsSpinner
+ * @returns {HTMLElement} Hides spinner UI
+ */
+const hideMeetupsSpinner = () => {
+  const spinner = document.querySelector('.spinner');
+  spinner.classList.add('hidden');
+  return spinner;
+};
+
 togglePasswordVisibility();

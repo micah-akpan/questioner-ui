@@ -236,13 +236,48 @@ const addMeetupsToPage = (meetups) => {
   return cards;
 };
 
-const getMeetups = () => fetch(`${apiBaseURL}/meetups`, {
-  headers: {
-    Authorization: `Bearer ${userToken}`
+const getMeetups = () => {
+  showMeetupsSpinner();
+  return fetch(`${apiBaseURL}/meetups`, {
+    headers: {
+      Authorization: `Bearer ${userToken}`
+    }
+  })
+    .then(response => response.json())
+    .then((response) => {
+      hideMeetupsSpinner();
+      return response;
+    })
+    .catch((err) => {
+      // Periodically check if there's internet connection available
+      throw err;
+    });
+};
+
+
+const fetchAndAddMeetupsToPage = () => getMeetups().then((res) => {
+  if (tokenIsValid(res)) {
+    const { status, data } = res;
+    if (status === 200) {
+      const meetups = data;
+      const MAX_MEETUPS = 6;
+      if (meetups.length > MAX_MEETUPS) {
+        const meetupsToBeDisplayed = meetups.slice(0, MAX_MEETUPS);
+        addMeetupsToPage(meetupsToBeDisplayed);
+        const remainingMeetups = meetups.length - MAX_MEETUPS;
+        const paginateText = `SEE MORE ${remainingMeetups} ${remainingMeetups > 1 ? 'MEETUPS' : 'MEETUP'}`;
+        meetupCardsWrapper.appendChild(createPaginationButton(paginateText));
+      } else {
+        addMeetupsToPage(meetups);
+      }
+
+      return 'Meetups added on page';
+    }
+  } else {
+    localStorage.removeItem('userToken');
+    window.location.assign('./sign-in.html');
   }
 })
-  .then(response => response.json())
-  .then(response => response)
   .catch((err) => {
     throw err;
   });

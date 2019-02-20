@@ -202,6 +202,38 @@ section {
   display: none;
 }
 
+/* Spinner for buttons */
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+ 
+.spinner::after {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 90%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  border-top-color: #116466;
+  animation: spinner .5s linear infinite;
+}
+
+.meetups-spinner::after {
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  border: 4px solid #ccc;
+  border-top-color: #116466;
+  animation: spinner .6s linear infinite;
+}
+
 
 /* App Main Header */
 header {
@@ -280,6 +312,22 @@ header .q-logo-w-border::after {
   font-family: Roboto, sans-serif;
 }
 
+.notifications__btn {
+
+}
+
+/* Notifications */
+.unread-count--active {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 12px;
+  height: 12px;
+  color: #fff;
+  background: #f44;
+  border-radius: 50%;
+}
+
 /* Left Nav */
 .q-left-nav {
   flex: 1 1 100%;
@@ -322,6 +370,7 @@ header .q-logo-w-border::after {
 }
 
 .notifications__btn {
+  position: relative;
   padding: 3px !important;
 }
 

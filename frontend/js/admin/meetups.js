@@ -278,6 +278,7 @@ const createDropDownMenu = (meetup) => {
  */
 const showDropDownMenu = (meetup) => {
   const dropDownMenu = document.getElementById(`dropdown-menu-${meetup.id}`);
+  console.log(dropDownMenu);
   dropDownMenu.classList.toggle('show');
   return dropDownMenu;
 };
