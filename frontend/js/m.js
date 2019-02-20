@@ -244,7 +244,10 @@ const getMeetups = () => {
     }
   })
     .then(response => response.json())
-    .then(response => response)
+    .then((response) => {
+      hideMeetupsSpinner();
+      return response;
+    })
     .catch((err) => {
       // Periodically check if there's internet connection available
       throw err;

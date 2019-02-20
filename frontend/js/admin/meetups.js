@@ -278,6 +278,7 @@ const createDropDownMenu = (meetup) => {
  */
 const showDropDownMenu = (meetup) => {
   const dropDownMenu = document.getElementById(`dropdown-menu-${meetup.id}`);
+  console.log(dropDownMenu);
   dropDownMenu.classList.toggle('show');
   return dropDownMenu;
 };
@@ -331,7 +332,6 @@ const createMeetupPrimarySec = (meetup) => {
  * @returns {undefined} Adds and displays all meetups
  */
 const showAllMeetups = () => {
-  fetchAndAddMeetupsToPage();
   getMeetups().then((res) => {
     if (tokenIsValid(res)) {
       if (res.status === 200) {

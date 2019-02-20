@@ -176,7 +176,7 @@ const createSpinner = (classNames) => {
  */
 const showMeetupsSpinner = () => {
   const cards = document.querySelector('.cards');
-  cards.innerHTML = '';
+  // cards.innerHTML = '';
   const spinner = createSpinner(['spinner', 'meetups-spinner']);
   cards.appendChild(spinner);
   return cards;
