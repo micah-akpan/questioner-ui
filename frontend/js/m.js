@@ -236,16 +236,19 @@ const addMeetupsToPage = (meetups) => {
   return cards;
 };
 
-const getMeetups = () => fetch(`${apiBaseURL}/meetups`, {
-  headers: {
-    Authorization: `Bearer ${userToken}`
-  }
-})
-  .then(response => response.json())
-  .then(response => response)
-  .catch((err) => {
-    throw err;
-  });
+const getMeetups = () => {
+  showMeetupsSpinner();
+  return fetch(`${apiBaseURL}/meetups`, {
+    headers: {
+      Authorization: `Bearer ${userToken}`
+    }
+  })
+    .then(response => response.json())
+    .then(response => response)
+    .catch((err) => {
+      throw err;
+    });
+};
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {

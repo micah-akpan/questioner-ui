@@ -158,4 +158,24 @@ const getUser = async (userId) => {
   }
 };
 
+const createSpinner = () => {
+
+};
+
+const showMeetupsSpinner = () => {
+  const cards = document.querySelector('.cards');
+  cards.innerHTML = '';
+  const spinner = document.createElement('div');
+  spinner.classList.add('spinner');
+  spinner.classList.add('meetups-spinner');
+  cards.appendChild(spinner);
+  return cards;
+};
+
+const hideMeetupsSpinner = () => {
+  const spinner = document.querySelector('.spinner');
+  spinner.classList.add('hidden');
+  return spinner;
+};
+
 togglePasswordVisibility();
