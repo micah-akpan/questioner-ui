@@ -11,6 +11,8 @@ const cityField = document.getElementById('mCity');
 const stateField = document.getElementById('mState');
 const countryField = document.getElementById('mCountry');
 
+const createButton = document.querySelector('.progress-button > button');
+
 /**
  * @func getAllCountries
  * @returns {Promise<Array>} Resolves
@@ -308,6 +310,16 @@ const formMeetupLocation = () => {
   return location;
 }
 
+const enableButtonSpinner = (button, spinnerClass) => {
+  button.classList.add(spinnerClass);
+  return button;
+}
+
+const disableButtonSpinner = (button, spinnerClass) => {
+  button.classList.remove(spinnerClass);
+  return button;
+}
+
 /**
  * @func createMeetup
  * @returns {undefined} 
@@ -335,6 +347,8 @@ const createMeetup = () => {
     formData.append(prop, data[prop]);
   }
 
+  enableButtonSpinner(createButton, 'spinner');
+
   fetch(`${apiBaseURL}/meetups`, {
     method: 'POST',
     mode: 'cors',
@@ -347,17 +361,19 @@ const createMeetup = () => {
     .then((res) => {
       const { status, data, error } = res;
       if (status === 201) {
+        disableButtonSpinner(createButton, 'spinner');
         displayFeedback(`${data[0].topic} meetup was successfully created`, 'success');
         setTimeout(() => {
           window.location.assign('./meetups.html');
         }, 5000);
       } else {
+        disableButtonSpinner(createButton, 'spinner');
         displayFeedback(error, 'error');
         hideFeedback(10);
       }
     })
     .catch((err) => {
-
+      disableButtonSpinner(createButton, 'spinner');
     })
 };
 
