@@ -331,6 +331,7 @@ const createMeetupPrimarySec = (meetup) => {
  * @returns {undefined} Adds and displays all meetups
  */
 const showAllMeetups = () => {
+  fetchAndAddMeetupsToPage();
   getMeetups().then((res) => {
     if (tokenIsValid(res)) {
       if (res.status === 200) {
