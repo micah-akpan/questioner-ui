@@ -16,6 +16,33 @@ const getComments = async (question) => {
   }
 };
 
+
+const createCommentTimestamp = (date) => {
+  const ms = new Date(date).getTime() + (1000 * 24 * 60);
+  const now = new Date().getTime();
+  const rem = now - ms;
+  const secs = Math.floor(rem / 1000);
+  let mins = 0;
+  let hours = 0;
+  if (secs >= 60) {
+    mins = Math.floor(secs / 60);
+  } else {
+    return 'Just Now';
+  }
+
+  if (mins > 60) {
+    hours = Math.floor(mins / 60);
+  } else {
+    return `${mins} minutes ago`;
+  }
+
+  if (hours > 23) {
+    const [month, day] = parseDate(date);
+    return `${month} ${day}`;
+  }
+  return `${hours} hours ago`;
+};
+
 const createCardUserAvatarSec = (user) => {
   const userAvatar = document.createElement('img');
   const defaultImage = '../assets/icons/avatar1.svg';
@@ -33,8 +60,7 @@ const createCardPrimarySection = ({ firstname, lastname }, comment) => {
   const commentBody = document.createElement('p');
   commentBody.textContent = comment.body;
   const commentDate = document.createElement('span');
-  const [month, day] = parseDate(comment.createdOn);
-  commentDate.textContent = `${month} ${day}`;
+  commentDate.textContent = createCommentTimestamp(comment.createdOn);
 
   primaryDetails.appendChild(userName);
   primaryDetails.appendChild(commentBody);
