@@ -271,14 +271,6 @@ nav.no-flex {
   background: radial-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
 }
 
-.nav-avatar__list-item {
-  
-}
-
-.nav-avatar__list-item img {
-  border-radius: 10px;
-}
-
 /* Form styling specifics for meetups page */
 #q-form {
   width: 90%;

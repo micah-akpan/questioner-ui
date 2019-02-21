@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -102,17 +102,23 @@
   <section id="user-profile">
     <div class="container">
       <div class="user-profile__stats">
-        <div class="user-statistics__total-questions">
-          <p class="stat-value">80</p>
-          <p class="stat-desc">Total Questions asked</p>
+        <div class="user-statistics__total-questions" id="user-statistics__total-questions">
+          <p class="stat-value" 
+            id="questions-stat__value"
+            title="Total Questions asked in all Meetups">0</p>
+          <p class="stat-desc" id="questions-stat__description">Total Questions asked</p>
         </div>
-        <div class="user-statistics__total-comments">
-          <p class="stat-value">100</p>
-          <p class="stat-desc">Total Comments</p>
+        <div class="user-statistics__total-comments" id="user-statistics__total-comments">
+          <p class="stat-value" 
+            id="comments-stat__value"
+            title="Total Comments posted in all questions">0</p>
+          <p class="stat-desc" id="comments-stat__description">Total Comments</p>
         </div>
         <div class="user-statistics__total-meetups-sched">
-          <p class="stat-value">80</p>
-          <p class="stat-desc">Total Meetups</p>
+          <p class="stat-value" 
+          id="meetup-rsvp-state__value"
+          title="Total Meetups you are scheduled to attend">0</p>
+          <p class="stat-desc" id="meetup-rsvp-state__description">Total Meetups</p>
         </div>
       </div>
 
@@ -413,6 +419,9 @@
 
   <script src="../js/base.js"></script>
   <script src="../js/nav.js"></script>
+  <script src="../js/m.js"></script>
+  <script src="../js/rsvp.js"></script>
+  <script src="../js/stat.js"></script>
   <script src="../js/profile.js"></script>
 </body>
 

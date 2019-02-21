@@ -347,11 +347,15 @@ saveChangesButton.onclick = () => {
     });
 };
 
-addProfileAvatarToNav('../assets/icons/avatar1.jpg');
+addProfileAvatarToNav('../assets/icons/avatar1.svg');
 
 const focusInput = (node) => {
   node.focus();
 };
+
+const changeDocTitle = (title) => {
+  document.title = title;
+}
 
 window.onload = () => {
   const userId = localStorage.getItem('userId');
@@ -362,6 +366,7 @@ window.onload = () => {
         userProfileImageTextWrapper.appendChild(userDataCard);
         replaceFormFields(user);
         displayUserAvatar(user);
+        changeDocTitle(`${user.firstname} | Questioner`);
       }
     })
     .catch((err) => {

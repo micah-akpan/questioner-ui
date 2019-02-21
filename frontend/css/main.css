@@ -312,8 +312,10 @@ header .q-logo-w-border::after {
   font-family: Roboto, sans-serif;
 }
 
-.notifications__btn {
-
+.nav-avatar__list-item img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
 }
 
 /* Notifications */

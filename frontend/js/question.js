@@ -52,7 +52,7 @@ const createQuestionCardPrimary = (question) => {
   askedBy.classList.add('asked-by');
   getUser(question.createdby)
     .then((user) => {
-      askedBy.textContent = `asked by ${user.firstname} ${user.lastname}`;
+      askedBy.textContent = `Asked by ${user.firstname} ${user.lastname}`;
     })
     .catch((err) => {
       throw err;
