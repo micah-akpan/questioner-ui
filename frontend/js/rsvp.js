@@ -28,14 +28,19 @@ const rsvpBtnSpecs = [
 const getMeetupRsvps = async (meetup) => {
   try {
     const apiUrl = `${apiBaseURL}/meetups/${meetup.id}/rsvps`;
-    const response = await fetch(apiUrl, requestHeader);
+    const response = await fetch(apiUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Token.getToken('userToken')}`
+      }
+    });
     const responseBody = await response.json();
     if (responseBody.status === 200) {
       return responseBody.data;
     }
     return [];
   } catch (e) {
-
+    
   }
 };
 

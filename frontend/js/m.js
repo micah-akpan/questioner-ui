@@ -26,9 +26,11 @@ const createPaginationButton = (text) => {
   return pgButton;
 };
 
-searchIcon.onclick = () => {
-  searchBar.classList.add('show');
-};
+if (searchIcon) {
+  searchIcon.onclick = () => {
+    searchBar.classList.add('show');
+  };
+}
 
 /**
  * @function createMeetupLink
