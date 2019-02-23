@@ -99,13 +99,13 @@ const displayMeetupTags = async (tags) => {
 
 /**
  * @func displayMeetupQuestions
- * @param {*} meetup Meetup
+ * @param {String|Number} meetupId Meetup
  * @returns {undefined} Makes an HTTP request for all meetup questions
  * displays them
  */
-const displayMeetupQuestions = async (meetup) => {
+const displayMeetupQuestions = async (meetupId) => {
   try {
-    const apiUrl = `${apiBaseURL}/meetups/${activeMeetupId}/questions`;
+    const apiUrl = `${apiBaseURL}/meetups/${meetupId}/questions`;
     const response = await fetch(apiUrl, requestHeader);
     const responseBody = await response.json();
     const { status, data } = responseBody;
@@ -118,6 +118,110 @@ const displayMeetupQuestions = async (meetup) => {
   } catch (e) {
     throw e;
   }
+};
+
+
+// ====================== questions ================================
+
+const askGroupButton = document.getElementById('ask-group-btn');
+
+const createQuestionFormFields = specs => specs.map((spec) => {
+  const formGroup = document.createElement('div');
+  formGroup.classList.add('q-form__group');
+  const label = document.createElement('label');
+  label.htmlFor = spec.idText;
+  label.classList.add('q-form__label', spec.labelClass);
+  label.textContent = spec.labelText;
+  const requireValidation = document.createElement('abbr');
+  requireValidation.textContent = ' * ';
+  requireValidation.title = 'required';
+  const field = document.createElement(spec.type);
+  field.id = spec.idText;
+  field.placeholder = spec.placeholder;
+  field.classList.add(`${spec.type === 'input' ? 'q-form__input' : 'q-form__textarea'}`);
+  if (spec.idText !== 'user-question-label') {
+    label.appendChild(requireValidation);
+    field.setAttribute('required', '');
+  }
+
+  formGroup.appendChild(label);
+  formGroup.appendChild(field);
+
+  return formGroup;
+});
+
+const createQuestionFormButton = () => {
+  const postButtonArea = document.createElement('div');
+  postButtonArea.classList.add('post-btn-box', 'post-question-btn-box', 'q-form__group');
+  const postQuestionButton = document.createElement('button');
+  postQuestionButton.classList.add('q-btn', 'post-comment-btn');
+  postQuestionButton.textContent = 'Ask';
+
+  postButtonArea.appendChild(postQuestionButton);
+  return postButtonArea;
+};
+
+const sendUserQuestion = (e) => {
+  e.preventDefault();
+  askQuestion()
+    .then((question) => {
+      questionCards.innerHTML = '';
+      displayMeetupQuestions(question.meetup);
+    })
+    .catch((err) => {
+      displayFormFeedback(err.message);
+    });
+};
+
+/**
+ * @func createQuestionForm
+ * @returns {HTMLElement} Returns an HTML Element that
+ * wraps the form
+ */
+const createQuestionForm = () => {
+  const wrapper = document.createElement('div');
+  const bioSection = createQuestionBioSection();
+  const clear = document.createElement('div');
+  clear.classList.add('clear');
+
+  const form = document.createElement('form');
+  form.setAttribute('method', 'POST');
+  const userFeedback = document.createElement('div');
+  userFeedback.classList.add('user-feedback');
+  userFeedback.id = 'user-feedback';
+
+  const formInputs = createQuestionFormFields(formInputSpec);
+  const postButtonArea = createQuestionFormButton();
+
+  form.appendChild(userFeedback);
+
+  formInputs.forEach((formField) => {
+    form.appendChild(formField);
+  });
+
+  form.appendChild(postButtonArea);
+
+  form.onsubmit = sendUserQuestion;
+  wrapper.appendChild(bioSection);
+  wrapper.appendChild(clear);
+  wrapper.appendChild(form);
+  askQuestionWrapper.appendChild(wrapper);
+
+  return wrapper;
+};
+
+const displayQuestionBlock = () => {
+  askQuestionWrapper.classList.add('active');
+  postQuestionDirArea.classList.add('inactive');
+  const divider = document.createElement('hr');
+  divider.classList.add('divider');
+  askQuestionWrapper.appendChild(divider);
+  return askQuestionWrapper;
+};
+
+askGroupButton.onclick = () => {
+  createQuestionForm();
+  displayQuestionBlock();
 };
 
 /**
@@ -255,7 +359,7 @@ const addMeetupToPage = (meetup) => {
   addRsvpButtonsToPage(meetup);
   addDescriptionToPage(meetup);
 
-  displayMeetupQuestions(meetup);
+  displayMeetupQuestions(meetup.id);
   getMeetupTags()
     .then(tags => createMeetupTags(tags))
     .then((tagElems) => {

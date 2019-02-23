@@ -1,5 +1,7 @@
 
 const getComments = async (question) => {
+  console.log('got ............... here!');
+  console.log(question);
   try {
     const apiUrl = `${apiBaseURL}/questions/${question.id}/comments`;
     const response = await fetch(apiUrl, requestHeader);
@@ -89,7 +91,7 @@ const createCommentCard = (user, comment) => {
 * @returns {String} Comment link text
 */
 const formCommentLinkText = (totalComments) => {
-  let linkText = '';
+  let linkText = 'Be the first to comment';
   if (totalComments > 1) {
     linkText = `View all ${totalComments} comments`;
   } else if (totalComments === 1) {
