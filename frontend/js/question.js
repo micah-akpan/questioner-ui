@@ -183,6 +183,7 @@ const addIcons = (question, iconWrapper, icons) => {
 
 const cards = document.getElementById('q-question-cards');
 
+
 /**
  * @func createQuestionCard
  * @param {*} question Meetup question
@@ -268,98 +269,122 @@ const formInputSpec = [
 
 ];
 
-const createQuestionForm = () => {
-  const wrapper = document.createElement('div');
-  const bioSection = document.createElement('div');
+const getUserDetails = () => Promise.all([getUserImage(), getUser(userId)])
+  .then(results => results)
+  .catch((err) => {
+    throw err;
+  });
+
+const createQuestionBioSection = () => {
+  const bioSection = document.createElement('section');
   const userAvatar = document.createElement('img');
   userAvatar.classList.add('user-profile-avatar');
   const defaultAvatar = '../assets/icons/avatar1.svg';
 
   const bioText = document.createElement('p');
-  bioText.classList.add('modal-content-title', 'question-text', 'user-profile-text');
+  bioText.classList.add('question-text', 'user-profile-text');
   const userName = document.createElement('p');
-  const clear = document.createElement('div');
-  clear.classList.add('clear');
-  Promise.all([getUserImage(), getUser(userId)])
-    .then((results) => {
-      const [userImage, user] = results;
-      userAvatar.setAttribute('src', userImage || defaultAvatar);
-      userAvatar.setAttribute('alt', user.firstname);
 
-      userName.textContent = `${user.firstname} ${user.lastname}`;
-      bioText.textContent = user.bio;
-    })
-    .catch((err) => {
+  getUserDetails()
+    .then((details) => {
+      const [userImage, user] = details;
+      const { firstname, lastname, bio } = user;
+      userAvatar.setAttribute('src', userImage || defaultAvatar);
+      userAvatar.setAttribute('alt', firstname);
+      userName.textContent = `${firstname} ${lastname}`;
+      bioText.textContent = bio;
+    }, (err) => {
       throw err;
     });
+
   bioSection.appendChild(userAvatar);
   bioSection.appendChild(userName);
   bioSection.appendChild(bioText);
+  return bioSection;
+};
 
-  const form = document.createElement('form');
-  form.method = 'POST';
-  const userFeedback = document.createElement('div');
-  userFeedback.classList.add('user-feedback');
-  userFeedback.id = 'user-feedback';
+const createQuestionFormFields = specs => specs.map((spec) => {
+  const formGroup = document.createElement('div');
+  formGroup.classList.add('q-form__group');
+  const label = document.createElement('label');
+  label.htmlFor = spec.idText;
+  label.classList.add('q-form__label', spec.labelClass);
+  label.textContent = spec.labelText;
+  const requireValidation = document.createElement('abbr');
+  requireValidation.textContent = ' * ';
+  requireValidation.title = 'required';
+  const field = document.createElement(spec.type);
+  field.id = spec.idText;
+  field.placeholder = spec.placeholder;
+  field.classList.add(`${spec.type === 'input' ? 'q-form__input' : 'q-form__textarea'}`);
+  if (spec.idText !== 'user-question-label') {
+    label.appendChild(requireValidation);
+    field.setAttribute('required', '');
+  }
 
-  const formInputs = formInputSpec.map((spec) => {
-    const formGroup = document.createElement('div');
-    formGroup.classList.add('q-form__group');
-    const label = document.createElement('label');
-    label.htmlFor = spec.idText;
-    label.classList.add('q-form__label', spec.labelClass);
-    label.textContent = spec.labelText;
-    const requireValidation = document.createElement('abbr');
-    requireValidation.textContent = ' * ';
-    requireValidation.title = 'required';
-    const field = document.createElement(spec.type);
-    field.id = spec.idText;
-    field.placeholder = spec.placeholder;
-    field.classList.add(`${spec.type === 'input' ? 'q-form__input' : 'q-form__textarea'}`);
-    if (spec.idText !== 'user-question-label') {
-      label.appendChild(requireValidation);
-      field.setAttribute('required', '');
-    }
+  formGroup.appendChild(label);
+  formGroup.appendChild(field);
 
-    formGroup.appendChild(label);
-    formGroup.appendChild(field);
+  return formGroup;
+});
 
-    return formGroup;
-  });
-
-  const postBtnArea = document.createElement('div');
-  postBtnArea.classList.add('post-btn-box', 'post-question-btn-box', 'q-form__group');
+const createQuestionFormButton = () => {
+  const postButtonArea = document.createElement('div');
+  postButtonArea.classList.add('post-btn-box', 'post-question-btn-box', 'q-form__group');
   const postQuestionButton = document.createElement('button');
   postQuestionButton.classList.add('q-btn', 'post-comment-btn');
   postQuestionButton.textContent = 'Ask';
 
-  postBtnArea.appendChild(postQuestionButton);
+  postButtonArea.appendChild(postQuestionButton);
+  return postButtonArea;
+};
+
+const sendUserQuestion = (e) => {
+  e.preventDefault();
+  askQuestion()
+    .then((question) => {
+      createQuestionCard(question)
+        .then((questionCard) => {
+          cards.appendChild(questionCard);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    })
+    .catch((err) => {
+      displayFormFeedback(err.message);
+    });
+};
+
+/**
+ * @func createQuestionForm
+ * @returns {HTMLElement} Returns an HTML Element that
+ * wraps the form
+ */
+const createQuestionForm = () => {
+  const wrapper = document.createElement('div');
+  const bioSection = createQuestionBioSection();
+  const clear = document.createElement('div');
+  clear.classList.add('clear');
+
+  const form = document.createElement('form');
+  form.setAttribute('method', 'POST');
+  const userFeedback = document.createElement('div');
+  userFeedback.classList.add('user-feedback');
+  userFeedback.id = 'user-feedback';
+
+  const formInputs = createQuestionFormFields(formInputSpec);
+  const postButtonArea = createQuestionFormButton();
 
   form.appendChild(userFeedback);
 
-  formInputs.forEach((el) => {
-    form.appendChild(el);
+  formInputs.forEach((formField) => {
+    form.appendChild(formField);
   });
 
-  form.appendChild(postBtnArea);
+  form.appendChild(postButtonArea);
 
-  form.onsubmit = (e) => {
-    e.preventDefault();
-    askQuestion()
-      .then((question) => {
-        createQuestionCard(question)
-          .then((questionCard) => {
-            cards.appendChild(questionCard);
-          })
-          .catch((err) => {
-            throw err;
-          });
-      })
-      .catch((err) => {
-        displayFormFeedback(err.message);
-      });
-  };
-
+  form.onsubmit = sendUserQuestion;
   wrapper.appendChild(bioSection);
   wrapper.appendChild(clear);
   wrapper.appendChild(form);
