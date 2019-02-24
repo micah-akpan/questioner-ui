@@ -98,30 +98,44 @@ const displayMeetupTags = async (tags) => {
 };
 
 /**
+ * @func getMeetupQuestions
+ * @param {String|Number} meetupId
+ * @returns {Promise<Array>} Resolves to an array of questions
+ * asked in `meetupId`
+ */
+const getMeetupQuestions = (meetupId) => {
+  const apiUrl = `${apiBaseURL}/meetups/${meetupId}/questions`;
+  return fetch(apiUrl, requestHeader)
+    .then(response => response.json())
+    .then((responseBody) => {
+      const { status, data } = responseBody;
+      return status === 200 ? data : [];
+    });
+};
+/**
  * @func displayMeetupQuestions
  * @param {String|Number} meetupId Meetup
- * @returns {undefined} Makes an HTTP request for all meetup questions
- * displays them
+ * @returns {HTMLElement} Resolves to an array of HTML Element
+ * representing meetup cards
  */
-const displayMeetupQuestions = async (meetupId) => {
-  try {
-    const apiUrl = `${apiBaseURL}/meetups/${meetupId}/questions`;
-    const response = await fetch(apiUrl, requestHeader);
-    const responseBody = await response.json();
-    const { status, data } = responseBody;
-    if (status === 200) {
-      const questions = data;
-      questions.forEach(async (question) => {
-        questionCards.appendChild(await createQuestionCard(question));
-      });
-    }
-  } catch (e) {
-    throw e;
-  }
-};
+const displayMeetupQuestions = meetupId => getMeetupQuestions(meetupId)
+  .then((questions) => {
+    const allCardsPromises = questions.map(question => createQuestionCard(question));
 
+    return allCardsPromises;
+  })
+  .then(allCardsPromises => Promise.all(allCardsPromises)
+    .then((cards) => {
+      for (let i = 0, nCards = cards.length; i < nCards; i += 1) {
+        const card = cards[i];
+        questionCards.appendChild(card);
+      }
 
-// ====================== questions ================================
+      return questionCards;
+    })
+    .catch((err) => {
+      throw err;
+    }));
 
 const askGroupButton = document.getElementById('ask-group-btn');
 

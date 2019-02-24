@@ -1,7 +1,5 @@
 
 const getComments = async (question) => {
-  console.log('got ............... here!');
-  console.log(question);
   try {
     const apiUrl = `${apiBaseURL}/questions/${question.id}/comments`;
     const response = await fetch(apiUrl, requestHeader);
