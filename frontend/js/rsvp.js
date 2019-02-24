@@ -1,8 +1,6 @@
-/* eslint-disable */
-
 const rsvpEnquiryWrapper = document.getElementById('meetup-rsvp__enquiry');
 
-const rsvpBtnSpecs = [
+const rsvpButtonSpecs = [
   {
     id: 1,
     text: 'yes'
@@ -21,75 +19,81 @@ const rsvpBtnSpecs = [
 
 /**
  * @func getMeetupRsvps
- * @param {*} meetup 
+ * @param {*} meetup
  * @return {Promise<Array>} Resolves to the array
  * of the meetup rsvps
  */
-const getMeetupRsvps = async (meetup) => {
-  try {
-    const apiUrl = `${apiBaseURL}/meetups/${meetup.id}/rsvps`;
-    const response = await fetch(apiUrl, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Token.getToken('userToken')}`
-      }
-    });
-    const responseBody = await response.json();
-    if (responseBody.status === 200) {
-      return responseBody.data;
+const getMeetupRsvps = (meetup) => {
+  const apiUrl = `${apiBaseURL}/meetups/${meetup.id}/rsvps`;
+  return fetch(apiUrl, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Token.getToken('userToken')}`
     }
-    return [];
-  } catch (e) {
-    
-  }
-};
-
-/**
- * 
- * @param {*} rsvp 
- * @param {String} response
- * @returns {undefined}
- * @description Updates a Meetup RSVP status
- */
-const updateUserRsvpStatus = async (rsvp, response) => {
-  const meetupId = localStorage.getItem('activeMeetupId');
-  fetch(`${apiBaseURL}/meetups/${meetupId}/rsvps/${rsvp.id}`, {
-    method: 'PATCH',
-    headers: requestHeader.headers,
-    body: JSON.stringify({ response })
   })
-    .then(res => res.json())
-    .then(res => {
-      
+    .then(response => response.json())
+    .then((responseBody) => {
+      const { status, data } = responseBody;
+      return status === 200 ? data : [];
     })
     .catch((err) => {
       throw err;
+    });
+};
+
+/**
+ * @func updateUserRsvpStatus
+ * @param {*} rsvp
+ * @param {String} userResponse
+ * @returns {Promise} Resolves to the newly
+ * updated Meetup RSVP or null if update
+ * request was unsuccessful
+ */
+const updateUserRsvpStatus = async (rsvp, userResponse) => {
+  const meetupId = localStorage.getItem('activeMeetupId');
+  const rsvpAPIUrl = `${apiBaseURL}/meetups/${meetupId}/rsvps/${rsvp.id}`;
+  return fetch(rsvpAPIUrl, {
+    method: 'PATCH',
+    headers: requestHeader.headers,
+    body: JSON.stringify({ response: userResponse })
+  })
+    .then(response => response.json())
+    .then((responseBody) => {
+      const { status, data } = responseBody;
+      return status === 200 ? data[0] : null;
     })
+    .catch((err) => {
+      throw err;
+    });
 };
 
 /**
 * @func getUserRsvp
 * @param {*} meetup
-* @returns {Promise} Resolves to a Meetup Rsvp object
+* @returns {Promise} Resolves to a Meetup Rsvp of the
+* currently logged in user
 */
-const getUserRsvp = async (meetup) => {
-  const rsvps = await getMeetupRsvps(meetup);
-  const userId = localStorage.getItem('userId');
-  const userRsvp = rsvps.find((rsvp) => {
-    return rsvp.user === Number(userId);
+const getUserRsvp = meetup => getMeetupRsvps(meetup)
+  .then((rsvps) => {
+    const userId = localStorage.getItem('userId');
+    const userRsvp = rsvps.find(rsvp => rsvp.user === Number(userId));
+
+    return userRsvp;
+  })
+  .catch((err) => {
+    throw err;
   });
-  return userRsvp;
-};
 
 /**
 * @func userHasRsvped
 * @param {*} meetup Meetup object
 * @returns {Promise<Boolean>} Resolve to true if user has rsvped for `meetup`, false otherwise
 */
-const userHasRsvped = async (meetup) => {
-  const userRsvp = await getUserRsvp(meetup);
-  return userRsvp !== undefined;
-};
+const userHasRsvped = meetup => getUserRsvp(meetup)
+  .then(userRsvp => userRsvp !== undefined)
+  .catch((err) => {
+    throw err;
+  });
 
 
 /**
@@ -100,11 +104,11 @@ const userHasRsvped = async (meetup) => {
 const formRsvpFeedbackMsg = (response) => {
   let feedbackMessage = '';
   if (response === 'yes') {
-    feedbackMessage = 'You are going to this meetup'
+    feedbackMessage = 'You are going to this meetup';
   } else if (response === 'no') {
     feedbackMessage = 'You are not going to this meetup';
   } else {
-    feedbackMessage = 'You are likely to attend this meetup'
+    feedbackMessage = 'You are likely to attend this meetup';
   }
 
   return feedbackMessage;
@@ -114,29 +118,27 @@ const formRsvpFeedbackMsg = (response) => {
  * @func getMeetup
  * @returns {*} Meetup
  */
-const getMeetup = async () => {
-  try {
-    const response = await fetch(`${apiBaseURL}/meetups/${activeMeetupId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`
-      }
-    });
-
-    const responseBody = await response.json();
+const getMeetup = () => fetch(`${apiBaseURL}/meetups/${activeMeetupId}`, {
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${userToken}`
+  }
+})
+  .then(response => response.json())
+  .then((responseBody) => {
     const { status, data } = responseBody;
     return status === 200 ? data[0] : null;
-  } catch (e) {
-    console.error(e);
-  }
-};
+  })
+  .catch((err) => {
+    throw err;
+  });
 
 /**
  * @func toggleButtons
- * @param {Array<HTMLButtonElement>} buttons 
+ * @param {Array<HTMLButtonElement>} buttons
  * @param {String} userResponse
- * @returns {undefined}
- * @description Toggle disabled classes for buttons 
+ * @returns {Array<HTMLButtonElement>} Returns the RSVP  action buttons
+ * @description Toggle disabled classes for buttons
  */
 const toggleButtons = (buttons, userResponse) => {
   buttons.forEach((button) => {
@@ -145,18 +147,20 @@ const toggleButtons = (buttons, userResponse) => {
       button.classList.add('disabled__btn');
     } else {
       button.disabled = false;
-      button.classList.remove('disabled__btn')
+      button.classList.remove('disabled__btn');
     }
   });
-}
+  return buttons;
+};
 
 /**
 * @func rsvpForMeetup
 * @param {String} userResponse
-* @returns {<Promise>Array} Resolves to an array of the user rsvp for the meetup
+* @returns {Promise<Array>} Resolves to an array of the user rsvp for the meetup
 */
 const rsvpForMeetup = async (userResponse) => {
   try {
+    const feedbackPara = document.querySelector('.rsvp-user-feedback');
     const rsvpExist = await userHasRsvped({
       id: activeMeetupId
     });
@@ -172,7 +176,6 @@ const rsvpForMeetup = async (userResponse) => {
         body: JSON.stringify({ response: userResponse })
       });
       const responseBody = await response.json();
-      const feedbackPara = document.querySelector('.rsvp-user-feedback');
       feedbackPara.textContent = formRsvpFeedbackMsg(userResponse);
       return responseBody.data;
     }
@@ -182,13 +185,10 @@ const rsvpForMeetup = async (userResponse) => {
 
     const meetup = await getMeetup();
     const rsvp = await getUserRsvp(meetup);
-
-    const feedbackPara = document.querySelector('.rsvp-user-feedback');
     feedbackPara.textContent = formRsvpFeedbackMsg(userResponse);
-
     updateUserRsvpStatus(rsvp, userResponse);
-  } catch (e) {
-
+  } catch (err) {
+    throw err;
   }
 };
 
@@ -196,22 +196,20 @@ const rsvpForMeetup = async (userResponse) => {
 * @func createRsvpButtons
 * @returns {Array<HTMLButtonElement>} An array of button elements representing the rsvp actions
 */
-const createRsvpButtons = () => {
-  return rsvpBtnSpecs.map((spec) => {
-    const button = document.createElement('button');
-    button.classList.add('q-btn', 'rsvp-btn');
-    button.textContent = spec.text;
-    button.setAttribute('data-target', spec.id);
-    button.onclick = () => {
-      rsvpForMeetup(spec.text);
-    }
-    return button;
-  });
-}
+const createRsvpButtons = () => rsvpButtonSpecs.map((spec) => {
+  const button = document.createElement('button');
+  button.classList.add('q-btn', 'rsvp-btn');
+  button.textContent = spec.text;
+  button.setAttribute('data-target', `${spec.text.toLowerCase()}-${spec.id}`);
+  button.onclick = () => {
+    rsvpForMeetup(spec.text);
+  };
+  return button;
+});
 
 /**
  * @func addRsvpButtonsToPage
- * @param {*} meetup 
+ * @param {*} meetup
  * @return {HTMLElement} Returns the wrapper
  * HTML element that wraps the buttons
  */
@@ -228,24 +226,24 @@ const addRsvpButtonsToPage = (meetup) => {
     .then((values) => {
       const [hasRsvped, rsvp] = values;
       if (hasRsvped) {
-        rsvpButtons.forEach(btn => {
-          if (btn.textContent === rsvp.response) {
-            btn.disabled = true;
-            btn.classList.add('disabled__btn');
+        rsvpButtons.forEach((button) => {
+          if (button.textContent === rsvp.response) {
+            button.disabled = true;
+            button.classList.add('disabled__btn');
           }
         });
 
         feedback = formRsvpFeedbackMsg(rsvp.response);
         feedbackPara.textContent = feedback;
 
-        p.textContent = 'Change your mind? Let\'s know if you will attend this meetup or not?'
+        p.textContent = 'Change your mind? Let\'s know if you will attend this meetup or not?';
       } else {
         p.textContent = 'Will you attend this meetup?';
       }
     })
     .catch((err) => {
-      console.log(err);
-    })
+      throw err;
+    });
 
   const btnsWrapper = document.createElement('div');
   btnsWrapper.classList.add('meetup-sched__btns');
@@ -255,7 +253,6 @@ const addRsvpButtonsToPage = (meetup) => {
   rsvpWrapper.appendChild(p);
   rsvpWrapper.appendChild(btnsWrapper);
   rsvpEnquiryWrapper.appendChild(rsvpWrapper);
-  rsvpEnquiryWrapper.appendChild(feedbackPara)
+  rsvpEnquiryWrapper.appendChild(feedbackPara);
   return rsvpEnquiryWrapper;
 };
-

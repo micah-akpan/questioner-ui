@@ -78,6 +78,7 @@ button {
   flex: 1 1 50%;
 }
 
+/* Meetup Main Image Preview */
 .q-meetups-preview__block .image-preview {
   position: relative;
   margin-right: 30px;
