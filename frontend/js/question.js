@@ -1,6 +1,6 @@
 const askQuestionWrapper = document.getElementById('ask-question');
 const postQuestionDirArea = document.getElementById('post-questions-directive');
-// const askGroupButton = document.getElementById('ask-group-btn');
+const cards = document.getElementById('q-question-cards');
 
 /**
  * @func askQuestion
@@ -180,8 +180,6 @@ const addIcons = (question, iconWrapper, icons) => {
   });
 };
 
-const cards = document.getElementById('q-question-cards');
-
 
 /**
  * @func createQuestionCard
@@ -268,12 +266,22 @@ const formInputSpec = [
 
 ];
 
+/**
+ * @func getUserDetails
+ * @returns {Promise<Array>} Resolves to an array of
+ * of user details
+ */
 const getUserDetails = () => Promise.all([getUserImage(), getUser(userId)])
   .then(results => results)
   .catch((err) => {
     throw err;
   });
 
+/**
+ * @func createQuestionBioSection
+ * @returns {HTMLElement} Returns HTML element that
+ * represent the question bio section
+ */
 const createQuestionBioSection = () => {
   const bioSection = document.createElement('section');
   const userAvatar = document.createElement('img');

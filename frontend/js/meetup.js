@@ -25,6 +25,7 @@ const thumbnailPhotosWrapper = document.getElementById('meetup-photos__wrapper')
 const meetupTagsWrapper = document.getElementById('meetup-tags');
 const addedMeetups = document.getElementById('meetup-tags-added');
 const questionCards = document.getElementById('q-question-cards');
+const askGroupButton = document.getElementById('ask-group-btn');
 
 /**
  * @func displayTotalUsersVotes
@@ -115,7 +116,7 @@ const getMeetupQuestions = (meetupId) => {
 /**
  * @func displayMeetupQuestions
  * @param {String|Number} meetupId Meetup
- * @returns {HTMLElement} Resolves to an array of HTML Element
+ * @returns {Promise<HTMLElement>} Resolves to an array of HTML Element
  * representing meetup cards
  */
 const displayMeetupQuestions = meetupId => getMeetupQuestions(meetupId)
@@ -137,8 +138,12 @@ const displayMeetupQuestions = meetupId => getMeetupQuestions(meetupId)
       throw err;
     }));
 
-const askGroupButton = document.getElementById('ask-group-btn');
-
+/**
+ * @func createQuestionFormFields
+ * @param {Array} specs
+ * @returns {HTMLElement} Creates all question form form using
+ * data in `specs`
+ */
 const createQuestionFormFields = specs => specs.map((spec) => {
   const formGroup = document.createElement('div');
   formGroup.classList.add('q-form__group');
@@ -164,6 +169,11 @@ const createQuestionFormFields = specs => specs.map((spec) => {
   return formGroup;
 });
 
+/**
+ * @func createQuestionFormButton
+ * @returns {HTMLDivElement} Creates a wrapper that
+ * holds the question form button
+ */
 const createQuestionFormButton = () => {
   const postButtonArea = document.createElement('div');
   postButtonArea.classList.add('post-btn-box', 'post-question-btn-box', 'q-form__group');
@@ -175,12 +185,19 @@ const createQuestionFormButton = () => {
   return postButtonArea;
 };
 
+/**
+ * @func sendUserQuestion
+ * @param {Event} e
+ * @returns {Promise<HTMLElement>} Sends user question
+ * and returns the wrapper
+ * that wraps all question cards
+ */
 const sendUserQuestion = (e) => {
   e.preventDefault();
-  askQuestion()
+  return askQuestion()
     .then((question) => {
       questionCards.innerHTML = '';
-      displayMeetupQuestions(question.meetup);
+      return displayMeetupQuestions(question.meetup);
     })
     .catch((err) => {
       displayFormFeedback(err.message);
@@ -224,6 +241,11 @@ const createQuestionForm = () => {
   return wrapper;
 };
 
+/**
+ * @func displayQuestionBlock
+ * @returns {HTMLElement} Displays the 'ask question'
+ * wrapper
+ */
 const displayQuestionBlock = () => {
   askQuestionWrapper.classList.add('active');
   postQuestionDirArea.classList.add('inactive');

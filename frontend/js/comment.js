@@ -1,4 +1,9 @@
-
+/**
+ * @func getComments
+ * @param {*} question
+ * @returns {Promise<Array>} Resolves to an array of
+ * comments
+ */
 const getComments = async (question) => {
   try {
     const apiUrl = `${apiBaseURL}/questions/${question.id}/comments`;
@@ -16,9 +21,13 @@ const getComments = async (question) => {
   }
 };
 
-
+/**
+ * @func createCommentTimestamp
+ * @param {String} date
+ * @returns {String} Returns a friendly time-stamp for comments
+ */
 const createCommentTimestamp = (date) => {
-  const ms = new Date(date).getTime() + (1000 * 24 * 60);
+  const ms = new Date(date).getTime();
   const now = new Date().getTime();
   const rem = now - ms;
   const secs = Math.floor(rem / 1000);
@@ -51,6 +60,12 @@ const createCardUserAvatarSec = (user) => {
   return userAvatar;
 };
 
+/**
+ * @func createCardPrimarySection
+ * @param {*} user
+ * @param {*} comment
+ * @returns {HTMLDivElement} Creates comment card primary section
+ */
 const createCardPrimarySection = ({ firstname, lastname }, comment) => {
   const primaryDetails = document.createElement('div');
   primaryDetails.classList.add('comment-card__primary');
@@ -68,6 +83,12 @@ const createCardPrimarySection = ({ firstname, lastname }, comment) => {
   return primaryDetails;
 };
 
+/**
+ * @func createCommentCard
+ * @param {?} user
+ * @param {*} comment
+ * @returns {HTMLDivElement} Creates a comment card
+ */
 const createCommentCard = (user, comment) => {
   const card = document.createElement('div');
   card.classList.add('comment-card');
@@ -98,7 +119,12 @@ const formCommentLinkText = (totalComments) => {
   return linkText;
 };
 
-
+/**
+ * @func postComment
+ * @param {String|Number} questionId
+ * @param {*} comment
+ * @returns {Promise} Resolves to the newly created comment
+ */
 const postComment = async (questionId, comment) => {
   try {
     const response = await fetch(`${apiBaseURL}/comments`, {
@@ -122,6 +148,13 @@ const postComment = async (questionId, comment) => {
   }
 };
 
+/**
+ * @func createComment
+ * @param {String|Number} questionId
+ * @param {*} comment
+ * @returns {void} Creates a new question comment
+ * and refreshes the window
+ */
 const createComment = (questionId, comment) => {
   Promise.all([
     getQuestion(questionId), postComment(questionId, comment)
@@ -134,6 +167,11 @@ const createComment = (questionId, comment) => {
     });
 };
 
+/**
+ * @func createCommentTextBox
+ * @returns {HTMLTextAreaElement} Creates a comment form
+ * textarea element
+ */
 const createCommentTextBox = () => {
   const textArea = document.createElement('textarea');
   setAttributes(textArea, {
@@ -144,6 +182,11 @@ const createCommentTextBox = () => {
   return textArea;
 };
 
+/**
+ * @func createCommentButton
+ * @returns {HTMLButtonElement} Creates a comment form
+ * button
+*/
 const createCommentButton = () => {
   const commentButton = document.createElement('button');
   commentButton.classList.add('q-btn', 'btn');
@@ -151,7 +194,13 @@ const createCommentButton = () => {
   return commentButton;
 };
 
-const createCommentForm = async (question) => {
+/**
+ * @func createCommentForm
+ * @param {*} question
+ * @returns {HTMLFormElement} Returns a comment form
+ *
+ */
+const createCommentForm = (question) => {
   const commentForm = document.createElement('form');
   commentForm.classList.add('comment-form');
   commentForm.setAttribute('data-target', question.id);
@@ -168,6 +217,12 @@ const createCommentForm = async (question) => {
   return commentForm;
 };
 
+/**
+ * @func createCommentFormWidget
+ * @param {String} elType
+ * @param {*} commentFormAttributes form attributes config
+ * @returns {HTMLElement} Returns the created form widget
+ */
 const createCommentFormWidget = (elType,
   { attrs, classNames, textValue }) => {
   const widget = document.createElement(elType);
@@ -180,6 +235,12 @@ const createCommentFormWidget = (elType,
   return widget;
 };
 
+/**
+ * @func displayComments
+ * @param {*} displayCommentsOpts
+ * @returns {HTMLElement} Returns the card wrapping
+ * the question comments
+ */
 const displayComments = async ({
   card, commentsWrapper,
   questionComment, commentForm, viewComments, question
@@ -236,7 +297,7 @@ const createCommentSection = async (comments, question) => {
   const commentUserAvatar = document.createElement('img');
   commentUserAvatar.src = userImage;
   commentUserAvatar.alt = '';
-  const commentForm = await createCommentForm(question);
+  const commentForm = createCommentForm(question);
 
   viewComments.onclick = () => {
     displayComments({
