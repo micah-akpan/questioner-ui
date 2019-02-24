@@ -1,6 +1,6 @@
 const askQuestionWrapper = document.getElementById('ask-question');
 const postQuestionDirArea = document.getElementById('post-questions-directive');
-const askGroupButton = document.getElementById('ask-group-btn');
+const cards = document.getElementById('q-question-cards');
 
 /**
  * @func askQuestion
@@ -25,7 +25,6 @@ const askQuestion = async () => {
     if (status === 201) {
       return data[0];
     }
-
     throw new Error(responseBody.error);
   } catch (e) {
     throw e;
@@ -50,7 +49,7 @@ const createQuestionCardPrimary = (question) => {
   // TODO: Replace with dynamic content
   const askedBy = document.createElement('span');
   askedBy.classList.add('asked-by');
-  getUser(question.createdby)
+  getUser(question.user)
     .then((user) => {
       askedBy.textContent = `Asked by ${user.firstname} ${user.lastname}`;
     })
@@ -181,7 +180,6 @@ const addIcons = (question, iconWrapper, icons) => {
   });
 };
 
-const cards = document.getElementById('q-question-cards');
 
 /**
  * @func createQuestionCard
@@ -253,7 +251,7 @@ const formInputSpec = [
     idText: 'user-question-body',
     labelClass: 'question-label',
     labelText: 'Your question',
-    placeholder: 'What, why, where or when are great words to start with',
+    placeholder: 'A concise question gets more comments',
     type: 'textarea'
   },
 
@@ -268,116 +266,69 @@ const formInputSpec = [
 
 ];
 
-const createQuestionForm = () => {
-  const wrapper = document.createElement('div');
-  const bioSection = document.createElement('div');
+/**
+ * @func getUserDetails
+ * @returns {Promise<Array>} Resolves to an array of
+ * of user details
+ */
+const getUserDetails = () => Promise.all([getUserImage(), getUser(userId)])
+  .then(results => results)
+  .catch((err) => {
+    throw err;
+  });
+
+/**
+ * @func createQuestionBioSection
+ * @returns {HTMLElement} Returns HTML element that
+ * represent the question bio section
+ */
+const createQuestionBioSection = () => {
+  const bioSection = document.createElement('section');
   const userAvatar = document.createElement('img');
   userAvatar.classList.add('user-profile-avatar');
   const defaultAvatar = '../assets/icons/avatar1.svg';
 
   const bioText = document.createElement('p');
-  bioText.classList.add('modal-content-title', 'question-text', 'user-profile-text');
+  bioText.classList.add('question-text', 'user-profile-text');
   const userName = document.createElement('p');
-  const clear = document.createElement('div');
-  clear.classList.add('clear');
-  Promise.all([getUserImage(), getUser(userId)])
-    .then((results) => {
-      const [userImage, user] = results;
-      userAvatar.setAttribute('src', userImage || defaultAvatar);
-      userAvatar.setAttribute('alt', user.firstname);
 
-      userName.textContent = `${user.firstname} ${user.lastname}`;
-      bioText.textContent = user.bio;
-    })
-    .catch((err) => {
+  getUserDetails()
+    .then((details) => {
+      const [userImage, user] = details;
+      const { firstname, lastname, bio } = user;
+      userAvatar.setAttribute('src', userImage || defaultAvatar);
+      userAvatar.setAttribute('alt', firstname);
+      userName.textContent = `${firstname} ${lastname}`;
+      bioText.textContent = bio;
+    }, (err) => {
       throw err;
     });
+
   bioSection.appendChild(userAvatar);
   bioSection.appendChild(userName);
   bioSection.appendChild(bioText);
+  return bioSection;
+};
 
-  const form = document.createElement('form');
-  form.method = 'POST';
-  const userFeedback = document.createElement('div');
-  userFeedback.classList.add('user-feedback');
-  userFeedback.id = 'user-feedback';
-
-  const formInputs = formInputSpec.map((spec) => {
-    const formGroup = document.createElement('div');
-    formGroup.classList.add('q-form__group');
-    const label = document.createElement('label');
-    label.htmlFor = spec.idText;
-    label.classList.add('q-form__label', spec.labelClass);
-    label.textContent = spec.labelText;
-    const requireValidation = document.createElement('abbr');
-    requireValidation.textContent = ' * ';
-    requireValidation.title = 'required';
-    const field = document.createElement(spec.type);
-    field.id = spec.idText;
-    field.placeholder = spec.placeholder;
-    field.classList.add(`${spec.type === 'input' ? 'q-form__input' : 'q-form__textarea'}`);
-    if (spec.idText !== 'user-question-label') {
-      label.appendChild(requireValidation);
-      field.setAttribute('required', '');
-    }
-
-    formGroup.appendChild(label);
-    formGroup.appendChild(field);
-
-    return formGroup;
-  });
-
-  const postBtnArea = document.createElement('div');
-  postBtnArea.classList.add('post-btn-box', 'post-question-btn-box', 'q-form__group');
-  const postQuestionButton = document.createElement('button');
-  postQuestionButton.classList.add('q-btn', 'post-comment-btn');
-  postQuestionButton.textContent = 'Ask';
-
-  postBtnArea.appendChild(postQuestionButton);
-
-  form.appendChild(userFeedback);
-
-  formInputs.forEach((el) => {
-    form.appendChild(el);
-  });
-
-  form.appendChild(postBtnArea);
-
-  form.onsubmit = (e) => {
-    e.preventDefault();
-    askQuestion()
-      .then((question) => {
-        createQuestionCard(question)
-          .then((questionCard) => {
-            cards.appendChild(questionCard);
-          })
-          .catch((err) => {
-            throw err;
-          });
-      })
-      .catch((err) => {
-        displayFormFeedback(err.message);
+/**
+ * @func displayMeetupQuestions1
+ * @param {*} meetup Meetup
+ * @returns {undefined} Makes an HTTP request for all meetup questions
+ * displays them
+ */
+const displayMeetupQuestions1 = async (meetup) => {
+  try {
+    const apiUrl = `${apiBaseURL}/meetups/${meetup.id}/questions`;
+    const response = await fetch(apiUrl, requestHeader);
+    const responseBody = await response.json();
+    const { status, data } = responseBody;
+    if (status === 200) {
+      const questions = data;
+      questions.forEach(async (question) => {
+        questionCards.appendChild(await createQuestionCard(question));
       });
-  };
-
-  wrapper.appendChild(bioSection);
-  wrapper.appendChild(clear);
-  wrapper.appendChild(form);
-  askQuestionWrapper.appendChild(wrapper);
-
-  return wrapper;
-};
-
-const displayQuestionBlock = () => {
-  askQuestionWrapper.classList.add('active');
-  postQuestionDirArea.classList.add('inactive');
-  const divider = document.createElement('hr');
-  divider.classList.add('divider');
-  askQuestionWrapper.appendChild(divider);
-  return askQuestionWrapper;
-};
-
-askGroupButton.onclick = () => {
-  createQuestionForm();
-  displayQuestionBlock();
+    }
+  } catch (e) {
+    throw e;
+  }
 };
