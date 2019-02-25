@@ -32,7 +32,7 @@ class Stat {
       .then((responseBody) => {
         const { status, data } = responseBody;
         if (status === 200) {
-          const questions = data.filter(question => question.createdBy === userId * 1);
+          const questions = data.filter(question => question.user === userId * 1);
 
           return questions;
         }
@@ -67,7 +67,36 @@ class Stat {
       const totalComments = [];
       const allQuestions = await this.getQuestionsByUser(userId);
       const questionIds = allQuestions.map(question => question.id);
+
+      const init = {
+        headers: {
+          Authorization: `Bearer ${Token.getToken('userToken')}`
+        }
+      };
       /* eslint-disable */
+      const allPromises = questionIds.map((questionId) => {
+        return fetch(`${this.baseUrl}/questions/${questionId}/comments`, init)
+          .then(response => response.json())
+          .then((responseBody) => {
+            const { status, data } = responseBody;
+            return status === 200 ? data : [];
+          })
+          .catch((err) => {
+            throw err;
+          })
+      });
+
+      Promise.all(allPromises)
+        .then((results) => {
+          // all comments results
+          const o = results.forEach((result) => {
+            console.log(Array.isArray(result))
+          })
+          console.log(o)
+        })
+        .catch((err) => {
+          console.log(err);
+        })
       for (let id of questionIds) {
         const response = await fetch(`${this.baseUrl}/questions/${id}/comments`, {
           headers: {
@@ -77,6 +106,7 @@ class Stat {
         const { status, data } = await response.json();
         if (status === 200) {
           totalComments.push(data[0])
+          console.log(totalComments)
         }
         const userComments = totalComments.filter(comment => comment.createdBy === Number(userId));
         return userComments.length;
