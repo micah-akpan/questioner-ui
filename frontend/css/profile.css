@@ -3,8 +3,8 @@
 
 /* Profile Nav */
 
-#nav__profile {
-  margin: 200px auto 50px;
+.nav-profile {
+  margin: 100px auto 50px;
   width: 80%;
   background: #eee;
   border-radius: 5px;
@@ -12,7 +12,7 @@
   padding: 0;
 }
 
-#nav__profile ul {
+.nav-profile ul {
   display: flex;
   width: 100%;
   justify-content: center;
@@ -20,7 +20,7 @@
   height: 50px;
 }
 
-#nav__profile ul > li {
+.nav-profile ul > li {
   width: 100%;
   flex: 1 1 auto;
   border-right: 2px solid #ccc;
@@ -37,46 +37,46 @@
   border: none;
 }
 
-#nav__profile ul img {
+.nav-profile ul img {
   width: 20px;
   height: 20px;
   vertical-align: middle;
   padding: 0 !important;
 }
 
-#nav__profile li.active {
+.nav-profile li.active {
   background: #fff;
 }
 
-#nav__profile ul > li > a.link-text {
+.nav-profile ul > li > a.link-text {
   color: #116466;
   padding: 20px;
 }
 
 /* User profile view and settings */
-#user-profile {
+.user {
   width: 100%;
-  margin-top: 20px !important;
+  margin: 10px;
 }
 
-#user-profile h3 {
+.user h3 {
   text-align: left;
 }
 
 /* User stats */
-#user-profile .user-profile__stats {
+.user__stats {
   display: flex;
   justify-content: center;
-  width: 90%;
+  width: 100%;
   margin: 0 auto 20px;
   text-align: center;
 }
 
-#user-profile .user-profile__stats > div {
+.user-stat {
   flex: 1 1 auto;
 }
 
-.stat-value { 
+.stat-value {
   font-size: 2em;
   font-weight: 700;
   padding: 0;
@@ -85,33 +85,33 @@
 }
 
 /* User profile */
-#user-profile .user-profile__wrapper {
+.user__profile {
   display: flex;
   justify-content: space-between;
 }
 
-.user-profile__wrapper .user-profile__avatar-wrapper {
+.user__profile__avatar {
   flex: 1 0 auto;
   width: 250px;
   text-align: center;
   margin-right: 20px;
 }
 
-.user-profile__wrapper .user-profile__avatar-wrapper .user-profile__image-text {
+.user__profile__avatar-image {
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
   width: 100%;
 }
 
-.user-profile__wrapper .user-profile__avatar-wrapper .change-image__btn {
+.user__profile-update__btn {
   margin-top: 10px;
   width: 100%;
   padding: 15px 10px;
   font-size: 1em;
 }
 
-.user-profile__wrapper .user-profile__avatar-wrapper img {
+.user-image {
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -121,7 +121,7 @@
 }
 
 /* User Photo Edit */
-.user-profile__wrapper .user-profile__avatar-wrapper .edit-user-image {
+.user-profile__wrapper .user__profile__avatar-wrapper .edit-user-image {
   display: none;
   position: absolute;
   top: 20%;
@@ -129,7 +129,7 @@
 }
 
 .user-profile__wrapper
-  .user-profile__avatar-wrapper
+  .user__profile__avatar-wrapper
   .edit-user-image
   input[type="file"] {
   opacity: 0;
@@ -137,16 +137,16 @@
   height: 0;
 }
 
-/** User profile section wrapper */
-.user-profile__wrapper .user-profile__main-content__wrapper {
+/** User profile (personal|account) section wrapper */
+.user-profile__personal__account__form {
   flex: 2 0 auto;
   border: 1px solid #ccc;
 }
 
-#user-profile__main {
+.user-profile__personal__account {
   display: flex;
-  width: 100%;
   padding: 10px;
+  justify-content: center;
 }
 
 /* User feeds */
@@ -154,12 +154,24 @@
   display: none;
 }
 
-#user-profile__main .personal-data-account__wrapper {
-  width: calc(100% / 2 - 20px);
-  flex: 1 1 auto;
+.meetups-list {
+  display: none;
+  width: 200px;
+  margin-right: 100px;
 }
 
-#user-profile__main .personal-data-account__wrapper.account-settings {
+.meetups-list__item {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.user__profile__personal {
+  width: calc(100% / 2 - 20px);
+  flex: 1 0 auto;
+  padding-left: 20px;
+}
+
+.user__profile__account.account-settings {
   margin-left: 20px;
   background: #f4f4f4;
   padding: 0 20px;
@@ -167,11 +179,6 @@
 
 #user-profile__main h3 {
   font-size: 1.8em;
-}
-
-.user-profile-account__wrapper > div {
-  flex: 1 1 auto;
-  padding: 20px;
 }
 
 /* Notification enable/disable section */
@@ -267,14 +274,13 @@ input:checked + .slider::before {
 }
 
 /* Phone Number input */
-.personal-data-account__wrapper .phone-number-input__wrapper {
+.phone-number-input__wrapper {
   width: 100%;
   display: flex;
-  /* align-items: center; */
   justify-content: space-between;
 }
 
-.personal-data-account__wrapper .phone-number-input__wrapper select {
+.phone-number-input__wrapper select {
   flex: 0 0 15%;
   height: 47px;
   padding: 0.6rem;
@@ -284,7 +290,7 @@ input:checked + .slider::before {
   outline: none;
 }
 
-.personal-data-account__wrapper .phone-number-input__wrapper input {
+.phone-number-input__wrapper input {
   flex: 1 1 75%;
   border-radius: 0 3px 3px 0 !important;
   border-left: none;
@@ -307,7 +313,6 @@ input:checked + .slider::before {
   display: none;
   flex: 1 0 auto;
   width: 250px;
-  margin-right: 20px;
 }
 
 .user-feeds li {
@@ -320,35 +325,36 @@ input:checked + .slider::before {
 }
 
 @media (max-width: 768px) {
-  #user-profile .user-profile__wrapper {
-    flex-direction: column;
-  }
-  #user-profile__main {
+  .user-profile {
     flex-direction: column;
   }
 
-  .user-profile__main-content__wrapper {
+  .user-profile__personal__account__form {
+    flex-direction: column;
+  }
+
+  .user-profile__personal__account__form {
     width: 100%;
   }
 
-  #user-profile__main .personal-data-account__wrapper {
+  .user__profile__account {
     width: 100%;
   }
 
-  .user-profile__wrapper .user-profile__avatar-wrapper {
+  .user__profile__avatar {
     display: none;
   }
 
-  #nav__profile li a.link-text {
+  .nav-profile li a.link-text {
     display: none;
   }
 
-  #nav__profile li img {
+  .nav-profile li img {
     display: block;
     margin: 0 auto;
   }
 
-  #user-profile .user-profile__stats {
+  .user__stats {
     flex-direction: column;
   }
 
@@ -356,8 +362,7 @@ input:checked + .slider::before {
     display: none !important;
   }
 
-  #user-profile__main 
-  .personal-data-account__wrapper.account-settings {
+  .user__profile__account.account-settings {
     margin-left: 0;
   }
 }

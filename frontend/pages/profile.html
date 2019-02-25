@@ -65,9 +65,9 @@
     </div>
   </section>
 
-  <section id="nav__profile">
+  <section id="nav__profile" class="nav-profile">
     <nav>
-      <ul class="nav__profile-tablist" id="nav__profile-tablist">
+      <ul class="nav-profile__tabs" id="nav-profile__tabs">
         <li class="active">
           <a href="#!" class="link-image">
             <img src="../assets/icons/user1.svg" alt="A Dark green half body portrait in a green-bordered circle">
@@ -99,155 +99,152 @@
 
   </section>
 
-  <section id="user-profile">
+  <section class="user">
     <div class="container">
-      <div class="user-profile__stats">
-        <div class="user-statistics__total-questions" id="user-statistics__total-questions">
+
+      <!-- User stats -->
+      <div class="user__stats">
+        <div class="user-statistics__total-questions user-stat" id="user-statistics__total-questions">
           <p class="stat-value" id="questions-stat__value" title="Total Questions asked in all Meetups">0</p>
           <p class="stat-desc" id="questions-stat__description">Total Questions asked</p>
         </div>
-        <div class="user-statistics__total-comments" id="user-statistics__total-comments">
+        <div class="user-statistics__total-comments user-stat" id="user-statistics__total-comments">
           <p class="stat-value" id="comments-stat__value" title="Total Comments posted in all questions">0</p>
           <p class="stat-desc" id="comments-stat__description">Total Comments</p>
         </div>
-        <div class="user-statistics__total-meetups-sched">
+        <div class="user-statistics__total-meetups-sched user-stat">
           <p class="stat-value" id="meetup-rsvp-state__value" title="Total Meetups you are scheduled to attend">0</p>
           <p class="stat-desc" id="meetup-rsvp-state__description">Total Meetups</p>
         </div>
       </div>
 
-      <div class="user-profile__wrapper-container">
+      <!-- User Profile details -->
+      <div class="user__profile">
 
-        <div class="user-profile__wrapper" id="user-profile__wrapper">
-          <div class="user-profile__avatar-wrapper">
-            <div class="user-profile__image-text" id="user-profile__image-text">
-              <img src="../assets/icons/avatar1.svg" alt="Bob" class="user-image">
+        <!-- User avatar display & update -->
+        <div class="user__profile__avatar" id="user__profile__avatar">
+          <div class="user__profile__avatar-image" id="user__profile__avatar-image">
+            <img src="../assets/icons/avatar1.svg" alt="Bob" class="user-image user-profile__image" id="user-profile__image">
+          </div>
+
+          <form class="upload-image" enctype="multipart/form-data" action="#!" name="image-upload-form">
+            <div>
+              <label for="change-image__file"></label>
+              <input type="file" class="change-image__file" id="user__profile-avatar-update" name="avatar" accept="image/*">
             </div>
 
-            <form class="upload-image" enctype="multipart/form-data" action="#!" name="image-upload-form">
-              <div>
-                <label for="change-image__file"></label>
-                <input type="file" class="change-image__file" id="change-image__file" name="avatar" accept="image/*">
-              </div>
+            <button class="btn q-btn change-image__btn user__profile-update__btn" type="button" id="user__profile-update__btn">
+              Upload new picture
+            </button>
+          </form>
+        </div>
 
-              <button class="q-btn change-image__btn" type="button">
-                Upload new picture
-              </button>
-            </form>
-          </div>
+        <!-- Personal Profile Data & Account Data -->
+        <div class="user-profile__personal__account__form" id="user-profile__personal__account__form">
+          <div class="user-profile__personal__account">
 
-          <!-- User top feeds listings -->
-          <div class="user-feeds user-feeds-list">
-            <h3>Feeds</h3>
-            <ul class="meetups-list" id="meetups-list">
+            <!-- Personal Data -->
+            <div class="user__profile__personal">
+              <h3>Personal Data</h3>
+              <form class="q-form" id="personal-data-form" action="#!" method="POST">
+                <p id="personal-data-feedback" class="account-changes-feedback"></p>
+                <div>
+                  <label class="q-form__label" for="fullName">Full Name</label>
+                  <input type="text" id="fullName" class="q-form__input" placeholder="" name="fullname">
+                </div>
 
-            </ul>
+                <div>
+                  <label class="q-form__label" for="otherNames">Other Names</label>
+                  <input type="text" id="otherNames" class="q-form__input" placeholder="" name="othernames">
+                </div>
 
-          </div>
+                <div>
+                  <label class="q-form__label" for="location">Location</label>
+                  <input type="text" id="location" class="q-form__input" placeholder="" name="location">
+                </div>
 
+                <div>
+                  <label class="q-form__label" for="birthDate">Birthday</label>
+                  <input type="date" id="birthDate" class="q-form__input" name="birthday">
+                </div>
 
-          <div class="user-profile__main-content__wrapper">
-            <div id="user-profile__main">
-
-              <!-- Personal Data -->
-              <div class="personal-data-account__wrapper">
-                <h3>Personal Data</h3>
-                <form class="q-form" id="personal-data-form" action="#!" method="POST">
-                  <p id="personal-data-feedback" class="account-changes-feedback"></p>
-                  <div>
-                    <label class="q-form__label" for="fullName">Full Name</label>
-                    <input type="text" id="fullName" class="q-form__input" placeholder="" name="fullname">
-                  </div>
-
-                  <div>
-                    <label class="q-form__label" for="otherNames">Other Names</label>
-                    <input type="text" id="otherNames" class="q-form__input" placeholder="" name="othernames">
-                  </div>
-
-                  <div>
-                    <label class="q-form__label" for="location">Location</label>
-                    <input type="text" id="location" class="q-form__input" placeholder="" name="location">
-                  </div>
-
-                  <div>
-                    <label class="q-form__label" for="birthDate">Birthday</label>
-                    <input type="date" id="birthDate" class="q-form__input" name="birthday">
-                  </div>
-
-                  <div>
-                    <label class="q-form__label" for="phone-no">Phone Number</label>
-                    <div class="phone-number-input__wrapper">
-                      <select id="country-codes" class="country-codes">
-                        <option value="ng">+234</option>
-                        <option value="us">+1</option>
-                      </select>
-                      <input type="number" id="phone-no" class="q-form__input" placeholder="" name="phoneNumber">
-                    </div>
-                  </div>
-
-                  <div>
-                    <label class="q-form__label" for="userBio">Bio</label>
-                    <textarea class="q-form__textarea" id="userBio" name="bio"></textarea>
-                  </div>
-                </form>
-              </div>
-
-              <!-- Account Settings -->
-              <div class="personal-data-account__wrapper account-settings">
-                <h3>Account Data</h3>
-                <form class="q-form" id="account-data-form">
-                  <p id="account-data-feedback" class="account-changes-feedback"></p>
-                  <div>
-                    <label class="q-form__label" for="userEmail">Email</label>
-                    <input type="email" id="userEmail" class="q-form__input" placeholder="">
-                  </div>
-
-                  <div>
-                    <label class="q-form__label" for="userEmail">Username</label>
-                    <input type="text" id="username" class="q-form__input" placeholder="" name="username">
-                  </div>
-
-                  <div>
-                    <label class="q-form__label" for="newPassword">New Password</label>
-                    <input type="text" id="newPassword" class="q-form__input" placeholder="">
-                  </div>
-                </form>
-
-                <!-- Notifications -->
-                <div id="notif">
-                  <div class="notif__wrapper">
-                    <h3>Notifications</h3>
-                    <p>Questioner will send you periodic notifications by email or phone about meetups and any other
-                      <strong>necessary</strong> information</p>
-                    <label class="toggle-switch">
-                      <input type="checkbox">
-                      <span class="slider round"></span>
-                    </label>
+                <div>
+                  <label class="q-form__label" for="phone">Phone Number</label>
+                  <div class="phone-number-input__wrapper">
+                    <select id="country-codes" class="country-codes">
+                      <option value="ng">+234</option>
+                      <option value="us">+1</option>
+                    </select>
+                    <input type="number" id="phone" class="q-form__input" placeholder="" name="phoneNumber">
                   </div>
                 </div>
 
-                <!-- User acct settings save/deactivate -->
-                <div id="misc">
-                  <h3>Account</h3>
-                  <div class="misc-btns__wrapper">
-                    <button class="q-btn deactivate-btn">Deactivate Account</button>
-                    <button class="q-btn" id="save-changes__btn">Save Changes</button>
-                  </div>
+                <div>
+                  <label class="q-form__label" for="userBio">Bio</label>
+                  <textarea class="q-form__textarea" id="userBio" name="bio"></textarea>
+                </div>
+              </form>
+            </div>
+
+            <!-- Account Settings -->
+            <div class="user__profile__account account-settings">
+              <h3>Account Data</h3>
+              <form class="q-form" id="account-data-form">
+                <p id="account-data-feedback" class="account-changes-feedback"></p>
+                <div>
+                  <label class="q-form__label" for="userEmail">Email</label>
+                  <input type="email" id="userEmail" class="q-form__input" placeholder="">
+                </div>
+
+                <div>
+                  <label class="q-form__label" for="userEmail">Username</label>
+                  <input type="text" id="username" class="q-form__input" placeholder="" name="username">
+                </div>
+
+                <div>
+                  <label class="q-form__label" for="newPassword">New Password</label>
+                  <input type="text" id="newPassword" class="q-form__input" placeholder="">
+                </div>
+              </form>
+
+              <!-- Notifications -->
+              <div id="notif">
+                <div class="notif__wrapper">
+                  <h3>Notifications</h3>
+                  <p>Questioner will send you periodic notifications by email or phone about meetups and any other
+                    <strong>necessary</strong> information</p>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- User acct settings save/deactivate -->
+              <div id="misc">
+                <h3>Account</h3>
+                <div class="misc-btns__wrapper">
+                  <button class="q-btn deactivate-btn">Deactivate Account</button>
+                  <button class="q-btn" id="save-changes__btn">Save Changes</button>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
+        <section>
+          <h3>Feeds</h3>
+          <ul id="meetups-list" class="meetups-list">
+            
+          </ul>
+        </section>
+
+        <!-- User-feeds -->
+        <div class="user-feeds__wrapper user-feeds-cards user-feeds" id="user-feeds-cards">
+          <h3 class="meetup-topic meetup-topic--active" id="meetup-topic">Meetup X</h3>
+          <div class="cards" id="feeds-cards">
 
           </div>
-
-          <!-- User-feeds -->
-          <div class="user-feeds__wrapper user-feeds-cards" id="user-feeds-cards">
-            <h3 class="meetup-topic meetup-topic--active" id="meetup-topic">Meetup X</h3>
-            <div class="cards" id="feeds-cards">
-             
-            </div>
-          </div>
-
         </div>
       </div>
     </div>

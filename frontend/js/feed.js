@@ -40,7 +40,7 @@ const toggleUserFeedListItem = (list) => {
         });
       for (let i = 0; i < meetupListItems.length; i += 1) {
         const item = meetupListItems[i];
-        item.removeAttribute('class');
+        item.classList.remove('active');
       }
 
       this.classList.toggle('active');
@@ -82,6 +82,7 @@ const createTopMeetupFeedList = (meetups) => {
     feedItem.textContent = topic;
     feedItem.setAttribute('data-target', id);
     feedItem.setAttribute('id', `meetup-${id}`);
+    feedItem.classList.add('meetups-list__item');
     meetupList.appendChild(feedItem);
   });
 

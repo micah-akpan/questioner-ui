@@ -1,18 +1,23 @@
-const tabListItems = document.querySelectorAll('.nav__profile-tablist li');
-const userAcctArea = document.querySelector('.user-profile__main-content__wrapper');
-const userAcctAvatarWrapper = document.querySelector('.user-profile__avatar-wrapper');
-const userTopFeeds = document.querySelector('.user-feeds__wrapper');
-const mainContainer = document.querySelector('.user-profile__main-content__wrapper');
+const tabList = document.getElementById('nav-profile__tabs');
+const tabListItems = tabList.querySelectorAll('li');
+const userPersonalAccountForm = document.getElementById('user-profile__personal__account__form');
+const userAccountAvatar = document.getElementById('user__profile__avatar');
+
+const userTopFeeds = document.getElementById('user-feeds-cards');
+const userProfile = document.querySelector('.user__profile');
+const meetupsList = document.getElementById('meetups-list');
+
+const mainContainer = document.querySelector('.user-profile__personal__account');
 const userFeedsList = document.querySelector('.user-feeds');
-const uploadNewPicBtn = document.querySelector('.change-image__btn');
-const uploadNewPicWidget = document.querySelector('.change-image__file');
-const userImage = document.querySelector('.user-image');
+const uploadNewPicButton = document.getElementById('user__profile-update__btn');
+const uploadNewPicWidget = document.getElementById('user__profile-avatar-update');
+const userImage = document.getElementById('user-profile__image');
 
 const fullNameField = document.getElementById('fullName');
 const otherNameField = document.getElementById('otherNames');
 const locationField = document.getElementById('location');
 const birthDateField = document.getElementById('birthDate');
-const phoneNumberField = document.getElementById('phone-no');
+const phoneNumberField = document.getElementById('phone');
 const userBioField = document.getElementById('userBio');
 const emailField = document.getElementById('userEmail');
 const usernameField = document.getElementById('username');
@@ -23,11 +28,24 @@ const personalDataForm = document.getElementById('personal-data-form');
 
 const usersAPIUrl = 'http://localhost:9999/api/v1/users';
 
-tabListItems.forEach((listItem) => {
-  listItem.onclick = () => {
-    if (listItem.textContent.trim().toLowerCase() === 'feeds') {
-      userAcctArea.classList.add('n-active-block');
-      userAcctAvatarWrapper.classList.add('n-active-block');
+/**
+ * @func toggleNavPanel
+ * @param {String} panel
+ * @returns {void}
+ */
+const toggleNavPanel = (panel) => {
+  switch (panel) {
+    case 'feeds': {
+      meetupList.classList.add('active');
+      userPersonalAccountForm.classList.add('hidden');
+      userAccountAvatar.classList.add('hidden');
+
+      userTopFeeds.classList.remove('hidden');
+      userTopFeeds.classList.add('active');
+      mainContainer.classList.add('no-border');
+
+      userFeedsList.classList.remove('hidden');
+      userFeedsList.classList.add('active');
 
       addMeetupFeedListToPage()
         .then((meetupList) => {
@@ -36,25 +54,32 @@ tabListItems.forEach((listItem) => {
         .catch((err) => {
           throw err;
         });
-
-
-      userTopFeeds.classList.remove('n-active-block');
-      userTopFeeds.classList.add('active-block');
-      mainContainer.classList.add('no-border');
-
-      userFeedsList.classList.remove('n-active-block');
-      userFeedsList.classList.add('active-block');
-    } else if (listItem.textContent.trim().toLowerCase() === 'profile') {
-      userAcctArea.classList.remove('n-active-block');
-      userAcctArea.classList.add('active-block');
-
-      userTopFeeds.classList.remove('active-block');
-      userTopFeeds.classList.add('n-active-block');
-
-      userAcctAvatarWrapper.classList.remove('n-active-block');
-      userAcctAvatarWrapper.classList.add('active-block');
-      userFeedsList.classList.add('n-active-block');
+      break;
     }
+
+    case 'profile': {
+      userPersonalAccountForm.classList.remove('hidden');
+      userPersonalAccountForm.classList.add('active');
+
+      userTopFeeds.classList.remove('active');
+      userTopFeeds.classList.add('hidden');
+
+      userAccountAvatar.classList.remove('hidden');
+      userAccountAvatar.classList.add('active');
+      userFeedsList.classList.add('hidden');
+      break;
+    }
+
+    default: {
+      break;
+    }
+  }
+};
+
+tabListItems.forEach((listItem) => {
+  listItem.onclick = () => {
+    const panel = listItem.textContent.toLowerCase().trim();
+    toggleNavPanel(panel);
     tabListItems.forEach((item) => {
       item.removeAttribute('class');
     });
@@ -63,7 +88,7 @@ tabListItems.forEach((listItem) => {
   };
 });
 
-uploadNewPicBtn.onclick = () => {
+uploadNewPicButton.onclick = () => {
   uploadNewPicWidget.click();
 };
 
@@ -74,8 +99,7 @@ uploadNewPicWidget.onchange = function changeAvatar(e) {
   userImage.src = imgSrc;
 };
 
-const userProfileWrapper = document.getElementById('user-profile__wrapper');
-const userProfileImageTextWrapper = document.getElementById('user-profile__image-text');
+const userProfileImageTextWrapper = document.getElementById('user__profile__avatar-image');
 const profileTextWrapper = document.getElementById('profile-text__wrapper');
 const defaultAvatar = '../assets/icons/avatar1.svg';
 
