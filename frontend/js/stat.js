@@ -124,15 +124,23 @@ class Stat {
   async getMeetupRsvpStats(userId) {
     const meetups = await getMeetups();
     const meetupIds = meetups.data.map(meetup => meetup.id);
-    const allRsvps = [];
-    /* eslint-disable */
-    for (let id of meetupIds) {
-      const rsvps = await getMeetupRsvps({ id });
-      allRsvps.push(rsvps[0]);
-    }
+    const allRsvpsPromises = meetupIds.map((id) => {
+      const apiUrl = `${this.baseUrl}/meetups/${id}/rsvps`;
+      return fetch(apiUrl, { headers: this._statRequestHeader })
+        .then(response => response.json())
+        .then((responseBody) => {
+          const { status, data } = responseBody;
+          return status === 200 ? data : [];
+        })
+        .catch((err) => {
+          throw err;
+        });
+    });
 
-    const userRsvps = allRsvps.filter((rsvp) => rsvp !== undefined && rsvp.user === userId * 1);
-    return userRsvps.length;
+    const allRsvps = await Promise.all(allRsvpsPromises);
+    const rsvps = allRsvps.reduce((prevArr, currArr) => prevArr.concat(currArr), []);
+    const rsvpByUser = rsvps.filter(rsvp => rsvp.user === userId * 1);
+    return rsvpByUser.length;
   }
 
   /**
@@ -150,7 +158,7 @@ class Stat {
 
   /**
    * @method addStatsToPage
-   * @returns {undefined} 
+   * @returns {undefined}
    * @description Adds all stats to page
    */
   addStatsToPage() {
@@ -160,7 +168,7 @@ class Stat {
       this.getMeetupRsvpStats(this._userId)
     ])
       .then((stats) => {
-        const [questionStat, commentStat, rsvpStat] = stats;
+        const [questionStat = 0, commentStat = 0, rsvpStat = 0] = stats;
         this.addStatToPage(this._questionStatsValue, questionStat);
         this.addStatToPage(this._commentStatsValue, commentStat);
         this.addStatToPage(this._meetupRsvpStatsValue, rsvpStat);
@@ -169,7 +177,7 @@ class Stat {
         this.addStatToPage(this._questionStatsValue, 0);
         this.addStatToPage(this._commentStatsValue, 0);
         this.addStatToPage(this._meetupRsvpStatsValue, 0);
-      })
+      });
   }
 }
 
