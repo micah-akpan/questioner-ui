@@ -238,8 +238,15 @@ const addMeetupsToPage = (meetups) => {
   return cards;
 };
 
+const onMeetupsListPage = () => {
+  const urlPaths = window.location.pathname.split('/');
+  return urlPaths.includes('meetups');
+};
+
 const getMeetups = () => {
-  showMeetupsSpinner();
+  if (onMeetupsListPage()) {
+    showMeetupsSpinner();
+  }
   return fetch(`${apiBaseURL}/meetups`, {
     headers: {
       Authorization: `Bearer ${userToken}`
@@ -247,7 +254,9 @@ const getMeetups = () => {
   })
     .then(response => response.json())
     .then((response) => {
-      hideMeetupsSpinner();
+      if (onMeetupsListPage()) {
+        showMeetupsSpinner();
+      }
       return response;
     })
     .catch((err) => {
