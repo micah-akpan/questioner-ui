@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+
 /**
  * @class Stat
  * @description A class about a user stats information
@@ -9,6 +11,9 @@ class Stat {
   constructor() {
     this.baseUrl = 'http://localhost:9999/api/v1';
     this._userId = localStorage.getItem('userId');
+    this._statRequestHeader = {
+      Authorization: `Bearer ${Token.getToken('userToken')}`
+    };
     this._questionStatsBlock = document.getElementById('user-statistics__total-questions');
     this._questionStatsValue = document.getElementById('questions-stat__value');
     this._commentStatsValue = document.getElementById('comments-stat__value');
@@ -64,18 +69,12 @@ class Stat {
    */
   async getCommentStat(userId) {
     try {
-      const totalComments = [];
-      const allQuestions = await this.getQuestionsByUser(userId);
-      const questionIds = allQuestions.map(question => question.id);
+      const meetupResults = await getMeetups();
+      const meetupsIds = meetupResults.data.map(meetup => meetup.id);
 
-      const init = {
-        headers: {
-          Authorization: `Bearer ${Token.getToken('userToken')}`
-        }
-      };
-      /* eslint-disable */
-      const allPromises = questionIds.map((questionId) => {
-        return fetch(`${this.baseUrl}/questions/${questionId}/comments`, init)
+      const allQuestionsPromises = meetupsIds.map((id) => {
+        const apiUrl = `${this.baseUrl}/meetups/${id}/questions`;
+        return fetch(apiUrl, { headers: this._statRequestHeader })
           .then(response => response.json())
           .then((responseBody) => {
             const { status, data } = responseBody;
@@ -83,34 +82,34 @@ class Stat {
           })
           .catch((err) => {
             throw err;
-          })
+          });
       });
 
-      Promise.all(allPromises)
-        .then((results) => {
-          // all comments results
-          const o = results.forEach((result) => {
-            console.log(Array.isArray(result))
-          })
-          console.log(o)
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-      for (let id of questionIds) {
-        const response = await fetch(`${this.baseUrl}/questions/${id}/comments`, {
+      const allQuestions = await Promise.all(allQuestionsPromises);
+      const questions = allQuestions.reduce((prevArr, currArr) => prevArr.concat(currArr), []);
+      const questionIds = questions.map(question => question.id);
+
+      const commentsPromises = questionIds.map((id) => {
+        const apiUrl = `${this.baseUrl}/questions/${id}/comments`;
+        return fetch(apiUrl, {
           headers: {
-            Authorization: `Bearer ${Token.getToken('userToken')}`
+            Authorization: `Bearer ${userToken}`
           }
-        });
-        const { status, data } = await response.json();
-        if (status === 200) {
-          totalComments.push(data[0])
-          console.log(totalComments)
-        }
-        const userComments = totalComments.filter(comment => comment.createdBy === Number(userId));
-        return userComments.length;
-      }
+        })
+          .then(res => res.json())
+          .then((res) => {
+            const { status, data } = res;
+            return status === 200 ? data : [];
+          })
+          .catch((err) => {
+            throw err;
+          });
+      });
+
+      const allComments = await Promise.all(commentsPromises);
+      const comments = allComments.reduce((prevArr, currArr) => prevArr.concat(currArr), []);
+      const commentsByUser = comments.filter(comment => comment.createdBy === Number(userId));
+      return commentsByUser.length;
     } catch (err) {
       throw err;
     }
@@ -126,6 +125,7 @@ class Stat {
     const meetups = await getMeetups();
     const meetupIds = meetups.data.map(meetup => meetup.id);
     const allRsvps = [];
+    /* eslint-disable */
     for (let id of meetupIds) {
       const rsvps = await getMeetupRsvps({ id });
       allRsvps.push(rsvps[0]);
