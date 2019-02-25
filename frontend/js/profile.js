@@ -29,6 +29,15 @@ tabListItems.forEach((listItem) => {
       userAcctArea.classList.add('n-active-block');
       userAcctAvatarWrapper.classList.add('n-active-block');
 
+      addMeetupFeedListToPage()
+        .then((meetupList) => {
+          toggleUserFeedListItem(meetupList);
+        })
+        .catch((err) => {
+          throw err;
+        });
+
+
       userTopFeeds.classList.remove('n-active-block');
       userTopFeeds.classList.add('active-block');
       mainContainer.classList.add('no-border');
@@ -374,4 +383,5 @@ window.onload = () => {
     });
 
   focusInput(fullNameField);
+  // toggleUserFeedListItem();
 };

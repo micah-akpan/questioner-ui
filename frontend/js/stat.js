@@ -116,12 +116,11 @@ class Stat {
   }
 
   /**
-   * @method getMeetupRsvpStats
-   * @param {String} userId
-   * @returns {Promise<Number>} Resolve to the total number of
-   * meetups the user is scheduled to attend
+   * @method getMeetupRsvpsForUser
+   * @param {String|Number} userId
+   * @returns {Promise<Array>} Resolves to an array of meetups user `userId` has rsvped for
    */
-  async getMeetupRsvpStats(userId) {
+  async getMeetupRsvpsForUser(userId) {
     const meetups = await getMeetups();
     const meetupIds = meetups.data.map(meetup => meetup.id);
     const allRsvpsPromises = meetupIds.map((id) => {
@@ -139,8 +138,23 @@ class Stat {
 
     const allRsvps = await Promise.all(allRsvpsPromises);
     const rsvps = allRsvps.reduce((prevArr, currArr) => prevArr.concat(currArr), []);
-    const rsvpByUser = rsvps.filter(rsvp => rsvp.user === userId * 1);
-    return rsvpByUser.length;
+    const rsvpsByUser = rsvps.filter(rsvp => rsvp.user === userId * 1 && (rsvp.response === 'yes' || rsvp.response === 'maybe'));
+
+    return rsvpsByUser;
+  }
+
+  /**
+   * @method getMeetupRsvpStats
+   * @param {String} userId
+   * @returns {Promise<Number>} Resolve to the total number of
+   * meetups the user is scheduled to attend
+   */
+  async getMeetupRsvpStats(userId) {
+    return this.getMeetupRsvpsForUser(userId)
+      .then(rsvps => rsvps.length)
+      .catch((err) => {
+        throw err;
+      });
   }
 
   /**
