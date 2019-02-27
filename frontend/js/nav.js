@@ -85,14 +85,28 @@ const getUserImage = () => {
     });
 };
 
+const createUserNameInitials = (user) => {
+  const { firstname, lastname } = user;
+  const userFirstNameInitial = firstname.charAt(0).toUpperCase();
+  const userLastNameInitial = lastname.charAt(0).toUpperCase();
+  return [userFirstNameInitial, userLastNameInitial];
+};
+
+const showUserNameInitials = (userInitials) => {
+  const [firstNameInitial, lastNameInitial] = userInitials;
+  const span = document.createElement('span');
+  span.classList.add('user-initials__text');
+  span.textContent = `${firstNameInitial}${lastNameInitial}`;
+  return span;
+};
+
 /**
  * @func createUserProfileAvatar
- * @param {String} avatarSrcPath
  * @returns {Promise<HTMLLIElement>} Returns a promise
  * that resolves to an HTML list item element
  * representing a nav list item
  */
-const createUserProfileAvatar = (avatarSrcPath) => {
+const createUserProfileAvatar = () => {
   const userId = localStorage.getItem('userId');
   return getUserData(userId)
     .then((user) => {
@@ -103,16 +117,21 @@ const createUserProfileAvatar = (avatarSrcPath) => {
       button.id = 'dropdown-trigger-btn';
       button.title = 'Profile';
       const img = document.createElement('img');
+      const span = document.createElement('span');
+      span.style.width = '100%';
       if (user) {
-        const { avatar, firstname } = user;
-        img.src = avatar || avatarSrcPath;
+        const { firstname, avatar } = user;
         img.alt = firstname;
-      } else {
-        img.src = avatarSrcPath;
-        img.alt = 'User';
+        if (avatar) {
+          img.src = user.avatar;
+          button.appendChild(img);
+        } else {
+          const userInitials = createUserNameInitials(user);
+          const userInitialsBlock = showUserNameInitials(userInitials);
+          button.appendChild(userInitialsBlock);
+          button.classList.add('user-initials__btn');
+        }
       }
-
-      button.appendChild(img);
       li.appendChild(button);
       li.onclick = toggleDropDownMenu;
       return li;
