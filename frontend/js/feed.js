@@ -3,6 +3,23 @@ const meetupList = document.getElementById('meetups-list');
 const feedCards = document.getElementById('feeds-cards');
 const meetupTopic = document.getElementById('meetup-topic');
 
+const getQuestions = (meetupId) => {
+  const apiURL = `${apiBaseURL}/meetups/${meetupId}/questions`;
+  return fetch(apiURL, {
+    headers: {
+      Authorization: `Bearer ${Token.getToken('userToken')}`
+    }
+  })
+    .then(response => response.json())
+    .then((responseBody) => {
+      const { status, data } = responseBody;
+      return status === 200 ? data : null;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 const createQuestionFeedCard = (question) => {
   const { id, body, createdOn } = question;
   const card = document.createElement('div');
@@ -12,7 +29,7 @@ const createQuestionFeedCard = (question) => {
   questionTitle.classList.add('question-card__title');
   questionTitle.textContent = body;
   const questioneer = document.createElement('p');
-  questioneer.textContent = 'Asked by Bob On';
+  questioneer.textContent = 'Asked by Bob On ';
   const questionDate = document.createElement('span');
   questionDate.classList.add('question-card__date', 'date-asked');
   questionDate.textContent = new Date(createdOn);
@@ -35,7 +52,15 @@ const toggleUserFeedListItem = (list) => {
       getMeetup(meetupId)
         .then((meetup) => {
           meetupTopic.textContent = meetup.topic;
-        }, (err) => {
+          return getQuestions(meetupId);
+        })
+        .then((questions) => {
+          questions.forEach((question) => {
+            const questionCard = createQuestionFeedCard(question);
+            feedCards.appendChild(questionCard);
+          });
+        })
+        .catch((err) => {
           throw err;
         });
       for (let i = 0; i < meetupListItems.length; i += 1) {

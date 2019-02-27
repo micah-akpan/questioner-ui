@@ -3,12 +3,11 @@ const tabListItems = tabList.querySelectorAll('li');
 const userPersonalAccountForm = document.getElementById('user-profile__personal__account__form');
 const userAccountAvatar = document.getElementById('user__profile__avatar');
 
-const userTopFeeds = document.getElementById('user-feeds-cards');
 const userProfile = document.querySelector('.user__profile');
 const meetupsList = document.getElementById('meetups-list');
 
 const mainContainer = document.querySelector('.user-profile__personal__account');
-const userFeedsList = document.querySelector('.user-feeds');
+const userFeedsCards = document.querySelector('.user-feeds-cards');
 const uploadNewPicButton = document.getElementById('user__profile-update__btn');
 const uploadNewPicWidget = document.getElementById('user__profile-avatar-update');
 const userImage = document.getElementById('user-profile__image');
@@ -26,7 +25,60 @@ const saveChangesButton = document.getElementById('save-changes__btn');
 const accountDataForm = document.getElementById('account-data-form');
 const personalDataForm = document.getElementById('personal-data-form');
 
+const feedsBlock = document.querySelector('.feeds');
+
 const usersAPIUrl = 'http://localhost:9999/api/v1/users';
+
+/**
+ * @func showSectionContent
+ * @param {String} section
+ * @returns {void}
+ * @description Shows `section` content dynamically
+ */
+const showSectionContent = (section) => {
+  switch (section) {
+    case 'feeds': {
+      feedsBlock.classList.remove('hidden');
+      userFeedsCards.classList.remove('hidden');
+      userFeedsCards.classList.add('active');
+      break;
+    }
+
+    case 'profile': {
+      userPersonalAccountForm.classList.remove('hidden');
+      userAccountAvatar.classList.remove('hidden');
+      break;
+    }
+
+    default:
+      break;
+  }
+};
+
+/**
+ * @func hideSectionContent
+ * @param {String} section
+ * @returns {void}
+ * @description Shows `section` content dynamically
+ */
+const hideSectionContent = (section) => {
+  switch (section) {
+    case 'feeds': {
+      feedsBlock.classList.add('hidden');
+      userFeedsCards.classList.add('hidden');
+      break;
+    }
+
+    case 'profile': {
+      userPersonalAccountForm.classList.add('hidden');
+      userAccountAvatar.classList.add('hidden');
+      break;
+    }
+
+    default:
+      break;
+  }
+};
 
 /**
  * @func toggleNavPanel
@@ -36,16 +88,8 @@ const usersAPIUrl = 'http://localhost:9999/api/v1/users';
 const toggleNavPanel = (panel) => {
   switch (panel) {
     case 'feeds': {
-      meetupList.classList.add('active');
-      userPersonalAccountForm.classList.add('hidden');
-      userAccountAvatar.classList.add('hidden');
-
-      userTopFeeds.classList.remove('hidden');
-      userTopFeeds.classList.add('active');
-      mainContainer.classList.add('no-border');
-
-      userFeedsList.classList.remove('hidden');
-      userFeedsList.classList.add('active');
+      showSectionContent('feeds');
+      hideSectionContent('profile');
 
       addMeetupFeedListToPage()
         .then((meetupList) => {
@@ -58,15 +102,9 @@ const toggleNavPanel = (panel) => {
     }
 
     case 'profile': {
-      userPersonalAccountForm.classList.remove('hidden');
-      userPersonalAccountForm.classList.add('active');
+      showSectionContent('profile');
+      hideSectionContent('feeds');
 
-      userTopFeeds.classList.remove('active');
-      userTopFeeds.classList.add('hidden');
-
-      userAccountAvatar.classList.remove('hidden');
-      userAccountAvatar.classList.add('active');
-      userFeedsList.classList.add('hidden');
       break;
     }
 

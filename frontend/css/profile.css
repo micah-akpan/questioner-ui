@@ -155,7 +155,6 @@
 }
 
 .meetups-list {
-  display: none;
   width: 200px;
   margin-right: 100px;
 }
@@ -329,15 +328,16 @@ input:checked + .slider::before {
     flex-direction: column;
   }
 
-  .user-profile__personal__account__form {
+  .user-profile__personal__account {
     flex-direction: column;
   }
 
-  .user-profile__personal__account__form {
+  .user-profile__personal__account {
     width: 100%;
   }
 
-  .user__profile__account {
+  .user__profile__personal,
+  .user__profile__account  {
     width: 100%;
   }
 

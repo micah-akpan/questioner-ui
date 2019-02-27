@@ -240,13 +240,14 @@ const addMeetupsToPage = (meetups) => {
 
 const onMeetupsListPage = () => {
   const urlPaths = window.location.pathname.split('/');
-  return urlPaths.includes('meetups');
+  return urlPaths.includes('meetups.html');
 };
 
 const getMeetups = () => {
   if (onMeetupsListPage()) {
     showMeetupsSpinner();
   }
+
   return fetch(`${apiBaseURL}/meetups`, {
     headers: {
       Authorization: `Bearer ${userToken}`
