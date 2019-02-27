@@ -7,8 +7,6 @@
 
 #questioner-what .questioner-what__text {
   text-align: center;
-  font-size: 1.5em;
-  font-weight: 700;
   padding: 1em;
 }
 
@@ -103,9 +101,12 @@
 .cards {
   margin: 20px auto;
   width: 100%;
+  display: flex;
 }
 
 .cards .q-card {
+  width: calc(100% / 3);
+  flex: 1 1 auto;
   margin-right: 20px;
   height: 300px;
   max-height: 300px;
@@ -117,6 +118,16 @@
 
 .cards .q-card__no-border {
   border: none;
+  cursor: default;
+}
+
+.cards--centered {
+  text-align: center;
+}
+
+.card__tips {
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 /* Cards main content */
