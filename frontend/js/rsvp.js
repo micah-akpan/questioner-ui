@@ -116,9 +116,10 @@ const formRsvpFeedbackMsg = (response) => {
 
 /**
  * @func getMeetup
+ * @param {String|Number} meetupId
  * @returns {*} Meetup
  */
-const getMeetup = () => fetch(`${apiBaseURL}/meetups/${activeMeetupId}`, {
+const getMeetup = meetupId => fetch(`${apiBaseURL}/meetups/${meetupId || activeMeetupId}`, {
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${userToken}`

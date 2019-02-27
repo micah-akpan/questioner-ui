@@ -1,5 +1,3 @@
-
-
 /**
  * @class Token
  * @description Contains a collection of token related statics
