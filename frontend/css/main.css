@@ -195,11 +195,11 @@ section {
 }
 
 .active {
-  display: block !important;
+  display: block;
 }
 
 .hidden {
-  display: none !important;
+  display: none;
 }
 
 /* Spinner for buttons */
@@ -388,6 +388,40 @@ header .q-logo-w-border::after {
 .notifications__btn {
   position: relative;
   padding: 3px !important;
+}
+
+/* Search Bar */
+.q-search__nav li {
+  display: inline-block;
+  padding: 1rem 0;
+}
+
+.q-search__nav li a {
+  padding: 1rem;
+  color: #116466;
+}
+
+.q-search__nav li img {
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+}
+
+.q-search__nav li img:focus {
+}
+
+.q-search__nav input[type="search"] {
+  background: transparent;
+  margin-left: -15px;
+  display: none;
+  border: none;
+  border-bottom: 1px solid #cccccc;
+  outline: none;
+  padding: 1rem 0;
+  box-sizing: content-box;
+  color: #333333;
+  width: 0;
+  transition: width 0.5s;
 }
 
 /* Mobile Menu */

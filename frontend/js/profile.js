@@ -94,6 +94,8 @@ const toggleNavPanel = (panel) => {
       addMeetupFeedListToPage()
         .then((meetupList) => {
           toggleUserFeedListItem(meetupList);
+          const firstItem = meetupList.querySelector('li');
+          firstItem.click();
         })
         .catch((err) => {
           throw err;
