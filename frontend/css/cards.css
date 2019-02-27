@@ -1,0 +1,21 @@
+.cards {
+  margin: 20px auto;
+  width: 100%;
+  display: flex;
+}
+
+.cards .q-card {
+  width: calc(100% / 3);
+  flex: 1 1 auto;
+  margin-right: 20px;
+  height: 300px;
+  max-height: 300px;
+  border: 1px solid #596377;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.cards .q-card__no-border {
+  border: none;
+}
