@@ -1,3 +1,5 @@
+const apiBaseURL = 'http://localhost:9999/api/v1';
+
 /**
  * @class Token
  * @description Contains a collection of token related statics
@@ -62,7 +64,7 @@ const passwordVisible = false;
  * @param {Number} date
  * @returns {String} A string version of date e.g 1 -> Jan
  */
-const getMonth = date => numMonthToStr[date];
+const getMonth = date => numMonthToStr[date + 1];
 
 /**
  * @function parseDate
