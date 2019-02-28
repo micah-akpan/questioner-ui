@@ -1,5 +1,4 @@
 /* eslint-disable */
-const apiBaseURL = 'http://localhost:9999/api/v1';
 
 const topicField = document.getElementById('m-topic');
 const locationField = document.getElementById('m-location');
