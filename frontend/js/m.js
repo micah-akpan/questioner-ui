@@ -82,13 +82,6 @@ const getMeetupImages = async (meetup) => {
 };
 
 /**
- * @func tokenIsValid
- * @param {*} response Response hash
- * @returns {Boolean} true if token is valid, false otherwise
- */
-const tokenIsValid = response => response.status !== 401;
-
-/**
  *
  * @param {Array} images
  * @returns {String} Returns main meetup image url;

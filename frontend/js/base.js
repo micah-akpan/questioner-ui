@@ -1,4 +1,6 @@
 const apiBaseURL = 'http://localhost:9999/api/v1';
+const userAuthToken = localStorage.getItem('userToken');
+const currentUserId = localStorage.getItem('userId');
 
 /**
  * @class Token
@@ -150,7 +152,9 @@ const togglePasswordVisibility = () => {
 const getUser = async (userId) => {
   try {
     const apiUrl = `${apiBaseURL}/users/${userId}`;
-    const response = await fetch(apiUrl, requestHeader);
+    const response = await fetch(apiUrl, {
+      headers: genericRequestHeader
+    });
     const responseBody = await response.json();
     return responseBody.status === 200 ? responseBody.data[0] : null;
   } catch (e) {
@@ -193,3 +197,33 @@ const hideMeetupsSpinner = () => {
 };
 
 togglePasswordVisibility();
+
+/**
+ * @func tokenIsValid
+ * @param {String} token
+ * @returns {Promise<Boolean>} Returns true if `token` is valid, false otherwise
+ */
+const tokenIsValid = token => fetch('http://localhost:9999/api/v1/meetups', {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+})
+  .then((res) => {
+    if (!res.ok) {
+      if (res.status === 401) {
+        return false;
+      }
+      return true;
+    }
+    return true;
+  })
+  .catch((err) => {
+    throw err;
+  });
+
+/**
+ * @func userIsAdmin
+ * @param {*} user
+ * @returns {Boolean} Returns true if user is admin, false otherwise
+ */
+const userIsAdmin = user => user.isAdmin;

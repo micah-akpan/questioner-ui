@@ -254,6 +254,35 @@
   background-color: #ffcb9a;
 }
 
+.flex__1 {
+  display: flex;
+}
+
+.flex__0 {
+  display: block !important;
+}
+
+.upcoming-meetups__message {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.upcoming-meetups__link {
+  display: block;
+  width: 300px;
+  margin: 20px auto;
+  text-transform: capitalize;
+  background-color: #ffcb9a;
+  color: #333;
+  font-size: initial;
+  transition: background-color .3s;
+  font-weight: bold;
+}
+
+.upcoming-meetups__link:hover {
+  background-color: #f7b77c;
+}
+
 /* Mobile Devices */
 @media (max-width: 768px) {
   .cards {
