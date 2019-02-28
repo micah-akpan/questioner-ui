@@ -323,7 +323,19 @@
   #q-showcase h2 {
     margin: calc(300px / 2) auto 0 auto;
   }
+
+  #q-showcase a[role="button"] {
+    width: 50%;
+  }
 }
+
+
+@media (min-width: 993px) and (max-width: 1012px) {
+  #q-showcase a[role="button"] {
+    width: 50%;
+  }
+}
+
 
 /* Laptop and Desktop Viewport */
 @media (min-width: 992px) {
