@@ -419,6 +419,73 @@ const displayMeetup = () => {
     });
 };
 
+/**
+ * @func getMeetupLocationCoords
+ * @param {String} meetupLocation
+ * @returns {*} Returns the geo coords
+ * (latitude & latitude) of `meetupLocation`
+ */
+const getMeetupLocationCoords = (meetupLocation) => {
+  const apiUrl = `https://eec19846-geocoder-us-census-bureau-v1.p.rapidapi.com/locations/onelineaddress?format=json&address=${meetupLocation}&benchmark=Public_AR_Current`;
+  return fetch(apiUrl, {
+    headers: {
+      'X-RapidAPI-Key': 'm3xBJzCDi0mshlFG6gTOfdrrU5h3p16dIgIjsngT7YwCyj5VmL'
+    },
+    mode: 'cors'
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      throw new Error('Failed to find coords');
+    })
+    .then(({ result }) => {
+      let coords = {
+        x: 6.5538235,
+        y: 3.3314545
+      };
+      if (result.addressMatches && result.addressMatches[0]) {
+        const { coordinates } = result.addressMatches[0];
+        coords = coordinates;
+      }
+      return coords;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+/**
+ * @func showMeetupLocationOnMap
+ * @param {*} location
+ * @returns {void}
+ */
+const showMeetupLocationOnMap = (location) => {
+  getMeetupLocationCoords(location)
+    .then((coords) => {
+      const { x, y } = coords;
+      const lat = y;
+      const long = x;
+      const mapProp = {
+        center: new google.maps.LatLng(lat, long),
+        zoom: 5,
+      };
+      const map = new google.maps.Map(document.getElementById('meetup-location-map__preview'), mapProp);
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+getMeetup()
+  .then(({ location }) => {
+    showMeetupLocationOnMap(location);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+
 window.onload = () => {
   if (!userToken) {
     window.location.assign('./sign-in.html');
