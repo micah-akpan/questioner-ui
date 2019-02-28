@@ -1,0 +1,27 @@
+/* Nav DropDown */
+.q-user-profile__dropdown-menu {
+  display: none;
+  position: absolute;
+  color: #ffffff;
+  width: 200px;
+  background: #488485;
+  top: 70px;
+  right: 200px;
+  z-index: 100000;
+  box-shadow: 2px 2px 2px #777;
+}
+
+.q-user-profile__dropdown-menu li {
+  display: block;
+  border-bottom: 1px solid #aaaaaa;
+  padding: 0.7rem;
+}
+
+.q-user-profile__dropdown-menu a {
+  color: #ffffff;
+  text-transform: capitalize;
+}
+
+.q-user-profile__dropdown-menu a:hover {
+  color: #ffcb9a;
+}
