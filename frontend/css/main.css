@@ -256,8 +256,8 @@ header #q-branding a:link {
   color: #ffffff;
 }
 
-header #q-branding a:hover {
-  color: #ffcb9a;
+.q-branding__link:hover {
+  color: #ffcb9a !important;
 }
 
 header #q-branding a:visited {
