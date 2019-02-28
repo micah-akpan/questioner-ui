@@ -2,8 +2,6 @@
  * @module meetup
  * @description Meetup Detail script
  */
-
-const apiBaseURL = 'http://localhost:9999/api/v1';
 const activeMeetupId = localStorage.getItem('activeMeetupId');
 const userId = localStorage.getItem('userId');
 const userToken = localStorage.getItem('userToken');

@@ -2,8 +2,6 @@
  * @module meetups
  * @description Contains logic for meetups list page
  */
-
-const apiBaseURL = 'http://localhost:9999/api/v1';
 const userToken = localStorage.getItem('userToken');
 
 const requestHeaders = {
