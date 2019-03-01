@@ -68,9 +68,15 @@ const createQuestionCardPrimary = (question) => {
   return section;
 };
 
+/**
+ * @func upvoteQuestion
+ * @param {String|Number} questionId
+ * @returns {Number} Upvotes a question
+ * and resolves to the total votes count
+ */
 const upvoteQuestion = (questionId) => {
   const apiUrl = `${apiBaseURL}/questions/${questionId}/upvote`;
-  fetch(apiUrl, {
+  return fetch(apiUrl, {
     method: 'PATCH',
     headers: {
       Authorization: `Bearer ${userAuthToken}`
@@ -80,8 +86,10 @@ const upvoteQuestion = (questionId) => {
     .then((response) => {
       const { status, data } = response;
       if (status === 200) {
+        const question = data[0];
         const votes = document.getElementById(`user-vote-${questionId}`);
-        votes.textContent = data[0].votes;
+        votes.textContent = question.votes;
+        return question.votes;
       }
     })
     .catch((err) => {
@@ -89,9 +97,15 @@ const upvoteQuestion = (questionId) => {
     });
 };
 
+/**
+ * @func downvoteQuestion
+ * @param {String|Number} questionId
+ * @returns {Number} Upvotes a question
+ * and resolves to the total votes count
+ */
 const downvoteQuestion = (questionId) => {
   const apiUrl = `${apiBaseURL}/questions/${questionId}/downvote`;
-  fetch(apiUrl, {
+  return fetch(apiUrl, {
     method: 'PATCH',
     headers: {
       Authorization: `Bearer ${userAuthToken}`
@@ -101,8 +115,10 @@ const downvoteQuestion = (questionId) => {
     .then((response) => {
       const { status, data } = response;
       if (status === 200) {
+        const usersVotes = data[0].votes;
         const votes = document.getElementById(`user-vote-${questionId}`);
-        votes.textContent = data[0].votes;
+        votes.textContent = usersVotes;
+        return usersVotes;
       }
     })
     .catch((err) => {
@@ -110,16 +126,24 @@ const downvoteQuestion = (questionId) => {
     });
 };
 
-const getQuestion = async (questionId) => {
+/**
+ * @func getQuestion
+ * @param {String|Number} questionId
+ * @returns {*} Resolves to a question with `questionId` or null
+ */
+const getQuestion = (questionId) => {
   const apiURL = `${apiBaseURL}/meetups/${activeMeetupId}/questions/${questionId}`;
-  try {
-    const response = await fetch(apiURL, requestHeader);
-    const responseBody = await response.json();
-    const { status, data } = responseBody;
-    return status === 200 ? data[0] : null;
-  } catch (e) {
-    throw e;
-  }
+  return fetch(apiURL, {
+    headers: genericRequestHeader
+  })
+    .then(response => response.json())
+    .then((responseBody) => {
+      const { status, data } = responseBody;
+      return status === 200 ? data[0] : null;
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 
 /**
