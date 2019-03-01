@@ -12,7 +12,7 @@ const displayFormFeedback = (message) => {
   feedbackText.textContent = message;
   feedbackText.classList.add('request-feedback__text');
   requestFeedback.classList.remove('request-feedback--hidden');
-  requestFeedback.classList.add('request-feedback--animate');
+  requestFeedback.classList.add('request-feedback--shown');
 
   setTimeout(() => {
     requestFeedback.classList.add('request-feedback--active');
@@ -21,7 +21,8 @@ const displayFormFeedback = (message) => {
 
 const hideFormFeedback = (secs) => {
   setTimeout(() => {
-    userFeedback.classList.add('hide');
+    requestFeedback.classList.remove('request-feedback--active');
+    requestFeedback.classList.add('request-feedback--hidden');
   }, secs * 1000);
 };
 

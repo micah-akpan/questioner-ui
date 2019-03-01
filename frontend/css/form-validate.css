@@ -11,6 +11,7 @@ form input[type="password"]:valid:not(:placeholder-shown) {
   padding-right: 35px;
 }
 
+/* Request Error Feedback for pages */
 .request-feedback {
   position: fixed;
   top: 0px;
@@ -20,10 +21,11 @@ form input[type="password"]:valid:not(:placeholder-shown) {
   padding: 10px 20px;
   color: #fff;
   font-weight: 600;
+  opacity: 0;
 }
 
 .request-feedback--hidden {
-  opacity: 0;
+  animation: requestFeedbackAnimHide 1s 1;
 }
 
 .request-feedback--active {
@@ -31,8 +33,8 @@ form input[type="password"]:valid:not(:placeholder-shown) {
   top: 80px;
 }
 
-.request-feedback--animate {
-  animation: request-feedback-anim 1s 1;
+.request-feedback--shown {
+  animation: requestFeedbackAnimShow 1s 1;
 }
 
 .request-feedback__icon {
@@ -49,12 +51,26 @@ form input[type="password"]:valid:not(:placeholder-shown) {
   padding: 0 5px;
 }
 
-@keyframes request-feedback-anim {
+@keyframes requestFeedbackAnimShow {
   from {
+    opacity: 0;
     transform: translateY(0px);
   }
 
   to {
+    opacity: 1;
     transform: translateY(80px);
+  }
+}
+
+@keyframes requestFeedbackAnimHide {
+  from {
+    opacity: 1;
+    transform: translateY(80px);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(0px);
   }
 }
