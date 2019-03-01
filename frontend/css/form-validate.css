@@ -4,18 +4,57 @@ form input[type="password"]:valid:not(:placeholder-shown) {
   background: url("../assets/icons/check-mark.svg");
   background-size: 20px;
   background-repeat: no-repeat;
-  background-position: 10px center;
+  background-position: 97% center;
 }
 
-
 .q-form__input {
-  padding-left: 35px;
+  padding-right: 35px;
 }
 
 .request-feedback {
+  position: fixed;
+  top: 0px;
+  left: 0;
   width: 100%;
-  background-color: #f44;
-  padding: 0 10px;
+  background-color: #e22;
+  padding: 10px 20px;
   color: #fff;
   font-weight: 600;
+}
+
+.request-feedback--hidden {
+  opacity: 0;
+}
+
+.request-feedback--active {
+  opacity: 1;
+  top: 80px;
+}
+
+.request-feedback--animate {
+  animation: request-feedback-anim 1s 1;
+}
+
+.request-feedback__icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.request-feedback__text {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+  margin-top: 5px;
+  padding: 0 5px;
+}
+
+@keyframes request-feedback-anim {
+  from {
+    transform: translateY(0px);
+  }
+
+  to {
+    transform: translateY(80px);
+  }
 }

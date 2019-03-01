@@ -1,15 +1,22 @@
 
 const userFeedback = document.querySelector('.user-feedback');
+const requestFeedback = document.getElementById('sign-up-request-feedback');
 
-const displayFormFeedback = (msg) => {
-  const infoImage = document.createElement('img');
-  infoImage.src = '../../assets/icons/cross.svg';
-  infoImage.alt = '2 slanted lines representing a cancel symbol';
-  userFeedback.appendChild(infoImage);
-  const span = document.createElement('span');
-  span.textContent = msg;
-  userFeedback.classList.add('info-box');
-  userFeedback.appendChild(span);
+/**
+ * @func displayFormFeedback
+ * @param {String} message
+ * @returns {HTMLElement} Returns HTML Element wrapping `message`
+ */
+const displayFormFeedback = (message) => {
+  const feedbackText = document.getElementById('sign-up-request-feedback-text');
+  feedbackText.textContent = message;
+  feedbackText.classList.add('request-feedback__text');
+  requestFeedback.classList.remove('request-feedback--hidden');
+  requestFeedback.classList.add('request-feedback--animate');
+
+  setTimeout(() => {
+    requestFeedback.classList.add('request-feedback--active');
+  }, 1000);
 };
 
 const hideFormFeedback = (secs) => {
@@ -50,6 +57,7 @@ const registerUser = (newUser) => {
 
         window.location.assign('./meetups.html');
       } else {
+        console.log(res.error);
         displayFormFeedback(res.error);
         hideFormFeedback(10);
       }
