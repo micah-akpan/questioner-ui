@@ -76,7 +76,7 @@ window.onload = () => {
       const originalPassword = passwordField.value.trim();
       const repeatedPassword = this.value.trim();
 
-      const validationMessage = passwordMatch(originalPassword, repeatedPassword) ? 'passwords match' : 'passwords do not match';
+      const validationMessage = passwordMatch(originalPassword, repeatedPassword) ? '' : 'passwords do not match';
 
       passwordValidationMsg.textContent = validationMessage;
     };

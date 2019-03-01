@@ -11,3 +11,11 @@ form input[type="password"]:valid:not(:placeholder-shown) {
 .q-form__input {
   padding-left: 35px;
 }
+
+.request-feedback {
+  width: 100%;
+  background-color: #f44;
+  padding: 0 10px;
+  color: #fff;
+  font-weight: 600;
+}
