@@ -4,12 +4,11 @@
  */
 const activeMeetupId = localStorage.getItem('activeMeetupId');
 const userId = localStorage.getItem('userId');
-const userToken = localStorage.getItem('userToken');
 
 const requestHeader = {
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${userToken}`
+    Authorization: `Bearer ${userAuthToken}`
   }
 };
 
@@ -487,7 +486,7 @@ getMeetup()
 
 
 window.onload = () => {
-  if (!userToken) {
+  if (!userAuthToken) {
     window.location.assign('./sign-in.html');
   } else {
     const currentPageURL = window.location.pathname;

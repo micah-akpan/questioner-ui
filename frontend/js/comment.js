@@ -131,7 +131,7 @@ const postComment = async (questionId, comment) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`
+        Authorization: `Bearer ${userAuthToken}`
       },
 
       body: JSON.stringify({

@@ -73,7 +73,7 @@ const upvoteQuestion = (questionId) => {
   fetch(apiUrl, {
     method: 'PATCH',
     headers: {
-      Authorization: `Bearer ${userToken}`
+      Authorization: `Bearer ${userAuthToken}`
     }
   })
     .then(response => response.json())
@@ -94,7 +94,7 @@ const downvoteQuestion = (questionId) => {
   fetch(apiUrl, {
     method: 'PATCH',
     headers: {
-      Authorization: `Bearer ${userToken}`
+      Authorization: `Bearer ${userAuthToken}`
     }
   })
     .then(response => response.json())

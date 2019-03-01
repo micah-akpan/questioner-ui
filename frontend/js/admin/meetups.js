@@ -278,7 +278,6 @@ const createDropDownMenu = (meetup) => {
  */
 const showDropDownMenu = (meetup) => {
   const dropDownMenu = document.getElementById(`dropdown-menu-${meetup.id}`);
-  console.log(dropDownMenu);
   dropDownMenu.classList.toggle('show');
   return dropDownMenu;
 };
@@ -332,24 +331,22 @@ const createMeetupPrimarySec = (meetup) => {
  * @returns {undefined} Adds and displays all meetups
  */
 const showAllMeetups = () => {
-  getMeetups().then((res) => {
-    if (tokenIsValid(res)) {
-      if (res.status === 200) {
-        const meetups = res.data;
-        const MAX_MEETUPS = 6;
-        if (meetups.length > MAX_MEETUPS) {
-          const data = meetups.slice(0, MAX_MEETUPS);
-          addMeetupsToPage(data);
-          const remainingMeetups = meetups.length - MAX_MEETUPS;
-          seeMoreBtn.textContent = `SEE MORE ${remainingMeetups} ${remainingMeetups > 1 ? 'MEETUPS' : 'MEETUP'}`;
-        } else {
-          addMeetupsToPage(meetups);
-        }
+  getMeetups().then((meetups) => {
+    if (tokenIsValid(userAuthToken)) {
+      const MAX_MEETUPS = 6;
+      if (meetups.length > MAX_MEETUPS) {
+        const data = meetups.slice(0, MAX_MEETUPS);
+        addMeetupsToPage(data);
+        const remainingMeetups = meetups.length - MAX_MEETUPS;
+        seeMoreBtn.textContent = `SEE MORE ${remainingMeetups} ${remainingMeetups > 1 ? 'MEETUPS' : 'MEETUP'}`;
+      } else {
+        addMeetupsToPage(meetups);
       }
-    } else {
-      localStorage.removeItem('userToken');
-      window.location.assign('./sign-in.html');
+
+      return 'Meetups added to page';
     }
+    localStorage.removeItem('userToken');
+    window.location.assign('./sign-in.html');
   });
 };
 
@@ -357,6 +354,7 @@ addProfileAvatarToNav('../../assets/icons/avatar1.svg');
 
 if (closeDeleteModalButton) {
   closeDeleteModalButton.onclick = () => {
+    hideMeetupsSpinner();
     hideModal(deleteModal);
   };
 }
