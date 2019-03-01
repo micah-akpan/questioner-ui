@@ -97,8 +97,8 @@ const changeModalHeadingContent = (header, content) => {
  * that returns a selected meetup
  */
 const getMeetup = meetupId => getMeetups()
-  .then(({ data }) => {
-    const selectedMeetup = data.filter(meetup => meetup.id === meetupId);
+  .then((meetups) => {
+    const selectedMeetup = meetups.filter(meetup => meetup.id === meetupId);
     return selectedMeetup[0];
   })
   .catch((err) => {
@@ -331,30 +331,34 @@ const createMeetupPrimarySec = (meetup) => {
  * @returns {undefined} Adds and displays all meetups
  */
 const showAllMeetups = () => {
-  getMeetups().then((meetups) => {
-    if (tokenIsValid(userAuthToken)) {
-      const MAX_MEETUPS = 6;
-      if (meetups.length > MAX_MEETUPS) {
-        const data = meetups.slice(0, MAX_MEETUPS);
-        addMeetupsToPage(data);
-        const remainingMeetups = meetups.length - MAX_MEETUPS;
-        seeMoreBtn.textContent = `SEE MORE ${remainingMeetups} ${remainingMeetups > 1 ? 'MEETUPS' : 'MEETUP'}`;
-      } else {
-        addMeetupsToPage(meetups);
+  showMeetupsSpinner();
+  fetchAndAddMeetupsToPage()
+    .then((message) => {
+      if (intervalId) {
+        clearInterval(intervalId);
       }
+    })
+    .catch((err) => {
+      // There was probably an internet connection problem
+      // or some other network problem
+      intervalId = setInterval(() => {
+        fetchAndAddMeetupsToPage()
+          .then((message) => {
+            if (intervalId) {
+              clearInterval(intervalId);
+            }
+          })
+          .catch((err) => {
 
-      return 'Meetups added to page';
-    }
-    localStorage.removeItem('userToken');
-    window.location.assign('./sign-in.html');
-  });
+          });
+      }, 5000);
+    });
 };
 
 addProfileAvatarToNav('../../assets/icons/avatar1.svg');
 
 if (closeDeleteModalButton) {
   closeDeleteModalButton.onclick = () => {
-    hideMeetupsSpinner();
     hideModal(deleteModal);
   };
 }

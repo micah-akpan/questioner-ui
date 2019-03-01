@@ -241,9 +241,6 @@ const getMeetups = () => fetch(`${apiBaseURL}/meetups`, {
 })
   .then(response => response.json())
   .then((responseBody) => {
-    // if (onMeetupsListPage()) {
-    //   showMeetupsSpinner();
-    // }
     const { status, data } = responseBody;
     return status === 200 ? data : [];
   })
@@ -251,6 +248,7 @@ const getMeetups = () => fetch(`${apiBaseURL}/meetups`, {
     // Periodically check if there's internet connection available
     throw err;
   });
+
 const fetchAndAddMeetupsToPage = () => getMeetups().then((meetups) => {
   if (tokenIsValid(userToken)) {
     const MAX_MEETUPS = 6;
