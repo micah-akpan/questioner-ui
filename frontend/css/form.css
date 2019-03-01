@@ -262,10 +262,6 @@ form abbr[title="required"] {
   color: #f44;
 }
 
-#login-form input {
-  padding-left: 35px;
-}
-
 /* User Feedback for form inputs */
 .user-feedback {
   width: 100%;
