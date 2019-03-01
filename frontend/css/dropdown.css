@@ -1,14 +1,14 @@
 /* Nav DropDown */
 .q-user-profile__dropdown-menu {
   display: none;
-  position: absolute;
+  position: fixed;
   color: #ffffff;
   width: 200px;
   background: #488485;
-  top: 70px;
+  top: 80px;
   right: 200px;
   z-index: 100000;
-  box-shadow: 2px 2px 2px #777;
+  box-shadow: 2px 2px 2px #555;
 }
 
 .q-user-profile__dropdown-menu li {
