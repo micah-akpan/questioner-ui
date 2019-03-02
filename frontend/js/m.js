@@ -1,6 +1,8 @@
 /**
  * @module meetups
  * @description Contains logic for meetups list page
+ * And logic here is used for both admin and non-admin
+ * users
  */
 const userToken = localStorage.getItem('userToken');
 
@@ -12,11 +14,17 @@ const requestHeaders = {
 };
 
 const searchIcon = document.getElementById('search-icon');
-const searchBar = document.getElementById('search-bar');
+const searchBarForm = document.getElementById('search-bar__form');
+const searchBar = document.getElementById('search-bar__field');
 const cards = document.getElementById('meetup-cards');
 const meetupCardsWrapper = document.getElementById('meetup-cards__wrapper');
 
-
+/**
+ * @func createPaginationButton
+ * @param {String} text
+ * @returns {HTMLButtonElement} Creates a pagination button
+ * with `text` as its text content
+ */
 const createPaginationButton = (text) => {
   const pgButton = document.createElement('button');
   pgButton.textContent = text;
@@ -27,6 +35,7 @@ const createPaginationButton = (text) => {
 if (searchIcon) {
   searchIcon.onclick = () => {
     searchBar.classList.add('show');
+    searchBar.focus();
   };
 }
 
@@ -88,12 +97,22 @@ const getMeetupImages = async (meetup) => {
  */
 const getMainMeetupImage = images => images[0].imageUrl;
 
-
+/**
+ * @func onAdminPage
+ * @returns {Boolean} Returns true if user is
+ * currently on an admin page, false otherwise
+ */
 const onAdminPage = () => {
   const urlPaths = window.location.pathname.split('/');
   return urlPaths.includes('admin');
 };
 
+/**
+ * @func createCardActionButton
+ * @param {*} meetup
+ * @returns {HTMLElement} Creates Action button
+ * on meetups cards and returns the wrapper element
+ */
 const createCardActionButton = (meetup) => {
   const buttonBlock = document.createElement('div');
   buttonBlock.classList.add('q-card__primary-options');
@@ -110,6 +129,11 @@ const createCardActionButton = (meetup) => {
   return buttonBlock;
 };
 
+/**
+ * @func createCardPrimaryDetails
+ * @param {*} meetup
+ * @returns {HTMLElement} Returns the primary content element
+ */
 const createCardPrimaryDetails = (meetup) => {
   const content = document.createElement('div');
   content.classList.add('content');
@@ -163,16 +187,17 @@ const createCardPrimaryDetails = (meetup) => {
  * @returns {HTMLDivElement} HTML element representing the meetup card
  */
 const createCardSecondaryDetails = (meetup) => {
+  const { title, topic, happeningOn } = meetup;
   const content = document.createElement('div');
   content.classList.add('content', 'q-card__sec');
 
   const meetupTitle = document.createElement('p');
   meetupTitle.classList.add('meetup-title');
-  meetupTitle.textContent = meetup.title;
+  meetupTitle.textContent = title || topic;
 
   const meetupDate = document.createElement('p');
   meetupDate.classList.add('meetup-sched-date');
-  const [month, day] = parseDate(meetup.happeningOn);
+  const [month, day] = parseDate(happeningOn);
   meetupDate.textContent = `${month} ${day}`;
 
   content.appendChild(meetupTitle);
@@ -229,11 +254,20 @@ const addMeetupsToPage = (meetups) => {
   return cards;
 };
 
+/**
+ * @func onMeetupsListPage
+ * @returns {Boolean} Returns true if user
+ * is currently on the meetups list page
+ */
 const onMeetupsListPage = () => {
   const urlPaths = window.location.pathname.split('/');
   return urlPaths.includes('meetups.html');
 };
-
+/**
+ * @func getMeetups
+ * @returns {Promise<Array>} Resolves to a list of meetups
+ * or an empty array if no meetups were found
+ */
 const getMeetups = () => fetch(`${apiBaseURL}/meetups`, {
   headers: {
     Authorization: `Bearer ${userToken}`
@@ -249,6 +283,11 @@ const getMeetups = () => fetch(`${apiBaseURL}/meetups`, {
     throw err;
   });
 
+/**
+ * @func fetchAndAddMeetupsToPage
+ * @returns {Promise<String>} Resolves to a success
+ * message confirming meetups have been added to page
+ */
 const fetchAndAddMeetupsToPage = () => getMeetups().then((meetups) => {
   if (tokenIsValid(userToken)) {
     const MAX_MEETUPS = 6;
@@ -269,6 +308,89 @@ const fetchAndAddMeetupsToPage = () => getMeetups().then((meetups) => {
   .catch((err) => {
     throw err;
   });
+
+/**
+ * @const searchForMeetups
+ * @param {String} searchTermValue
+ * @returns {Promise<Array>} Resolves to an array of meetups
+ * that meets criteria: `searchTermValue`
+ */
+const searchForMeetups = (searchTermValue) => {
+  const searchAPIURL = `${apiBaseURL}/meetups?searchTerm=${searchTermValue}`;
+  return fetch(searchAPIURL, {
+    headers: genericRequestHeader
+  })
+    .then(res => res.json())
+    .then((resBody) => {
+      const { status, data } = resBody;
+      return status === 200 ? data : [];
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+/**
+ * @func displayNoMeetupsFallback
+ * @param {String} searchTermValue
+ * @returns {HTMLElement} Returns Meetups cards HTML
+ * Element wrapper
+ */
+const displayNoMeetupsFallback = (searchTermValue) => {
+  cards.innerHTML = '';
+  const fallback = document.createElement('section');
+  fallback.classList.add('no-meetup-fallback');
+  const fallbackText = document.createElement('p');
+  fallbackText.classList.add('no-meetup-fallback__text');
+  const term = document.createElement('span');
+  term.textContent = searchTermValue;
+  term.classList.add('no-meetup-fallback__term');
+  fallbackText.textContent = 'We couldn\'t find any meetup having the topic, location or tag: ';
+  fallbackText.appendChild(term);
+  const fallbackLink = document.createElement('a');
+  fallbackLink.href = '#search-bar__field';
+  fallbackLink.textContent = 'Try Another Search?';
+  fallbackLink.onclick = () => {
+    clearFormField('search-bar__field');
+    focusFormField('search-bar__field');
+  };
+  fallbackLink.classList.add('no-meetup-fallback__link');
+  fallback.appendChild(fallbackText);
+  fallback.appendChild(fallbackLink);
+  cards.appendChild(fallback);
+  return cards;
+};
+
+searchBarForm.onsubmit = (e) => {
+  e.preventDefault();
+  const searchTermValue = searchBar.value;
+  searchForMeetups(searchTermValue)
+    .then((meetups) => {
+      if (meetups.length === 0) {
+        displayNoMeetupsFallback(searchTermValue);
+      } else {
+        addMeetupsToPage(meetups);
+      }
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+const searchSectionList = document.querySelector('.meetups-search-type-list');
+const searchSectionListItems = searchSectionList.querySelectorAll('li');
+
+const listItemNames = ['All', 'Favorites', 'Upcoming'];
+
+searchSectionListItems.forEach((listItem) => {
+  listItem.onclick = function toggleActiveItem() {
+    searchSectionListItems.forEach((item) => {
+      item.classList.remove('meetups-search-type-list__item--active');
+    });
+
+    this.classList.add('meetups-search-type-list__item--active');
+  };
+});
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {

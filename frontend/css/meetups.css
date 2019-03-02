@@ -255,6 +255,55 @@ nav.no-flex {
   width: 100%;
 }
 
+.cards__block {
+  display: block;
+}
+
+.cards__flex {
+  display: flex;
+}
+
+/* Search Meetups Bar & Fallback Styling */
+.search-form__btn {
+  background: transparent;
+  padding-right: 14px;
+  cursor: pointer;
+}
+
+.no-meetup-fallback__text {
+
+}
+
+.no-meetup-fallback__link {
+  display: block;
+}
+
+.no-meetup-fallback__term {
+  font-weight: 600;
+}
+
+.no-meetup-fallback__link:hover {
+  text-decoration: underline;
+}
+
+/* Meetups Search List Item */
+.meetups-search-type-list {
+
+}
+
+.meetups-search-type-list__item {
+  padding-bottom: 0.7em !important;
+}
+
+.meetups-search-type-list__item--active {
+  border-bottom: #116466 solid 4px;
+}
+
+.meetups-search-type-list__item--inactive {
+  
+}
+
+
 @media (max-width: 768px) {
   .show {
     width: 200px !important;
