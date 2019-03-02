@@ -177,8 +177,19 @@ const createCommentTextBox = () => {
   setAttributes(textArea, {
     required: true,
     name: 'comment',
-    placeholder: 'Add your comment'
+    placeholder: 'Add your comment...'
   });
+  textArea.oninput = function checkCharLength() {
+    const content = this.value;
+    const { height } = this.getBoundingClientRect();
+    if (content.length > 100) {
+      this.classList.remove('short-comment-box');
+      this.classList.add('long-comment-box');
+    } else {
+      this.classList.add('short-comment-box');
+      this.classList.remove('long-comment-box');
+    }
+  };
   return textArea;
 };
 
@@ -190,7 +201,7 @@ const createCommentTextBox = () => {
 const createCommentButton = () => {
   const commentButton = document.createElement('button');
   commentButton.classList.add('q-btn', 'btn');
-  commentButton.textContent = 'Comment';
+  commentButton.textContent = 'Post';
   return commentButton;
 };
 
@@ -241,7 +252,7 @@ const createCommentFormWidget = (elType,
  * @returns {HTMLElement} Returns the card wrapping
  * the question comments
  */
-const displayComments = async ({
+const displayComments = ({
   card, commentsWrapper,
   questionComment, commentForm, viewComments, question
 }) => {
@@ -250,7 +261,7 @@ const displayComments = async ({
       commentsWrapper.innerHTML = '';
       card.innerHTML = '';
 
-      for (let i = 0; i < comments.length; i += 1) {
+      for (let i = 0, nComments = comments.length; i < nComments; i += 1) {
         const comment = comments[i];
         getUser(comment.createdBy)
           .then((user) => {
