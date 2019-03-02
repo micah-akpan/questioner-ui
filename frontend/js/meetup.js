@@ -23,6 +23,7 @@ const meetupTagsWrapper = document.getElementById('meetup-tags');
 const addedMeetups = document.getElementById('meetup-tags-added');
 const questionCards = document.getElementById('q-question-cards');
 const askGroupButton = document.getElementById('ask-group-btn');
+const askQuestionFloatingButton = document.getElementById('ask-question-floating-button');
 
 /**
  * @func displayTotalUsersVotes
@@ -215,7 +216,7 @@ const createQuestionForm = () => {
   const form = document.createElement('form');
   form.setAttribute('method', 'POST');
   const userFeedback = document.createElement('div');
-  userFeedback.classList.add('user-feedback');
+  userFeedback.classList.add('feedback');
   userFeedback.id = 'user-feedback';
 
   const formInputs = createQuestionFormFields(formInputSpec);
@@ -252,9 +253,15 @@ const displayQuestionBlock = () => {
   return askQuestionWrapper;
 };
 
+createQuestionForm();
+
 askGroupButton.onclick = () => {
-  createQuestionForm();
+  // createQuestionForm();
   displayQuestionBlock();
+};
+
+askQuestionFloatingButton.onclick = () => {
+
 };
 
 /**

@@ -277,17 +277,7 @@ const formInputSpec = [
     labelText: 'Your question',
     placeholder: 'A concise question gets more comments',
     type: 'textarea'
-  },
-
-  {
-    id: 3,
-    idText: 'user-question-label',
-    labelClass: 'question-label',
-    labelText: 'Add tags to this question (Max 5)',
-    placeholder: 'What, why, where or when are great words to start with',
-    type: 'input'
-  },
-
+  }
 ];
 
 /**
@@ -315,6 +305,7 @@ const createQuestionBioSection = () => {
   const bioText = document.createElement('p');
   bioText.classList.add('question-text', 'user-profile-text');
   const userName = document.createElement('p');
+  userName.classList.add('question-text', 'user-profile__name');
 
   getUserDetails()
     .then((details) => {

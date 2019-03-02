@@ -205,26 +205,6 @@ const displayFeedbackAlert = (msg) => {
   return document.body.appendChild(createFeedbackAlert(msg));
 }
 
-/**
- * @func displayFormFeedback
- * @param {String} msg 
- * @returns {HTMLElement} Returns the HTML element wrapping
- * the Form feedback
- */
-const displayFormFeedback = (msg) => {
-  const infoImage = document.createElement('img');
-  infoImage.src = '../../../assets/icons/cross.svg';
-  infoImage.alt = '';
-  userFeedback.innerHTML = '';
-  userFeedback.appendChild(infoImage);
-  const span = document.createElement('span');
-  span.textContent = msg;
-  userFeedback.classList.remove('hide');
-  userFeedback.classList.add('');
-  userFeedback.appendChild(span);
-  return userFeedback;
-};
-
 const requestFeedback = document.getElementById('new-meetup-request-feedback');
 const requestFeedbackText = document.getElementById('new -meetup-request-feedback-text');
 

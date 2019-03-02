@@ -371,6 +371,11 @@ button {
 #ask-question .user-profile-text {
   width: 90%;
   text-align: left;
+  margin: 0;
+}
+
+.user-profile__name {
+  margin: 0;
 }
 
 #ask-question .clear {
