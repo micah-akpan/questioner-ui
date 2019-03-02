@@ -298,9 +298,20 @@ const getUserDetails = () => Promise.all([getUserImage(), getUser(userId)])
  */
 const createQuestionBioSection = () => {
   const bioSection = document.createElement('section');
+  bioSection.classList.add('ask-question__bio');
   const userAvatar = document.createElement('img');
   userAvatar.classList.add('user-profile-avatar');
   const defaultAvatar = getDefaultAvatarImagePath(userIsOnAdminPage());
+
+  const questionBlockCloseButton = document.createElement('button');
+  questionBlockCloseButton.classList.add('btn', 'ask-question-section__close-btn');
+  questionBlockCloseButton.title = 'Hide Question Form';
+  const closeButtonImage = document.createElement('img');
+  closeButtonImage.classList.add('ask-question-section__close-btn__image');
+  closeButtonImage.src = '../assets/icons/cross.svg';
+  questionBlockCloseButton.appendChild(closeButtonImage);
+
+  questionBlockCloseButton.onclick = hideQuestionBlock;
 
   const bioText = document.createElement('p');
   bioText.classList.add('question-text', 'user-profile-text');
@@ -322,6 +333,7 @@ const createQuestionBioSection = () => {
   bioSection.appendChild(userAvatar);
   bioSection.appendChild(userName);
   bioSection.appendChild(bioText);
+  bioSection.appendChild(questionBlockCloseButton);
   return bioSection;
 };
 

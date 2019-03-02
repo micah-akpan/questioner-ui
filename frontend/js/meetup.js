@@ -184,6 +184,17 @@ const createQuestionFormButton = () => {
 };
 
 /**
+ * @func hideQuestionBlock
+ * @returns {HTMLElement} Hides and returns the
+ * HTML element that wraps the question form
+ */
+const hideQuestionBlock = () => {
+  askQuestionWrapper.classList.remove('active');
+  postQuestionDirArea.classList.remove('inactive');
+  return askQuestionWrapper;
+};
+
+/**
  * @func sendUserQuestion
  * @param {Event} e
  * @returns {Promise<HTMLElement>} Sends user question

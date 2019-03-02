@@ -378,6 +378,27 @@ button {
   margin: 0;
 }
 
+/* Ask Question Block Styling */
+
+.ask-question__bio {
+  position: relative;
+}
+
+.ask-question-section__close-btn {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+}
+
+.ask-question-section__close-btn__image {
+  width: 100%;
+}
+
 #ask-question .clear {
   clear: both;
   margin-bottom: 10px;
