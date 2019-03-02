@@ -239,6 +239,8 @@ const createQuestionForm = () => {
   return wrapper;
 };
 
+const dividerWrapper = document.createElement('div');
+
 /**
  * @func displayQuestionBlock
  * @returns {HTMLElement} Displays the 'ask question'
@@ -249,19 +251,20 @@ const displayQuestionBlock = () => {
   postQuestionDirArea.classList.add('inactive');
   const divider = document.createElement('hr');
   divider.classList.add('divider');
-  askQuestionWrapper.appendChild(divider);
+  dividerWrapper.innerHTML = '';
+  dividerWrapper.appendChild(divider);
+  askQuestionWrapper.appendChild(dividerWrapper);
   return askQuestionWrapper;
 };
 
 createQuestionForm();
 
 askGroupButton.onclick = () => {
-  // createQuestionForm();
   displayQuestionBlock();
 };
 
 askQuestionFloatingButton.onclick = () => {
-
+  displayQuestionBlock();
 };
 
 /**
