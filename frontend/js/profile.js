@@ -332,7 +332,7 @@ saveChangesButton.onclick = () => {
       if (user) {
         replaceFormFields(user);
         const profileUserName = document.getElementById('profile-username');
-        profileUserName.textContent = `${firstname} ${lastname}`;
+        profileUserName.textContent = `${user.firstname} ${user.lastname}`;
         userImage.setAttribute('src', user.avatar || defaultAvatar);
       }
     })
@@ -368,5 +368,4 @@ window.onload = () => {
     });
 
   focusInput(fullNameField);
-  // toggleUserFeedListItem();
 };
