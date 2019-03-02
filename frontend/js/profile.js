@@ -232,73 +232,6 @@ const displayUpdateFeedbackAlert = (message, type) => {
 }
 
 /**
- * @func displayUpdateFeedback
- * @param {Number} elId 
- * @param {String} message 
- * @returns {HTMLElement} Returns the user feedback
- * HTML element
- */
-const displayUpdateFeedback = (elId, message) => {
-  const accountFeedback = document.getElementById(elId);
-  accountFeedback.classList.remove('hide');
-  accountFeedback.classList.add('show');
-  accountFeedback.textContent = message;
-  return accountFeedback;
-};
-
-/**
- * @func displayPersonalUpdateFeedback
- * @param {String} message
- * @returns {HTMLElement} Returns the user feedback
- * HTML element for account data
- */
-const displayPersonalUpdateFeedback = (message) => {
-  return displayUpdateFeedback('personal-data-feedback', message);
-}
-
-/**
- * @func displayAccountUpdateFeedback
- * @param {String} message 
- * @returns {HTMLElement} Returns the user feedback
- * HTML element for account data
- */
-const displayAccountUpdateFeedback = (message) => {
-  return displayUpdateFeedback('account-data-feedback', message);
-}
-
-/**
- * @func displayErrorFeedback
- * @param {String} message 
- * @param {String} section 
- * @returns {HTMLElement} Returns the user feedback
- * HTML element
- */
-const displayErrorFeedback = (message, section) => {
-  const accountFeedback = section === 'personal'
-    ? displayPersonalUpdateFeedback(message)
-    : displayAccountUpdateFeedback(message);
-  accountFeedback.classList.remove('success-feedback');
-  accountFeedback.classList.add('error-feedback');
-  return accountFeedback;
-};
-
-/**
- * @func displaySuccessFeedback
- * @param {String} message 
- * @param {String} section 
- * @returns {HTMLElement} Returns the user feedback 
- * HTML element
- */
-const displaySuccessFeedback = (message, section) => {
-  const accountFeedback = section === 'personal'
-    ? displayPersonalUpdateFeedback(message)
-    : displayAccountUpdateFeedback(message);
-  accountFeedback.classList.remove('error-feedback');
-  accountFeedback.classList.add('success-feedback');
-  return accountFeedback;
-};
-
-/**
  * @func hideUpdateFeedbackAlert
  * @param {Number} time
  * @returns {Number} Returns the timer interval id
@@ -333,18 +266,6 @@ const replaceFormFields = (user) => {
 
 const personalDataFeedback = document.getElementById('personal-data-feedback');
 const accountDataFeedback = document.getElementById('account-data-feedback');
-
-/**
- * @func getErrorType
- * @param {String} err
- * @returns {String} Returns the type of error based on `err` 
- */
-const getErrorType = (err) => {
-  if (err.includes('username') || err.includes('email') || err.includes('password')) {
-    return 'account'
-  }
-  return 'personal';
-}
 
 /**
  * @func updateUserData
