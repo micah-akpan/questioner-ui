@@ -1,7 +1,7 @@
 form input[type="text"]:valid:not(:placeholder-shown),
 form input[type="email"]:valid:not(:placeholder-shown),
 form input[type="password"]:valid:not(:placeholder-shown) {
-  background: url("../assets/icons/check-mark.svg");
+  background: url("../assets/icons/check.svg");
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: 97% center;
@@ -12,7 +12,8 @@ form input[type="password"]:valid:not(:placeholder-shown) {
 }
 
 /* Request Error Feedback for pages */
-.request-feedback {
+.request-feedback,
+.m-request-feedback {
   position: fixed;
   top: 0px;
   left: 0;
@@ -21,6 +22,8 @@ form input[type="password"]:valid:not(:placeholder-shown) {
   padding: 10px 20px;
   color: #fff;
   font-weight: 600;
+}
+.request-feedback {
   opacity: 0;
 }
 
@@ -51,6 +54,28 @@ form input[type="password"]:valid:not(:placeholder-shown) {
   padding: 0 5px;
 }
 
+/* Create Meetup Page Specific Stylings */
+.m-request-feedback {
+  background: #060;
+  top: 80px;
+}
+
+.m-request-feedback__success {
+  background: #060;
+}
+
+.m-request-feedback__error {
+  background: #e44;
+}
+
+.m-request-feedback--hidden {
+  opacity: 0;
+}
+
+.m-request-feedback--shown {
+  opacity: 1;
+}
+
 @keyframes requestFeedbackAnimShow {
   from {
     opacity: 0;
@@ -74,3 +99,4 @@ form input[type="password"]:valid:not(:placeholder-shown) {
     transform: translateY(0px);
   }
 }
+

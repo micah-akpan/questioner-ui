@@ -63,10 +63,10 @@ const passwordVisible = false;
 
 /**
  * @function getMonth
- * @param {Number} date
+ * @param {Number} month
  * @returns {String} A string version of date e.g 1 -> Jan
  */
-const getMonth = date => numMonthToStr[date + 1];
+const getMonth = month => numMonthToStr[month + 1];
 
 /**
  * @function parseDate
@@ -76,7 +76,7 @@ const getMonth = date => numMonthToStr[date + 1];
 const parseDate = (date) => {
   const currentDate = new Date(date);
   const month = currentDate.getMonth();
-  const monthShortForm = getMonth(month + 1);
+  const monthShortForm = getMonth(month);
   const day = currentDate.getDate();
 
   return [monthShortForm, day];
