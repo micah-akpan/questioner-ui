@@ -300,7 +300,7 @@ const createQuestionBioSection = () => {
   const bioSection = document.createElement('section');
   const userAvatar = document.createElement('img');
   userAvatar.classList.add('user-profile-avatar');
-  const defaultAvatar = '../assets/icons/avatar1.svg';
+  const defaultAvatar = getDefaultAvatarImagePath(userIsOnAdminPage());
 
   const bioText = document.createElement('p');
   bioText.classList.add('question-text', 'user-profile-text');

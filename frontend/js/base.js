@@ -226,3 +226,22 @@ const tokenIsValid = token => fetch('http://localhost:9999/api/v1/meetups', {
  * @returns {Boolean} Returns true if user is admin, false otherwise
  */
 const userIsAdmin = user => user.isAdmin;
+
+/**
+ * @func userIsOnAdminPage
+ * @returns {Boolean} Returns true if user is
+ * currently on admin page, false otherwise
+ */
+const userIsOnAdminPage = () => {
+  const urlPaths = window.location.pathname.split('/');
+  return urlPaths.includes('admin');
+};
+
+/**
+ * @func getDefaultAvatarImagePath
+ * @param {Boolean} onAdminPage
+ * @returns {String} Returns the path to the default
+ * avatar image base on `onAdminPage`
+ */
+const getDefaultAvatarImagePath = (onAdminPage = false) => (onAdminPage ? '../../assets/icons/avatar1.svg'
+  : '../assets/icons/avatar1.svg');
