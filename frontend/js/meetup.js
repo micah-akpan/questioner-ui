@@ -4,12 +4,11 @@
  */
 const activeMeetupId = localStorage.getItem('activeMeetupId');
 const userId = localStorage.getItem('userId');
-const userToken = localStorage.getItem('userToken');
 
 const requestHeader = {
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${userToken}`
+    Authorization: `Bearer ${userAuthToken}`
   }
 };
 
@@ -24,6 +23,7 @@ const meetupTagsWrapper = document.getElementById('meetup-tags');
 const addedMeetups = document.getElementById('meetup-tags-added');
 const questionCards = document.getElementById('q-question-cards');
 const askGroupButton = document.getElementById('ask-group-btn');
+const askQuestionFloatingButton = document.getElementById('ask-question-floating-button');
 
 /**
  * @func displayTotalUsersVotes
@@ -184,6 +184,17 @@ const createQuestionFormButton = () => {
 };
 
 /**
+ * @func hideQuestionBlock
+ * @returns {HTMLElement} Hides and returns the
+ * HTML element that wraps the question form
+ */
+const hideQuestionBlock = () => {
+  askQuestionWrapper.classList.remove('active');
+  postQuestionDirArea.classList.remove('inactive');
+  return askQuestionWrapper;
+};
+
+/**
  * @func sendUserQuestion
  * @param {Event} e
  * @returns {Promise<HTMLElement>} Sends user question
@@ -194,6 +205,8 @@ const sendUserQuestion = (e) => {
   e.preventDefault();
   return askQuestion()
     .then((question) => {
+      const { x, y } = questionCards.getBoundingClientRect();
+      window.scroll(x, y);
       questionCards.innerHTML = '';
       return displayMeetupQuestions(question.meetup);
     })
@@ -216,7 +229,7 @@ const createQuestionForm = () => {
   const form = document.createElement('form');
   form.setAttribute('method', 'POST');
   const userFeedback = document.createElement('div');
-  userFeedback.classList.add('user-feedback');
+  userFeedback.classList.add('feedback');
   userFeedback.id = 'user-feedback';
 
   const formInputs = createQuestionFormFields(formInputSpec);
@@ -239,6 +252,8 @@ const createQuestionForm = () => {
   return wrapper;
 };
 
+const dividerWrapper = document.createElement('div');
+
 /**
  * @func displayQuestionBlock
  * @returns {HTMLElement} Displays the 'ask question'
@@ -249,12 +264,19 @@ const displayQuestionBlock = () => {
   postQuestionDirArea.classList.add('inactive');
   const divider = document.createElement('hr');
   divider.classList.add('divider');
-  askQuestionWrapper.appendChild(divider);
+  dividerWrapper.innerHTML = '';
+  dividerWrapper.appendChild(divider);
+  askQuestionWrapper.appendChild(dividerWrapper);
   return askQuestionWrapper;
 };
 
+createQuestionForm();
+
 askGroupButton.onclick = () => {
-  createQuestionForm();
+  displayQuestionBlock();
+};
+
+askQuestionFloatingButton.onclick = () => {
   displayQuestionBlock();
 };
 
@@ -487,7 +509,7 @@ getMeetup()
 
 
 window.onload = () => {
-  if (!userToken) {
+  if (!userAuthToken) {
     window.location.assign('./sign-in.html');
   } else {
     const currentPageURL = window.location.pathname;

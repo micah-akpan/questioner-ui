@@ -1,16 +1,3 @@
-form input[type="text"]:valid:not(:placeholder-shown),
-form input[type="email"]:valid:not(:placeholder-shown),
-form input[type="password"]:valid:not(:placeholder-shown) {
-  background: url("../assets/icons/check.svg");
-  background-size: 20px;
-  background-repeat: no-repeat;
-  background-position: 97% center;
-}
-
-.q-form__input {
-  padding-right: 35px;
-}
-
 /* Request Error Feedback for pages */
 .request-feedback,
 .m-request-feedback {
@@ -23,6 +10,7 @@ form input[type="password"]:valid:not(:placeholder-shown) {
   color: #fff;
   font-weight: 600;
 }
+
 .request-feedback {
   opacity: 0;
 }
@@ -58,6 +46,7 @@ form input[type="password"]:valid:not(:placeholder-shown) {
 .m-request-feedback {
   background: #060;
   top: 80px;
+  transition: opacity .3s;
 }
 
 .m-request-feedback__success {
@@ -99,4 +88,3 @@ form input[type="password"]:valid:not(:placeholder-shown) {
     transform: translateY(0px);
   }
 }
-

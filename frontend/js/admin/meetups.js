@@ -97,8 +97,8 @@ const changeModalHeadingContent = (header, content) => {
  * that returns a selected meetup
  */
 const getMeetup = meetupId => getMeetups()
-  .then(({ data }) => {
-    const selectedMeetup = data.filter(meetup => meetup.id === meetupId);
+  .then((meetups) => {
+    const selectedMeetup = meetups.filter(meetup => meetup.id === meetupId);
     return selectedMeetup[0];
   })
   .catch((err) => {
@@ -278,7 +278,6 @@ const createDropDownMenu = (meetup) => {
  */
 const showDropDownMenu = (meetup) => {
   const dropDownMenu = document.getElementById(`dropdown-menu-${meetup.id}`);
-  console.log(dropDownMenu);
   dropDownMenu.classList.toggle('show');
   return dropDownMenu;
 };
@@ -332,25 +331,28 @@ const createMeetupPrimarySec = (meetup) => {
  * @returns {undefined} Adds and displays all meetups
  */
 const showAllMeetups = () => {
-  getMeetups().then((res) => {
-    if (tokenIsValid(res)) {
-      if (res.status === 200) {
-        const meetups = res.data;
-        const MAX_MEETUPS = 6;
-        if (meetups.length > MAX_MEETUPS) {
-          const data = meetups.slice(0, MAX_MEETUPS);
-          addMeetupsToPage(data);
-          const remainingMeetups = meetups.length - MAX_MEETUPS;
-          seeMoreBtn.textContent = `SEE MORE ${remainingMeetups} ${remainingMeetups > 1 ? 'MEETUPS' : 'MEETUP'}`;
-        } else {
-          addMeetupsToPage(meetups);
-        }
+  showMeetupsSpinner();
+  fetchAndAddMeetupsToPage()
+    .then((message) => {
+      if (intervalId) {
+        clearInterval(intervalId);
       }
-    } else {
-      localStorage.removeItem('userToken');
-      window.location.assign('./sign-in.html');
-    }
-  });
+    })
+    .catch((err) => {
+      // There was probably an internet connection problem
+      // or some other network problem
+      intervalId = setInterval(() => {
+        fetchAndAddMeetupsToPage()
+          .then((message) => {
+            if (intervalId) {
+              clearInterval(intervalId);
+            }
+          })
+          .catch((err) => {
+
+          });
+      }, 5000);
+    });
 };
 
 addProfileAvatarToNav('../../assets/icons/avatar1.svg');

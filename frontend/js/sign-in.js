@@ -2,6 +2,7 @@ const loginForm = document.getElementById('login-form');
 const userFeedback = document.querySelector('.user-feedback');
 const emailField = document.getElementById('userEmail');
 const passwordField = document.getElementById('userPwd');
+const requestFeedback = document.getElementById('sign-in-request-feedback');
 
 /**
  * @func displayFormFeedback
@@ -9,17 +10,15 @@ const passwordField = document.getElementById('userPwd');
  * @returns {HTMLElement} Returns HTML element representing the user feedback
  */
 const displayFormFeedback = (message) => {
-  const infoImage = document.createElement('img');
-  infoImage.src = '../../assets/icons/cross.svg';
-  infoImage.alt = '';
-  userFeedback.innerHTML = '';
-  userFeedback.appendChild(infoImage);
-  const span = document.createElement('span');
-  span.textContent = message;
-  userFeedback.classList.remove('hide');
-  userFeedback.classList.add('info-box');
-  userFeedback.appendChild(span);
-  return userFeedback;
+  const feedbackText = document.getElementById('sign-in-request-feedback-text');
+  feedbackText.textContent = message;
+  feedbackText.classList.add('request-feedback__text');
+  requestFeedback.classList.remove('request-feedback--hidden');
+  requestFeedback.classList.add('request-feedback--shown');
+
+  setTimeout(() => {
+    requestFeedback.classList.add('request-feedback--active');
+  }, 1000);
 };
 
 /**
@@ -28,7 +27,8 @@ const displayFormFeedback = (message) => {
  * @returns {Number} Returns a ID of this timer process
  */
 const hideFormFeedback = secs => setTimeout(() => {
-  userFeedback.classList.add('hide');
+  requestFeedback.classList.remove('request-feedback--active');
+  requestFeedback.classList.add('request-feedback--hidden');
 }, secs * 1000);
 
 /**

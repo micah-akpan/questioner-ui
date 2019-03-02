@@ -7,7 +7,7 @@ const getQuestions = (meetupId) => {
   const apiURL = `${apiBaseURL}/meetups/${meetupId}/questions`;
   return fetch(apiURL, {
     headers: {
-      Authorization: `Bearer ${Token.getToken('userToken')}`
+      Authorization: `Bearer ${userAuthToken}`
     }
   })
     .then(response => response.json())
@@ -55,6 +55,7 @@ const toggleUserFeedListItem = (list) => {
           return getQuestions(meetupId);
         })
         .then((questions) => {
+          feedCards.innerHTML = '';
           questions.forEach((question) => {
             const questionCard = createQuestionFeedCard(question);
             feedCards.appendChild(questionCard);
@@ -83,7 +84,7 @@ const getMeetupsUserHasRsvped = async (currentUserId) => {
     const apiUrl = `${baseURL}/meetups/${rsvp.meetup}`;
     return fetch(apiUrl, {
       headers: {
-        Authorization: `Bearer ${Token.getToken('userToken')}`
+        Authorization: `Bearer ${userAuthToken}`
       }
     })
       .then(res => res.json())

@@ -15,8 +15,8 @@
   <header>
     <div class="container">
       <div class="header-content">
-        <div id="q-branding">
-          <a href="../index.html">
+        <div id="q-branding" class="q-branding">
+          <a href="../index.html" class="q-branding__link">
             <h1 class="q-logo q-logo-w-border">Questioner</h1>
           </a>
         </div>
@@ -41,6 +41,11 @@
       </div>
     </div>
   </header>
+
+  <section class="m-request-feedback m-request-feedback--hidden" id="profile-update-request-feedback">
+    <img src="../../assets/icons/warning.svg" alt="A triangle with an exclamation mark inscribed inside of it" class="request-feedback__icon">
+    <span class="request-feedback__text" id="profile-update-request-feedback-text"></span>
+  </section>
 
   <!-- Nav User Profile DropDown Menu -->
   <section>
@@ -235,7 +240,7 @@
         <section class="feeds hidden">
           <h3>Feeds</h3>
           <ul id="meetups-list" class="meetups-list">
-            
+
           </ul>
         </section>
 

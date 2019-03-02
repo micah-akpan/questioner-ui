@@ -12,7 +12,7 @@ class Stat {
     this.baseUrl = 'http://localhost:9999/api/v1';
     this._userId = localStorage.getItem('userId');
     this._statRequestHeader = {
-      Authorization: `Bearer ${Token.getToken('userToken')}`
+      Authorization: `Bearer ${userAuthToken}`
     };
     this._questionStatsBlock = document.getElementById('user-statistics__total-questions');
     this._questionStatsValue = document.getElementById('questions-stat__value');
@@ -38,7 +38,6 @@ class Stat {
         const { status, data } = responseBody;
         if (status === 200) {
           const questions = data.filter(question => question.user === userId * 1);
-
           return questions;
         }
       })
@@ -69,8 +68,8 @@ class Stat {
    */
   async getCommentStat(userId) {
     try {
-      const meetupResults = await getMeetups();
-      const meetupsIds = meetupResults.data.map(meetup => meetup.id);
+      const meetups = await getMeetups();
+      const meetupsIds = meetups.map(meetup => meetup.id);
 
       const allQuestionsPromises = meetupsIds.map((id) => {
         const apiUrl = `${this.baseUrl}/meetups/${id}/questions`;
@@ -122,7 +121,7 @@ class Stat {
    */
   async getMeetupRsvpsForUser(userId) {
     const meetups = await getMeetups();
-    const meetupIds = meetups.data.map(meetup => meetup.id);
+    const meetupIds = meetups.map(meetup => meetup.id);
     const allRsvpsPromises = meetupIds.map((id) => {
       const apiUrl = `${this.baseUrl}/meetups/${id}/rsvps`;
       return fetch(apiUrl, { headers: this._statRequestHeader })

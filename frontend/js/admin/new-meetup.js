@@ -1,5 +1,4 @@
 /* eslint-disable */
-const apiBaseURL = 'http://localhost:9999/api/v1';
 
 const topicField = document.getElementById('m-topic');
 const locationField = document.getElementById('m-location');
@@ -45,7 +44,7 @@ const lookUpIP = () => {
       return res;
     })
     .catch((err) => {
-      console.log('Can\'t get your location');
+      
     })
 }
 
@@ -206,53 +205,36 @@ const displayFeedbackAlert = (msg) => {
   return document.body.appendChild(createFeedbackAlert(msg));
 }
 
-/**
- * @func displayFormFeedback
- * @param {String} msg 
- * @returns {HTMLElement} Returns the HTML element wrapping
- * the Form feedback
- */
-const displayFormFeedback = (msg) => {
-  const infoImage = document.createElement('img');
-  infoImage.src = '../../../assets/icons/cross.svg';
-  infoImage.alt = '';
-  userFeedback.innerHTML = '';
-  userFeedback.appendChild(infoImage);
-  const span = document.createElement('span');
-  span.textContent = msg;
-  userFeedback.classList.remove('hide');
-  userFeedback.classList.add('');
-  userFeedback.appendChild(span);
-  return userFeedback;
-};
+const requestFeedback = document.getElementById('new-meetup-request-feedback');
+const requestFeedbackText = document.getElementById('new -meetup-request-feedback-text');
 
 /**
  * @func addFeedbackMessage
- * @param {String} msg 
+ * @param {String} message
  * @param {String} feedbackType
  * @returns {HTMLElement} Adds error/success classes
  * to feedback element, according to `feedbackType`
  */
-const addFeedbackMessage = (msg, feedbackType = 'error') => {
-  const userFeedback = document.querySelector('.feedback');
-  userFeedback.textContent = msg;
-  userFeedback.classList.add(feedbackType === 'error' ?
-    'error-feedback' : 'success-feedback');
-  return userFeedback;
+const addFeedbackMessage = (message, feedbackType = 'error') => {
+  const feedbackClassName = feedbackType === 'error' ? 'm-request-feedback__error' : 'm-request-feedback__success';
+  requestFeedbackText.textContent = message;
+  requestFeedbackText.classList.add('request-feedback__text');
+  requestFeedback.classList.add(feedbackClassName);
+  return requestFeedback;
 }
 
 /**
  * @func displayFeedback
- * @param {String} msg
+ * @param {String} message
  * @param {String} feedbackType 
  * @returns {HTMLElement} 
  * @description Displays the feedback pop-up
  */
-const displayFeedback = (msg, feedbackType) => {
-  const userFeedback = addFeedbackMessage(msg, feedbackType);
-  userFeedback.classList.remove('hidden');
-  userFeedback.classList.add('active');
-  return userFeedback;
+const displayFeedback = (message, feedbackType) => {
+  const requestFeedback = addFeedbackMessage(message, feedbackType);
+  requestFeedback.classList.remove('m-request-feedback--hidden');
+  requestFeedback.classList.add('m-request-feedback--shown');
+  return requestFeedback;
 }
 
 /**
@@ -263,8 +245,8 @@ const displayFeedback = (msg, feedbackType) => {
  */
 const hideFeedback = (secs) => {
   return setTimeout(() => {
-    userFeedback.classList.remove('active');
-    userFeedback.classList.add('hidden');
+    requestFeedback.classList.remove('m-request-feedback--shown');
+    requestFeedback.classList.add('m-request-feedback--hidden');
   }, secs * 1000);
 };
 
@@ -385,8 +367,7 @@ createForm.onsubmit = (e) => {
 addProfileAvatarToNav('../../assets/icons/avatar1.svg');
 
 window.onload = () => {
-  const userToken = Token.getToken('userToken');
-  if (!userToken) {
+  if (!userAuthToken) {
     window.location.replace('./sign-in.html');
   }
   createImageUploadFormWidget();

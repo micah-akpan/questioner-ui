@@ -5,6 +5,7 @@ let intervalId;
  * @returns {undefined} Displays all meetups on the page
  */
 const showAllMeetups = () => {
+  showMeetupsSpinner();
   fetchAndAddMeetupsToPage()
     .then((message) => {
       if (intervalId) {

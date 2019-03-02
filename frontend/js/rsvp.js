@@ -28,7 +28,7 @@ const getMeetupRsvps = (meetup) => {
   return fetch(apiUrl, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${Token.getToken('userToken')}`
+      Authorization: `Bearer ${userAuthToken}`
     }
   })
     .then(response => response.json())
@@ -122,7 +122,7 @@ const formRsvpFeedbackMsg = (response) => {
 const getMeetup = meetupId => fetch(`${apiBaseURL}/meetups/${meetupId || activeMeetupId}`, {
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${userToken}`
+    Authorization: `Bearer ${userAuthToken}`
   }
 })
   .then(response => response.json())
@@ -172,11 +172,12 @@ const rsvpForMeetup = async (userResponse) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${userToken}`
+          Authorization: `Bearer ${userAuthToken}`
         },
         body: JSON.stringify({ response: userResponse })
       });
       const responseBody = await response.json();
+      console.log(responseBody);
       feedbackPara.textContent = formRsvpFeedbackMsg(userResponse);
       return responseBody.data;
     }

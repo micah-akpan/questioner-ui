@@ -68,20 +68,28 @@ const createQuestionCardPrimary = (question) => {
   return section;
 };
 
+/**
+ * @func upvoteQuestion
+ * @param {String|Number} questionId
+ * @returns {Number} Upvotes a question
+ * and resolves to the total votes count
+ */
 const upvoteQuestion = (questionId) => {
   const apiUrl = `${apiBaseURL}/questions/${questionId}/upvote`;
-  fetch(apiUrl, {
+  return fetch(apiUrl, {
     method: 'PATCH',
     headers: {
-      Authorization: `Bearer ${userToken}`
+      Authorization: `Bearer ${userAuthToken}`
     }
   })
     .then(response => response.json())
     .then((response) => {
       const { status, data } = response;
       if (status === 200) {
+        const question = data[0];
         const votes = document.getElementById(`user-vote-${questionId}`);
-        votes.textContent = data[0].votes;
+        votes.textContent = question.votes;
+        return question.votes;
       }
     })
     .catch((err) => {
@@ -89,20 +97,28 @@ const upvoteQuestion = (questionId) => {
     });
 };
 
+/**
+ * @func downvoteQuestion
+ * @param {String|Number} questionId
+ * @returns {Number} Upvotes a question
+ * and resolves to the total votes count
+ */
 const downvoteQuestion = (questionId) => {
   const apiUrl = `${apiBaseURL}/questions/${questionId}/downvote`;
-  fetch(apiUrl, {
+  return fetch(apiUrl, {
     method: 'PATCH',
     headers: {
-      Authorization: `Bearer ${userToken}`
+      Authorization: `Bearer ${userAuthToken}`
     }
   })
     .then(response => response.json())
     .then((response) => {
       const { status, data } = response;
       if (status === 200) {
+        const usersVotes = data[0].votes;
         const votes = document.getElementById(`user-vote-${questionId}`);
-        votes.textContent = data[0].votes;
+        votes.textContent = usersVotes;
+        return usersVotes;
       }
     })
     .catch((err) => {
@@ -110,16 +126,24 @@ const downvoteQuestion = (questionId) => {
     });
 };
 
-const getQuestion = async (questionId) => {
+/**
+ * @func getQuestion
+ * @param {String|Number} questionId
+ * @returns {*} Resolves to a question with `questionId` or null
+ */
+const getQuestion = (questionId) => {
   const apiURL = `${apiBaseURL}/meetups/${activeMeetupId}/questions/${questionId}`;
-  try {
-    const response = await fetch(apiURL, requestHeader);
-    const responseBody = await response.json();
-    const { status, data } = responseBody;
-    return status === 200 ? data[0] : null;
-  } catch (e) {
-    throw e;
-  }
+  return fetch(apiURL, {
+    headers: genericRequestHeader
+  })
+    .then(response => response.json())
+    .then((responseBody) => {
+      const { status, data } = responseBody;
+      return status === 200 ? data[0] : null;
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 
 /**
@@ -253,17 +277,7 @@ const formInputSpec = [
     labelText: 'Your question',
     placeholder: 'A concise question gets more comments',
     type: 'textarea'
-  },
-
-  {
-    id: 3,
-    idText: 'user-question-label',
-    labelClass: 'question-label',
-    labelText: 'Add tags to this question (Max 5)',
-    placeholder: 'What, why, where or when are great words to start with',
-    type: 'input'
-  },
-
+  }
 ];
 
 /**
@@ -284,13 +298,25 @@ const getUserDetails = () => Promise.all([getUserImage(), getUser(userId)])
  */
 const createQuestionBioSection = () => {
   const bioSection = document.createElement('section');
+  bioSection.classList.add('ask-question__bio');
   const userAvatar = document.createElement('img');
   userAvatar.classList.add('user-profile-avatar');
-  const defaultAvatar = '../assets/icons/avatar1.svg';
+  const defaultAvatar = getDefaultAvatarImagePath(userIsOnAdminPage());
+
+  const questionBlockCloseButton = document.createElement('button');
+  questionBlockCloseButton.classList.add('btn', 'ask-question-section__close-btn');
+  questionBlockCloseButton.title = 'Hide Question Form';
+  const closeButtonImage = document.createElement('img');
+  closeButtonImage.classList.add('ask-question-section__close-btn__image');
+  closeButtonImage.src = '../assets/icons/cross.svg';
+  questionBlockCloseButton.appendChild(closeButtonImage);
+
+  questionBlockCloseButton.onclick = hideQuestionBlock;
 
   const bioText = document.createElement('p');
   bioText.classList.add('question-text', 'user-profile-text');
   const userName = document.createElement('p');
+  userName.classList.add('question-text', 'user-profile__name');
 
   getUserDetails()
     .then((details) => {
@@ -307,6 +333,7 @@ const createQuestionBioSection = () => {
   bioSection.appendChild(userAvatar);
   bioSection.appendChild(userName);
   bioSection.appendChild(bioText);
+  bioSection.appendChild(questionBlockCloseButton);
   return bioSection;
 };
 

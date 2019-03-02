@@ -1,3 +1,6 @@
+@import url("../css/main.css");
+@import url("../css/dropdown.css");
+@import url("../css/meetups.css");
 @import url("../css/form.css");
 @import url("../css/modal.css");
 
@@ -368,6 +371,32 @@ button {
 #ask-question .user-profile-text {
   width: 90%;
   text-align: left;
+  margin: 0;
+}
+
+.user-profile__name {
+  margin: 0;
+}
+
+/* Ask Question Block Styling */
+
+.ask-question__bio {
+  position: relative;
+}
+
+.ask-question-section__close-btn {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+}
+
+.ask-question-section__close-btn__image {
+  width: 100%;
 }
 
 #ask-question .clear {

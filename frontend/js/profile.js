@@ -29,6 +29,8 @@ const feedsBlock = document.querySelector('.feeds');
 
 const usersAPIUrl = 'http://localhost:9999/api/v1/users';
 
+const profileUpdateFeedback = document.getElementById('profile-update-request-feedback');
+
 /**
  * @func showSectionContent
  * @param {String} section
@@ -214,83 +216,30 @@ const fieldsAreNotEmpty = (form) => {
   return false;
 }
 
-/**
- * @func displayUpdateFeedback
- * @param {Number} elId 
- * @param {String} message 
- * @returns {HTMLElement} Returns the user feedback
- * HTML element
- */
-const displayUpdateFeedback = (elId, message) => {
-  const accountFeedback = document.getElementById(elId);
-  accountFeedback.classList.remove('hide');
-  accountFeedback.classList.add('show');
-  accountFeedback.textContent = message;
-  return accountFeedback;
-};
+const addFeedbackMessage = (message) => {
+  const profileUpdateText = document.getElementById('profile-update-request-feedback-text');
+  profileUpdateText.textContent = message;
+  return profileUpdateText;
+}
 
-/**
- * @func displayPersonalUpdateFeedback
- * @param {String} message
- * @returns {HTMLElement} Returns the user feedback
- * HTML element for account data
- */
-const displayPersonalUpdateFeedback = (message) => {
-  return displayUpdateFeedback('personal-data-feedback', message);
+const displayUpdateFeedbackAlert = (message, type) => {
+  const profileUpdateText = addFeedbackMessage(message);
+  const feedbackClassName = type === 'success' ? 'm-request-feedback__success': 'm-request-feedback__error';
+  profileUpdateFeedback.classList.add(feedbackClassName);
+  profileUpdateFeedback.classList.remove('m-request-feedback--hidden');
+  profileUpdateFeedback.classList.add('m-request-feedback--shown');
+  return profileUpdateFeedback;
 }
 
 /**
- * @func displayAccountUpdateFeedback
- * @param {String} message 
- * @returns {HTMLElement} Returns the user feedback
- * HTML element for account data
- */
-const displayAccountUpdateFeedback = (message) => {
-  return displayUpdateFeedback('account-data-feedback', message);
-}
-
-/**
- * @func displayErrorFeedback
- * @param {String} message 
- * @param {String} section 
- * @returns {HTMLElement} Returns the user feedback
- * HTML element
- */
-const displayErrorFeedback = (message, section) => {
-  const accountFeedback = section === 'personal'
-    ? displayPersonalUpdateFeedback(message)
-    : displayAccountUpdateFeedback(message);
-  accountFeedback.classList.remove('success-feedback');
-  accountFeedback.classList.add('error-feedback');
-  return accountFeedback;
-};
-
-/**
- * @func displaySuccessFeedback
- * @param {String} message 
- * @param {String} section 
- * @returns {HTMLElement} Returns the user feedback 
- * HTML element
- */
-const displaySuccessFeedback = (message, section) => {
-  const accountFeedback = section === 'personal'
-    ? displayPersonalUpdateFeedback(message)
-    : displayAccountUpdateFeedback(message);
-  accountFeedback.classList.remove('error-feedback');
-  accountFeedback.classList.add('success-feedback');
-  return accountFeedback;
-};
-
-/**
- * @func hideFeedback
- * @param {Number} time 
- * @param {HTMLElement} node
+ * @func hideUpdateFeedbackAlert
+ * @param {Number} time
  * @returns {Number} Returns the timer interval id
  */
-const hideFeedback = (time, node) => {
+const hideUpdateFeedbackAlert = (time) => {
   return setTimeout(() => {
-    node.classList.remove('show');
-    node.classList.add('hide');
+    profileUpdateFeedback.classList.remove('m-request-feedback--shown');
+    profileUpdateFeedback.classList.add('m-request-feedback--hidden');
   }, time * 1000)
 }
 
@@ -308,7 +257,7 @@ const replaceFormFields = (user) => {
   fullNameField.placeholder = `${firstname} ${lastname}`;
   otherNameField.placeholder = othername;
   locationField.placeholder = address || '';
-  birthDateField.value = convertDate(new Date(birthday));
+  birthDateField.value = convertDate(birthday);
   phoneNumberField.placeholder = phoneNumber;
   userBioField.placeholder = bio;
   usernameField.placeholder = username;
@@ -317,18 +266,6 @@ const replaceFormFields = (user) => {
 
 const personalDataFeedback = document.getElementById('personal-data-feedback');
 const accountDataFeedback = document.getElementById('account-data-feedback');
-
-/**
- * @func getErrorType
- * @param {String} err
- * @returns {String} Returns the type of error based on `err` 
- */
-const getErrorType = (err) => {
-  if (err.includes('username') || err.includes('email') || err.includes('password')) {
-    return 'account'
-  }
-  return 'personal';
-}
 
 /**
  * @func updateUserData
@@ -348,30 +285,14 @@ const updateUserData = (newData) => {
     .then((res) => {
       const { status, data, error } = res;
       if (status !== 200) {
-        if (getErrorType(error) === 'account') {
-          displayErrorFeedback(error, 'account');
-        } else {
-          displayErrorFeedback(error, 'personal');
-        }
+        displayUpdateFeedbackAlert(error, 'error');
         return null;
       }
 
-      const bothFormsAreFilled = fieldsAreNotEmpty(personalDataForm) && fieldsAreNotEmpty(accountDataForm);
-      const personalDataFormFilled = fieldsAreNotEmpty(personalDataForm);
-      const accountDataFormFilled = fieldsAreNotEmpty(accountDataForm);
+      displayUpdateFeedbackAlert('Changes saved', 'success');
 
-      if (bothFormsAreFilled) {
-        displaySuccessFeedback('Changes Saved', 'personal');
-        displaySuccessFeedback('Changes Saved', 'account');
-        hideFeedback(5, personalDataFeedback);
-        hideFeedback(5, accountDataFeedback);
-      } else if (personalDataFormFilled) {
-        displaySuccessFeedback('Changes Saved', 'personal');
-        hideFeedback(5, personalDataFeedback);
-      } else if (accountDataFormFilled) {
-        displaySuccessFeedback('Changes Saved', 'account');
-        hideFeedback(5, accountDataFeedback);
-      }
+      hideUpdateFeedbackAlert(3);
+      
       return data[0];
     })
     .catch((err) => {
@@ -383,7 +304,7 @@ saveChangesButton.onclick = () => {
   const fullName = fullNameField.value;
   const firstname = fullName.substring(0, fullName.indexOf(' '));
   const lastname = fullName.substring(fullName.indexOf(' ') + 1);
-  const avatarWidget = document.getElementById('change-image__file');
+  const avatarWidget = document.getElementById('user__profile-avatar-update');
 
   const data = {
     firstname,
@@ -411,7 +332,7 @@ saveChangesButton.onclick = () => {
       if (user) {
         replaceFormFields(user);
         const profileUserName = document.getElementById('profile-username');
-        profileUserName.textContent = `${firstname} ${lastname}`;
+        profileUserName.textContent = `${user.firstname} ${user.lastname}`;
         userImage.setAttribute('src', user.avatar || defaultAvatar);
       }
     })
@@ -447,5 +368,4 @@ window.onload = () => {
     });
 
   focusInput(fullNameField);
-  // toggleUserFeedListItem();
 };

@@ -1,3 +1,7 @@
+/**
+ * @func getUpcomingMeetups
+ * @returns {Promise<Array>} Resolves to an array of upcoming meetups
+ */
 const getUpcomingMeetups = () => {
   const apiUrl = `${apiBaseURL}/meetups/upcoming`;
   return fetch(apiUrl, {
@@ -13,6 +17,11 @@ const getUpcomingMeetups = () => {
     });
 };
 
+/**
+ * @func getMeetupImages
+ * @param {*} meetupId
+ * @returns {Promise<Array>} Resolves to an array of meetup images
+ */
 const getMeetupImages = (meetupId) => {
   const apiUrl = `${apiBaseURL}/meetups/${meetupId}/images`;
   return fetch(apiUrl, {
@@ -28,6 +37,12 @@ const getMeetupImages = (meetupId) => {
     });
 };
 
+/**
+ * @func createCardPrimarySection
+ * @param {*} meetup meetup object
+ * @returns {HTMLDivElement} Returns an HTML div element representing
+ * the primary section of the card
+ */
 const createCardPrimarySection = (meetup) => {
   const meetupDetailsPrimary = document.createElement('div');
   meetupDetailsPrimary.classList.add('meetup-details__primary');
@@ -48,6 +63,12 @@ const createCardPrimarySection = (meetup) => {
   return meetupDetailsPrimary;
 };
 
+/**
+ * @func createCardPrimarySection
+ * @param {*} meetup meetup object
+ * @returns {HTMLDivElement} Returns an HTML div element representing
+ * the secondary section of the card
+ */
 const createCardSecondarySection = (meetup) => {
   const meetupDetailsSecondary = document.createElement('div');
   meetupDetailsSecondary.classList.add('meetup-details__sec');
@@ -71,6 +92,11 @@ const createCardSecondarySection = (meetup) => {
   return meetupDetailsSecondary;
 };
 
+/**
+ * @func createUpcomingMeetupCard
+ * @param {*} meetup meetup object
+ * @returns {HTMLDivElement} Returns an upcoming meetup card
+ */
 const createUpcomingMeetupCard = (meetup) => {
   const card = document.createElement('div');
   card.classList.add('q-card', 'q-card__no-border');
@@ -116,6 +142,12 @@ const createUpcomingMeetupCard = (meetup) => {
   return card;
 };
 
+/**
+ * @func addUpcomingMeetupCardsToPage
+ * @param {Array} meetups List of meetup objects
+ * @returns {HTMLElement} Returns the HTML element
+ * that represents the cards
+ */
 const addUpcomingMeetupCardsToPage = (meetups) => {
   const cards = document.querySelector('.cards');
   meetups.forEach((meetup) => {
@@ -127,8 +159,48 @@ const addUpcomingMeetupCardsToPage = (meetups) => {
 
 getUpcomingMeetups()
   .then((upcomingMeetups) => {
-    addUpcomingMeetupCardsToPage(upcomingMeetups);
+    if (upcomingMeetups.length > 0) {
+      addUpcomingMeetupCardsToPage(upcomingMeetups);
+    } else {
+      const upcomingMeetupCards = document.querySelector('.cards');
+      upcomingMeetupCards.innerHTML = '';
+      upcomingMeetupCards.classList.add('flex__0');
+      const message = 'Ooops!. There are no upcoming meetups at the moment';
+      const link = document.createElement('a');
+      link.setAttribute('href', './pages/meetups.html');
+      link.classList.add('upcoming-meetups__link', 'btn', 'q-btn');
+      link.textContent = 'See all meetups';
+      const text = document.createTextNode(message);
+      const info = document.createElement('p');
+      info.classList.add('upcoming-meetups__message');
+      info.appendChild(text);
+      info.appendChild(link);
+      upcomingMeetupCards.appendChild(info);
+    }
   })
   .catch((err) => {
     console.error(err);
   });
+
+
+window.onload = () => {
+  /*
+   * New visitors should see the home page
+   * Registered visitors are to be immediately
+   * redirected to the meetup list page (By Design)
+   */
+  if (userAuthToken && tokenIsValid(userAuthToken)) {
+    getUser(currentUserId)
+      .then(user => userIsAdmin(user))
+      .then((userIsAdmin) => {
+        if (userIsAdmin) {
+          window.location.replace('./pages/admin/meetups.html');
+        } else {
+          window.location.replace('./pages/meetups.html');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+};

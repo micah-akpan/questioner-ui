@@ -1,4 +1,6 @@
 const apiBaseURL = 'http://localhost:9999/api/v1';
+const userAuthToken = localStorage.getItem('userToken');
+const currentUserId = localStorage.getItem('userId');
 
 /**
  * @class Token
@@ -61,10 +63,10 @@ const passwordVisible = false;
 
 /**
  * @function getMonth
- * @param {Number} date
+ * @param {Number} month
  * @returns {String} A string version of date e.g 1 -> Jan
  */
-const getMonth = date => numMonthToStr[date + 1];
+const getMonth = month => numMonthToStr[month + 1];
 
 /**
  * @function parseDate
@@ -74,7 +76,7 @@ const getMonth = date => numMonthToStr[date + 1];
 const parseDate = (date) => {
   const currentDate = new Date(date);
   const month = currentDate.getMonth();
-  const monthShortForm = getMonth(month + 1);
+  const monthShortForm = getMonth(month);
   const day = currentDate.getDate();
 
   return [monthShortForm, day];
@@ -150,7 +152,9 @@ const togglePasswordVisibility = () => {
 const getUser = async (userId) => {
   try {
     const apiUrl = `${apiBaseURL}/users/${userId}`;
-    const response = await fetch(apiUrl, requestHeader);
+    const response = await fetch(apiUrl, {
+      headers: genericRequestHeader
+    });
     const responseBody = await response.json();
     return responseBody.status === 200 ? responseBody.data[0] : null;
   } catch (e) {
@@ -176,7 +180,6 @@ const createSpinner = (classNames) => {
  */
 const showMeetupsSpinner = () => {
   const cards = document.querySelector('.cards');
-  // cards.innerHTML = '';
   const spinner = createSpinner(['spinner', 'meetups-spinner']);
   cards.appendChild(spinner);
   return cards;
@@ -193,3 +196,52 @@ const hideMeetupsSpinner = () => {
 };
 
 togglePasswordVisibility();
+
+/**
+ * @func tokenIsValid
+ * @param {String} token
+ * @returns {Promise<Boolean>} Returns true if `token` is valid, false otherwise
+ */
+const tokenIsValid = token => fetch('http://localhost:9999/api/v1/meetups', {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+})
+  .then((res) => {
+    if (!res.ok) {
+      if (res.status === 401) {
+        return false;
+      }
+      return true;
+    }
+    return true;
+  })
+  .catch((err) => {
+    throw err;
+  });
+
+/**
+ * @func userIsAdmin
+ * @param {*} user
+ * @returns {Boolean} Returns true if user is admin, false otherwise
+ */
+const userIsAdmin = user => user.isAdmin;
+
+/**
+ * @func userIsOnAdminPage
+ * @returns {Boolean} Returns true if user is
+ * currently on admin page, false otherwise
+ */
+const userIsOnAdminPage = () => {
+  const urlPaths = window.location.pathname.split('/');
+  return urlPaths.includes('admin');
+};
+
+/**
+ * @func getDefaultAvatarImagePath
+ * @param {Boolean} onAdminPage
+ * @returns {String} Returns the path to the default
+ * avatar image base on `onAdminPage`
+ */
+const getDefaultAvatarImagePath = (onAdminPage = false) => (onAdminPage ? '../../assets/icons/avatar1.svg'
+  : '../assets/icons/avatar1.svg');
