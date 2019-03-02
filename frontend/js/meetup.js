@@ -205,6 +205,8 @@ const sendUserQuestion = (e) => {
   e.preventDefault();
   return askQuestion()
     .then((question) => {
+      const { x, y } = questionCards.getBoundingClientRect();
+      window.scroll(x, y);
       questionCards.innerHTML = '';
       return displayMeetupQuestions(question.meetup);
     })
