@@ -1,0 +1,90 @@
+/* Request Error Feedback for pages */
+.request-feedback,
+.m-request-feedback {
+  position: fixed;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  background-color: #e22;
+  padding: 10px 20px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.request-feedback {
+  opacity: 0;
+}
+
+.request-feedback--hidden {
+  animation: requestFeedbackAnimHide 1s 1;
+}
+
+.request-feedback--active {
+  opacity: 1;
+  top: 80px;
+}
+
+.request-feedback--shown {
+  animation: requestFeedbackAnimShow 1s 1;
+}
+
+.request-feedback__icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.request-feedback__text {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+  margin-top: 5px;
+  padding: 0 5px;
+}
+
+/* Create Meetup Page Specific Stylings */
+.m-request-feedback {
+  background: #060;
+  top: 80px;
+  transition: opacity .3s;
+}
+
+.m-request-feedback__success {
+  background: #060;
+}
+
+.m-request-feedback__error {
+  background: #e44;
+}
+
+.m-request-feedback--hidden {
+  opacity: 0;
+}
+
+.m-request-feedback--shown {
+  opacity: 1;
+}
+
+@keyframes requestFeedbackAnimShow {
+  from {
+    opacity: 0;
+    transform: translateY(0px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(80px);
+  }
+}
+
+@keyframes requestFeedbackAnimHide {
+  from {
+    opacity: 1;
+    transform: translateY(80px);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(0px);
+  }
+}

@@ -1,11 +1,12 @@
 @import "../css/main.css";
 @import "../css/dropdown.css";
 @import "../css/form.css";
+@import "../css/validation.css";
 
 /* Profile Nav */
 
 .nav-profile {
-  margin: 100px auto 50px;
+  margin: 200px auto 50px;
   width: 80%;
   background: #eee;
   border-radius: 5px;

@@ -236,10 +236,6 @@ const requestFeedbackText = document.getElementById('new -meetup-request-feedbac
  * to feedback element, according to `feedbackType`
  */
 const addFeedbackMessage = (message, feedbackType = 'error') => {
-  // const userFeedback = document.querySelector('.feedback');
-  // userFeedback.textContent = msg;
-  // userFeedback.classList.add(feedbackType === 'error' ?
-  //   'error-feedback' : 'success-feedback');
   const feedbackClassName = feedbackType === 'error' ? 'm-request-feedback__error' : 'm-request-feedback__success';
   requestFeedbackText.textContent = message;
   requestFeedbackText.classList.add('request-feedback__text');
