@@ -1,3 +1,9 @@
+/**
+ * @module meetups
+ * @description Contains logic specific to the non-admin
+ * meetups list page
+ */
+
 let intervalId;
 
 /**
@@ -28,6 +34,8 @@ const showAllMeetups = () => {
       }, 5000);
     });
 };
+
+const getAllButton = document.getElementById('meetups-search-type-list__item-all');
 
 addProfileAvatarToNav('../assets/icons/avatar1.svg');
 

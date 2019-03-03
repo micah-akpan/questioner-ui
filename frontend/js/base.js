@@ -245,3 +245,20 @@ const userIsOnAdminPage = () => {
  */
 const getDefaultAvatarImagePath = (onAdminPage = false) => (onAdminPage ? '../../assets/icons/avatar1.svg'
   : '../assets/icons/avatar1.svg');
+
+
+const getElement = (elId) => {
+
+};
+
+const clearFormField = (elId) => {
+  const formField = document.getElementById(elId);
+  formField.value = '';
+  return formField;
+};
+
+const focusFormField = (elId) => {
+  const formField = document.getElementById(elId);
+  formField.focus();
+  return formField;
+};

@@ -48,25 +48,35 @@
   <section id="q-search">
     <div class="container">
       <nav class="q-search__nav">
-        <ul>
+        <ul class="meetups-search-type-list">
           <li class="search-form__container">
-            <a href="#!" id="search-icon">
+            <button id="search-icon" class="search-form__btn">
               <img src="../assets/icons/search.svg" alt="a magnifying glass icon" />
-            </a>
+            </button>
           </li>
 
           <li class="search-bar__link">
-            <form>
-              <input type="search" name="search-term" placeholder="Search Meetups" id="search-bar" />
+            <form class="search-bar__form" id="search-bar__form">
+              <input type="search" name="searchTerm" placeholder="Search For Meetups by name, location, or tag" class="search-bar__field"
+                id="search-bar__field" />
             </form>
           </li>
 
-          <li class="active">
+          <li 
+            class="meetups-search-type-list__item meetups-search-type-list__item--active" id="meetups-search-type-list__item-all">
             <a href="#!">All</a>
           </li>
 
-          <li>
+          <li 
+            class="meetups-search-type-list__item"
+            id="meetups-search-type-list__item-favorites">
             <a href="#!">Favorites</a>
+          </li>
+
+          <li 
+            class="meetups-search-type-list__item"
+            id="meetups-search-type-list__item-upcoming">
+            <a href="#!">Upcoming</a>
           </li>
         </ul>
       </nav>
